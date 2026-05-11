@@ -1,0 +1,49 @@
+{
+  "extName": { "message": "Assent" },
+  "extDescription": {
+    "message": "Чытае пагадненні замест вас. Падсвечвае патэнцыйна нявыгадныя ўмовы перш чым вы прыймеце."
+  },
+
+  "scoreLabelLow": { "message": "Нізкая рызыка" },
+  "scoreLabelMedium": { "message": "Умераная рызыка" },
+  "scoreLabelHigh": { "message": "Высокая рызыка" },
+  "scoreLabelExtreme": { "message": "Надзвычайная рызыка" },
+  "scoreSublabel": { "message": "Толькі выяўленне шаблонаў - не юрыдычная кансультацыя." },
+
+  "stateIdle": { "message": "На гэтай старонцы дакумент не знойдзены." },
+  "stateLoading": { "message": "Сканіраванне дакумента…" },
+  "stateError": { "message": "Аналіз недаступны" },
+  "errorNoDeviceAI": { "message": "Лакальная моўная мадэль не гатовая на гэтай прыладзе." },
+
+  "sectionTopThree": { "message": "Галоўныя пункты" },
+  "sectionFlags": { "message": "Адзначаныя пункты" },
+  "sectionCredits": { "message": "Станоўчыя палажэнні" },
+
+  "btnShowInDocument": { "message": "Паказаць у дакуменце" },
+  "btnViewMethodology": { "message": "Як гэта працуе" },
+
+  "labelGrade": { "message": "Адзнака" },
+  "labelEvidence": { "message": "Доказ:" },
+  "labelDate": { "message": "Прааналізавана" },
+
+  "disclaimerTitle": { "message": "Пра гэты вынік" },
+  "disclaimerBody": {
+    "message": "Вынік атрыманы аўтаматычным выяўленнем шаблонаў, што працуе на прыладзе карыстальніка. Кожная адзнака спасылаецца на даслоўную цытату, якую можна праверыць незалежна. Гэта не юрыдычная думка, не юрыдычная кансультацыя і не звязана з выдаўцом аналізаванага дакумента. Адзнака адлюстроўвае толькі моўныя шаблоны і можа быць няпоўнай або памылковай. Заўсёды чытайце арыгінальны дакумент перад згодай."
+  },
+
+  "donationTitle": { "message": "Гэта пашырэнне незалежнае і бясплатнае" },
+  "donationBody": {
+    "message": "Без рэкламы. Без сачэння. Дадзеныя не прадаюцца. Калі яно было карысным, невялікі ўнёсак дапаможа працягнуць распрацоўку."
+  },
+  "donationBtnTen": { "message": "Падтрымаць · 10 €" },
+  "donationBtnCustom": { "message": "Выбраць суму" },
+  "donationBtnLater": { "message": "Магчыма пазней" },
+  "donationBtnNever": { "message": "Не, дзякуй" },
+
+  "footerAttribution": { "message": "Open source · незалежнае · без сувязі з трэцімі бакамі" },
+  "footerSupport": { "message": "Падтрымаць распрацоўку" },
+
+  "overlayScanning": { "message": "Сканіраванне…" },
+  "overlayDone": { "message": "Адкрыць дэталі" },
+  "overlayError": { "message": "Аналіз недаступны" }
+}

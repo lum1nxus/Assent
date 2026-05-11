@@ -1,0 +1,49 @@
+{
+  "extName": { "message": "Assent" },
+  "extDescription": {
+    "message": "Чете договорни документи вместо вас. Подчертава потенциално неблагоприятни клаузи, преди да приемете."
+  },
+
+  "scoreLabelLow": { "message": "Нисък риск" },
+  "scoreLabelMedium": { "message": "Умерен риск" },
+  "scoreLabelHigh": { "message": "Висок риск" },
+  "scoreLabelExtreme": { "message": "Изключителен риск" },
+  "scoreSublabel": { "message": "Само откриване на модели - не е правен съвет." },
+
+  "stateIdle": { "message": "На тази страница не е открит документ." },
+  "stateLoading": { "message": "Сканиране на документа…" },
+  "stateError": { "message": "Анализът не е наличен" },
+  "errorNoDeviceAI": { "message": "Езиковият модел на устройството не е готов." },
+
+  "sectionTopThree": { "message": "Основни точки" },
+  "sectionFlags": { "message": "Маркирани клаузи" },
+  "sectionCredits": { "message": "Значими разпоредби" },
+
+  "btnShowInDocument": { "message": "Покажи в документа" },
+  "btnViewMethodology": { "message": "Как работи" },
+
+  "labelGrade": { "message": "Оценка" },
+  "labelEvidence": { "message": "Доказателство:" },
+  "labelDate": { "message": "Анализирано" },
+
+  "disclaimerTitle": { "message": "За този резултат" },
+  "disclaimerBody": {
+    "message": "Резултат, генериран от автоматично откриване на модели, работещо на устройството на потребителя. Всеки маркер се позовава на дословен цитат, който може да бъде проверен независимо. Това не е правно становище, не е правен съвет и не е свързано с издателя на анализирания документ. Оценката отразява само езикови модели и може да е непълна или грешна. Винаги четете оригиналния документ, преди да приемете."
+  },
+
+  "donationTitle": { "message": "Това разширение е независимо и безплатно" },
+  "donationBody": {
+    "message": "Без реклами. Без проследяване. Без продажба на данни. Ако е било полезно, малък принос помага за продължаване на разработката."
+  },
+  "donationBtnTen": { "message": "Подкрепи · 10 €" },
+  "donationBtnCustom": { "message": "Избери сума" },
+  "donationBtnLater": { "message": "Може би по-късно" },
+  "donationBtnNever": { "message": "Не, благодаря" },
+
+  "footerAttribution": { "message": "Open source · независимо · без връзка с трети страни" },
+  "footerSupport": { "message": "Подкрепи разработката" },
+
+  "overlayScanning": { "message": "Сканиране…" },
+  "overlayDone": { "message": "Отвори детайли" },
+  "overlayError": { "message": "Анализът не е наличен" }
+}

@@ -1,0 +1,49 @@
+{
+  "extName": { "message": "Assent" },
+  "extDescription": {
+    "message": "Loeb lepingudokumendid sinu eest. Tõstab esile potentsiaalselt ebasoodsad klauslid enne kui aktsepteerid."
+  },
+
+  "scoreLabelLow": { "message": "Madal risk" },
+  "scoreLabelMedium": { "message": "Mõõdukas risk" },
+  "scoreLabelHigh": { "message": "Kõrge risk" },
+  "scoreLabelExtreme": { "message": "Äärmuslik risk" },
+  "scoreSublabel": { "message": "Ainult mustrite tuvastamine - pole õigusabi." },
+
+  "stateIdle": { "message": "Sellel lehel ei tuvastatud dokumenti." },
+  "stateLoading": { "message": "Dokumendi skannimine…" },
+  "stateError": { "message": "Analüüs pole saadaval" },
+  "errorNoDeviceAI": { "message": "Seadme keelemudel pole valmis." },
+
+  "sectionTopThree": { "message": "Olulisemad punktid" },
+  "sectionFlags": { "message": "Märgitud klauslid" },
+  "sectionCredits": { "message": "Märkimisväärsed sätted" },
+
+  "btnShowInDocument": { "message": "Näita dokumendis" },
+  "btnViewMethodology": { "message": "Kuidas see toimib" },
+
+  "labelGrade": { "message": "Hinne" },
+  "labelEvidence": { "message": "Tõend:" },
+  "labelDate": { "message": "Analüüsitud" },
+
+  "disclaimerTitle": { "message": "Selle tulemuse kohta" },
+  "disclaimerBody": {
+    "message": "Tulemus on toodetud kasutaja seadmes töötava automaatse mustrituvastusega. Iga märgistus viitab sõnasõnalisele tsitaadile, mida saab sõltumatult kontrollida. See ei ole õiguslik arvamus, ei ole õigusabi ja ei ole seotud analüüsitava dokumendi väljaandjaga. Skoor peegeldab ainult keelelisi mustreid ja võib olla puudulik või vale. Lugege alati originaaldokument enne nõustumist."
+  },
+
+  "donationTitle": { "message": "See laiendus on sõltumatu ja tasuta" },
+  "donationBody": {
+    "message": "Ei reklaame. Ei jälgimist. Ei andmemüüki. Kui see oli kasulik, väike toetus aitab arendust jätkata."
+  },
+  "donationBtnTen": { "message": "Toeta · 10 €" },
+  "donationBtnCustom": { "message": "Vali summa" },
+  "donationBtnLater": { "message": "Võib-olla hiljem" },
+  "donationBtnNever": { "message": "Ei aitäh" },
+
+  "footerAttribution": { "message": "Open source · sõltumatu · pole seotud kolmandate isikutega" },
+  "footerSupport": { "message": "Toeta arendust" },
+
+  "overlayScanning": { "message": "Skannimine…" },
+  "overlayDone": { "message": "Ava üksikasjad" },
+  "overlayError": { "message": "Analüüs pole saadaval" }
+}

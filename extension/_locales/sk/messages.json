@@ -1,0 +1,49 @@
+{
+  "extName": { "message": "Assent" },
+  "extDescription": {
+    "message": "Číta zmluvné dokumenty za vás. Zvýrazňuje potenciálne nevýhodné ustanovenia skôr, než ich prijmete."
+  },
+
+  "scoreLabelLow": { "message": "Nízke riziko" },
+  "scoreLabelMedium": { "message": "Mierne riziko" },
+  "scoreLabelHigh": { "message": "Vysoké riziko" },
+  "scoreLabelExtreme": { "message": "Extrémne riziko" },
+  "scoreSublabel": { "message": "Iba detekcia vzorov - nejde o právne poradenstvo." },
+
+  "stateIdle": { "message": "Na tejto stránke nebol zistený žiadny dokument." },
+  "stateLoading": { "message": "Skenovanie dokumentu…" },
+  "stateError": { "message": "Analýza nie je k dispozícii" },
+  "errorNoDeviceAI": { "message": "Jazykový model v zariadení nie je pripravený." },
+
+  "sectionTopThree": { "message": "Hlavné body" },
+  "sectionFlags": { "message": "Označené ustanovenia" },
+  "sectionCredits": { "message": "Pozoruhodné ustanovenia" },
+
+  "btnShowInDocument": { "message": "Zobraziť v dokumente" },
+  "btnViewMethodology": { "message": "Ako to funguje" },
+
+  "labelGrade": { "message": "Známka" },
+  "labelEvidence": { "message": "Dôkaz:" },
+  "labelDate": { "message": "Analyzované" },
+
+  "disclaimerTitle": { "message": "O tomto výstupe" },
+  "disclaimerBody": {
+    "message": "Výstup vznikol automatickou detekciou vzorov, ktorá beží v zariadení používateľa. Každé označenie odkazuje na doslovný citát, ktorý sa dá nezávisle overiť. Nejde o právne stanovisko ani právne poradenstvo a nie je to spojené s vydavateľom analyzovaného dokumentu. Skóre odráža iba jazykové vzory a môže byť neúplné alebo chybné. Pred súhlasom si vždy prečítajte pôvodný dokument."
+  },
+
+  "donationTitle": { "message": "Toto rozšírenie je nezávislé a zadarmo" },
+  "donationBody": {
+    "message": "Bez reklám. Bez sledovania. Žiadny predaj údajov. Ak bolo užitočné, malý príspevok pomáha pokračovať vo vývoji."
+  },
+  "donationBtnTen": { "message": "Podporiť · 10 €" },
+  "donationBtnCustom": { "message": "Zvoliť sumu" },
+  "donationBtnLater": { "message": "Možno neskôr" },
+  "donationBtnNever": { "message": "Nie, ďakujem" },
+
+  "footerAttribution": { "message": "Open source · nezávislé · bez väzby na tretie strany" },
+  "footerSupport": { "message": "Podporiť vývoj" },
+
+  "overlayScanning": { "message": "Skenovanie…" },
+  "overlayDone": { "message": "Otvoriť podrobnosti" },
+  "overlayError": { "message": "Analýza nie je k dispozícii" }
+}

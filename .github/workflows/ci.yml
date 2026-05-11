@@ -1,0 +1,79 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  lint-and-format:
+    name: Lint + format + audit
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Format check
+        run: npm run format:check
+
+      - name: Audit production deps
+        run: npm audit --omit=dev --audit-level=moderate
+        continue-on-error: true
+
+  validate-extension:
+    name: Validate manifest + locale files
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Validate JSON
+        run: |
+          for f in extension/manifest.json extension/_locales/*/messages.json; do
+            echo "Validating $f"
+            python3 -c "import json,sys; json.load(open('$f'))"
+          done
+
+      - name: Check manifest_version is 3
+        run: |
+          python3 -c "
+          import json
+          m = json.load(open('extension/manifest.json'))
+          assert m['manifest_version'] == 3, 'Must use Manifest V3'
+          assert 'default_locale' in m, 'default_locale required for i18n'
+          assert m['default_locale'] == 'en', 'default_locale must be en'
+          print('manifest.json OK')
+          "
+
+      - name: Verify all locales have same keys as en
+        run: |
+          python3 -c "
+          import json, glob, sys
+          base = json.load(open('extension/_locales/en/messages.json'))
+          base_keys = set(base.keys())
+          ok = True
+          for path in sorted(glob.glob('extension/_locales/*/messages.json')):
+              keys = set(json.load(open(path)).keys())
+              missing = base_keys - keys
+              extra = keys - base_keys
+              if missing or extra:
+                  ok = False
+                  print(f'{path}: missing={missing} extra={extra}')
+          sys.exit(0 if ok else 1)
+          "

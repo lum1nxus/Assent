@@ -1,0 +1,51 @@
+{
+  "extName": { "message": "Assent" },
+  "extDescription": {
+    "message": "Elolvassa a szerződéses dokumentumokat ön helyett. Kiemeli a potenciálisan kedvezőtlen kikötéseket, mielőtt elfogadná őket."
+  },
+
+  "scoreLabelLow": { "message": "Alacsony kockázat" },
+  "scoreLabelMedium": { "message": "Mérsékelt kockázat" },
+  "scoreLabelHigh": { "message": "Magas kockázat" },
+  "scoreLabelExtreme": { "message": "Szélsőséges kockázat" },
+  "scoreSublabel": { "message": "Csak mintafelismerés - nem jogi tanácsadás." },
+
+  "stateIdle": { "message": "Ezen az oldalon nem észleltünk dokumentumot." },
+  "stateLoading": { "message": "Dokumentum vizsgálata…" },
+  "stateError": { "message": "Az elemzés nem érhető el" },
+  "errorNoDeviceAI": { "message": "Az eszközön lévő nyelvi modell nem áll készen." },
+
+  "sectionTopThree": { "message": "Fő pontok" },
+  "sectionFlags": { "message": "Megjelölt kikötések" },
+  "sectionCredits": { "message": "Figyelemre méltó rendelkezések" },
+
+  "btnShowInDocument": { "message": "Megjelenítés a dokumentumban" },
+  "btnViewMethodology": { "message": "Hogyan működik" },
+
+  "labelGrade": { "message": "Osztályzat" },
+  "labelEvidence": { "message": "Bizonyíték:" },
+  "labelDate": { "message": "Elemezve" },
+
+  "disclaimerTitle": { "message": "Erről az eredményről" },
+  "disclaimerBody": {
+    "message": "Az eredményt a felhasználó eszközén futó automatikus mintafelismerés állította elő. Minden jelölés szó szerinti idézetre hivatkozik, amely függetlenül ellenőrizhető. Ez nem jogi vélemény, nem jogi tanácsadás, és nem áll kapcsolatban az elemzett dokumentum kiadójával. A pontszám csak nyelvi mintákat tükröz, és hiányos vagy hibás lehet. Mindig olvassa el az eredeti dokumentumot, mielőtt elfogadja."
+  },
+
+  "donationTitle": { "message": "Ez a kiegészítő független és ingyenes" },
+  "donationBody": {
+    "message": "Nincs hirdetés. Nincs követés. Nincs adateladás. Ha hasznosnak találta, egy kis hozzájárulás segít a fejlesztés folytatásában."
+  },
+  "donationBtnTen": { "message": "Támogatás · 10 €" },
+  "donationBtnCustom": { "message": "Összeg kiválasztása" },
+  "donationBtnLater": { "message": "Talán később" },
+  "donationBtnNever": { "message": "Nem, köszönöm" },
+
+  "footerAttribution": {
+    "message": "Open source · független · nincs harmadik féllel kapcsolatban"
+  },
+  "footerSupport": { "message": "A fejlesztés támogatása" },
+
+  "overlayScanning": { "message": "Vizsgálat…" },
+  "overlayDone": { "message": "Részletek megnyitása" },
+  "overlayError": { "message": "Az elemzés nem érhető el" }
+}

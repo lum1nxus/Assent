@@ -1,0 +1,49 @@
+{
+  "extName": { "message": "Assent" },
+  "extDescription": {
+    "message": "Lee documentos contractuales por ti. Resalta cláusulas potencialmente desfavorables antes de que aceptes."
+  },
+
+  "scoreLabelLow": { "message": "Riesgo bajo" },
+  "scoreLabelMedium": { "message": "Riesgo moderado" },
+  "scoreLabelHigh": { "message": "Riesgo alto" },
+  "scoreLabelExtreme": { "message": "Riesgo extremo" },
+  "scoreSublabel": { "message": "Solo detección de patrones - no es asesoramiento legal." },
+
+  "stateIdle": { "message": "No se ha detectado ningún documento en esta página." },
+  "stateLoading": { "message": "Analizando documento…" },
+  "stateError": { "message": "Análisis no disponible" },
+  "errorNoDeviceAI": { "message": "El modelo de lenguaje en el dispositivo no está listo." },
+
+  "sectionTopThree": { "message": "Puntos principales" },
+  "sectionFlags": { "message": "Cláusulas marcadas" },
+  "sectionCredits": { "message": "Disposiciones destacables" },
+
+  "btnShowInDocument": { "message": "Ver en el documento" },
+  "btnViewMethodology": { "message": "Cómo funciona" },
+
+  "labelGrade": { "message": "Nota" },
+  "labelEvidence": { "message": "Evidencia:" },
+  "labelDate": { "message": "Analizado" },
+
+  "disclaimerTitle": { "message": "Sobre este resultado" },
+  "disclaimerBody": {
+    "message": "Resultado producido por detección automática de patrones que se ejecuta en el dispositivo del usuario. Cada marca hace referencia a una cita textual que se puede verificar de forma independiente. No es una opinión legal ni asesoramiento legal y no está afiliado al editor del documento analizado. La puntuación refleja únicamente patrones de lenguaje y puede ser incompleta o incorrecta. Lee siempre el documento original antes de aceptar."
+  },
+
+  "donationTitle": { "message": "Esta extensión es independiente y gratuita" },
+  "donationBody": {
+    "message": "Sin anuncios. Sin seguimiento. Sin venta de datos. Si te ha resultado útil, una pequeña contribución ayuda a mantener el desarrollo."
+  },
+  "donationBtnTen": { "message": "Apoyar · 10 €" },
+  "donationBtnCustom": { "message": "Elegir cantidad" },
+  "donationBtnLater": { "message": "Quizás luego" },
+  "donationBtnNever": { "message": "No, gracias" },
+
+  "footerAttribution": { "message": "Open source · independiente · sin afiliación con terceros" },
+  "footerSupport": { "message": "Apoyar el desarrollo" },
+
+  "overlayScanning": { "message": "Analizando…" },
+  "overlayDone": { "message": "Abrir detalles" },
+  "overlayError": { "message": "Análisis no disponible" }
+}

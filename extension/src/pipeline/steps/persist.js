@@ -1,0 +1,44 @@
+import { scoreToGrade } from "../../features/grade.js";
+import { topThree } from "../../features/top-three.js";
+
+const KEY_PREFIX = "tab_";
+
+const DISCLAIMER_TEXT =
+  "Output produced by automated pattern detection running on the user's device. " +
+  "Each flag references a verbatim excerpt from the document so the reader can verify it independently. " +
+  "This is not a legal opinion, not legal advice, and is not affiliated with the publisher of the analysed document. " +
+  "The score reflects language patterns only and may be incomplete or wrong. " +
+  "Always read the original document before agreeing to any terms.";
+
+export async function persist(input, ctx) {
+  const grade = input.grade ?? scoreToGrade(input.score);
+  const highlights = topThree(input.flags ?? []);
+
+  const result = {
+    domain: input.domain,
+    score: input.score,
+    grade,
+    serviceType: input.serviceType,
+    summary: input.summary,
+    flags: input.flags ?? [],
+    credits: input.credits ?? [],
+    highlights,
+    analyzedAt: input.analyzedAt,
+    source: input.source,
+    disclaimer: {
+      not_legal_advice: true,
+      not_affiliated: true,
+      methodology_url: "https://github.com/lum1nxus/Assent#methodology",
+      analyzed_at: input.analyzedAt,
+      text: DISCLAIMER_TEXT,
+    },
+  };
+
+  await chrome.storage.session.set({
+    [`${KEY_PREFIX}${ctx.tabId}`]: { status: "done", result },
+  });
+
+  return { value: result };
+}
+
+export { KEY_PREFIX };
