@@ -200,13 +200,16 @@ function stripHtml(html) {
 }
 
 function updateBadge(tabId, status, score) {
+  const numeric = Number(score);
+  const safe = Number.isFinite(numeric) ? numeric : null;
   const badges = {
     idle: { text: "", color: "#71717a" },
     loading: { text: "...", color: "#f59e0b" },
     error: { text: "!", color: "#ef4444" },
     done: {
-      text: score !== null && score !== undefined ? String(Math.round(score)) : "?",
-      color: score <= 3 ? "#22c55e" : score <= 6.5 ? "#f59e0b" : "#ef4444",
+      text: safe !== null ? String(Math.round(safe)) : "?",
+      color:
+        safe === null ? "#71717a" : safe <= 25 ? "#22c55e" : safe <= 70 ? "#f59e0b" : "#ef4444",
     },
   };
   const badge = badges[status] ?? badges.idle;

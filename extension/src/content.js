@@ -189,21 +189,23 @@ function clearHighlights() {
 
 function normalizeChars(s) {
   return String(s)
-    .replace(/[\u2018\u2019\u201A\u201B\u2032]/g, "'")
-    .replace(/[\u201C\u201D\u201E\u201F\u2033]/g, '"')
-    .replace(/[\u2013\u2014\u2212]/g, "-")
-    .replace(/\u00A0/g, " ");
+    .replace(/[\u2018\u2019\u201A\u201B\u2032\u00AB\u00BB\u201F]/g, "'")
+    .replace(/[\u201C\u201D\u201E\u201F\u2033\u00AB\u00BB]/g, '"')
+    .replace(/[\u2013\u2014\u2212\u2010\u2011]/g, "-")
+    .replace(/[\u00A0\u202F\u2009\u200A]/g, " ");
 }
 
 function highlightText(quote) {
   ensureHighlightStyle();
   const needle = normalizeChars(quote).replace(/\s+/g, " ").trim().toLowerCase();
   if (needle.length < 8) {
+    console.warn("[Assent] highlight: needle too short", { quote });
     return false;
   }
 
   const { text, anchors } = buildNormalisedTextMap(document.body);
   if (text.length === 0) {
+    console.warn("[Assent] highlight: empty page text buffer");
     return false;
   }
 
@@ -216,12 +218,14 @@ function highlightText(quote) {
   ];
 
   const tried = new Set();
+  const probesTried = [];
   for (const len of candidateLengths) {
     if (len < 12 || tried.has(len)) {
       continue;
     }
     tried.add(len);
     const probe = needle.slice(0, len);
+    probesTried.push({ len, probe: `${probe.slice(0, 60)}...` });
     const idx = text.indexOf(probe);
     if (idx === -1) {
       continue;
@@ -239,6 +243,12 @@ function highlightText(quote) {
     scrollRangeIntoView(range);
     return true;
   }
+  console.warn("[Assent] highlight: no probe matched", {
+    needlePreview: `${needle.slice(0, 80)}...`,
+    needleLength: needle.length,
+    bufferLength: text.length,
+    probesTried,
+  });
   return false;
 }
 

@@ -1,49 +1,192 @@
 {
-  "extName": { "message": "Assent" },
+  "extName": {
+    "message": "Assent"
+  },
   "extDescription": {
     "message": "Læser aftaledokumenter for dig. Fremhæver potentielt ufordelagtige klausuler, før du accepterer."
   },
-
-  "scoreLabelLow": { "message": "Lav risiko" },
-  "scoreLabelMedium": { "message": "Moderat risiko" },
-  "scoreLabelHigh": { "message": "Høj risiko" },
-  "scoreLabelExtreme": { "message": "Ekstrem risiko" },
-  "scoreSublabel": { "message": "Kun mønstergenkendelse - ikke juridisk rådgivning." },
-
-  "stateIdle": { "message": "Intet dokument fundet på denne side." },
-  "stateLoading": { "message": "Scanner dokumentet…" },
-  "stateError": { "message": "Analyse ikke tilgængelig" },
-  "errorNoDeviceAI": { "message": "Sprogmodellen på enheden er ikke klar." },
-
-  "sectionTopThree": { "message": "Vigtigste punkter" },
-  "sectionFlags": { "message": "Markerede klausuler" },
-  "sectionCredits": { "message": "Bemærkelsesværdige bestemmelser" },
-
-  "btnShowInDocument": { "message": "Vis i dokumentet" },
-  "btnViewMethodology": { "message": "Sådan virker det" },
-
-  "labelGrade": { "message": "Karakter" },
-  "labelEvidence": { "message": "Bevis:" },
-  "labelDate": { "message": "Analyseret" },
-
-  "disclaimerTitle": { "message": "Om dette resultat" },
+  "scoreLabelLow": {
+    "message": "Lav risiko"
+  },
+  "scoreLabelMedium": {
+    "message": "Moderat risiko"
+  },
+  "scoreLabelHigh": {
+    "message": "Høj risiko"
+  },
+  "scoreLabelExtreme": {
+    "message": "Ekstrem risiko"
+  },
+  "scoreSublabel": {
+    "message": "Kun mønstergenkendelse - ikke juridisk rådgivning."
+  },
+  "stateIdle": {
+    "message": "Intet dokument fundet på denne side."
+  },
+  "stateLoading": {
+    "message": "Scanner dokumentet…"
+  },
+  "stateError": {
+    "message": "Analyse ikke tilgængelig"
+  },
+  "errorNoDeviceAI": {
+    "message": "Sprogmodellen på enheden er ikke klar."
+  },
+  "sectionTopThree": {
+    "message": "Vigtigste punkter"
+  },
+  "sectionFlags": {
+    "message": "Markerede klausuler"
+  },
+  "sectionCredits": {
+    "message": "Bemærkelsesværdige bestemmelser"
+  },
+  "btnShowInDocument": {
+    "message": "Vis i dokumentet"
+  },
+  "btnViewMethodology": {
+    "message": "Sådan virker det"
+  },
+  "labelGrade": {
+    "message": "Karakter"
+  },
+  "labelEvidence": {
+    "message": "Bevis:"
+  },
+  "labelDate": {
+    "message": "Analyseret"
+  },
+  "disclaimerTitle": {
+    "message": "Om dette resultat"
+  },
   "disclaimerBody": {
     "message": "Resultat produceret af automatisk mønstergenkendelse, der kører på brugerens enhed. Hver markering refererer til et ordret citat, som kan verificeres uafhængigt. Dette er ikke en juridisk udtalelse, ikke juridisk rådgivning og er ikke tilknyttet udgiveren af det analyserede dokument. Scoren afspejler kun sprogmønstre og kan være ufuldstændig eller forkert. Læs altid originaldokumentet, før du accepterer."
   },
-
-  "donationTitle": { "message": "Denne udvidelse er uafhængig og gratis" },
+  "donationTitle": {
+    "message": "Denne udvidelse er uafhængig og gratis"
+  },
   "donationBody": {
     "message": "Ingen annoncer. Ingen sporing. Intet salg af data. Hvis den har været nyttig, hjælper et lille bidrag udviklingen videre."
   },
-  "donationBtnTen": { "message": "Støt · 10 €" },
-  "donationBtnCustom": { "message": "Vælg beløb" },
-  "donationBtnLater": { "message": "Måske senere" },
-  "donationBtnNever": { "message": "Nej tak" },
-
-  "footerAttribution": { "message": "Open source · uafhængig · ikke tilknyttet tredjepart" },
-  "footerSupport": { "message": "Støt udviklingen" },
-
-  "overlayScanning": { "message": "Scanner…" },
-  "overlayDone": { "message": "Åbn detaljer" },
-  "overlayError": { "message": "Analyse ikke tilgængelig" }
+  "donationBtnTen": {
+    "message": "Støt · 10 €"
+  },
+  "donationBtnCustom": {
+    "message": "Vælg beløb"
+  },
+  "donationBtnLater": {
+    "message": "Måske senere"
+  },
+  "donationBtnNever": {
+    "message": "Nej tak"
+  },
+  "footerAttribution": {
+    "message": "Open source · uafhængig · ikke tilknyttet tredjepart"
+  },
+  "footerSupport": {
+    "message": "Støt udviklingen"
+  },
+  "overlayScanning": {
+    "message": "Scanner…"
+  },
+  "overlayDone": {
+    "message": "Åbn detaljer"
+  },
+  "overlayError": {
+    "message": "Analyse ikke tilgængelig"
+  },
+  "catFlagMandatoryArbitration": {
+    "message": "Mandatory arbitration"
+  },
+  "catFlagClassActionWaiver": {
+    "message": "Class action waiver"
+  },
+  "catFlagBroadLicenseIrrevocable": {
+    "message": "Irrevocable broad content licence"
+  },
+  "catFlagUnilateralChange": {
+    "message": "Unilateral terms change without notice"
+  },
+  "catFlagDataResale": {
+    "message": "Personal data resale to undisclosed parties"
+  },
+  "catFlagBroadIndemnity": {
+    "message": "Broad user indemnity"
+  },
+  "catFlagBroadLiabilityCap": {
+    "message": "Broad limitation of liability"
+  },
+  "catFlagBroadWarrantyDisclaimer": {
+    "message": "Broad warranty disclaimer"
+  },
+  "catFlagBroadDataSharing": {
+    "message": "Broad data sharing with third parties"
+  },
+  "catFlagAccountTermination": {
+    "message": "Account termination without notice"
+  },
+  "catFlagContentRemoval": {
+    "message": "Content removal at sole discretion"
+  },
+  "catFlagAutoRenewal": {
+    "message": "Auto-renewal without a clear opt-out"
+  },
+  "catFlagRetentionUndefined": {
+    "message": "Undefined data retention period"
+  },
+  "catFlagDistantVenue": {
+    "message": "Distant dispute venue"
+  },
+  "catFlagServicesAsIs": {
+    "message": "Service provided \"as is\""
+  },
+  "catFlagOtherUnfavourable": {
+    "message": "Other unfavourable clause"
+  },
+  "catCreditRefundWindow": {
+    "message": "Explicit refund window"
+  },
+  "catCreditEasyDeletion": {
+    "message": "Easy account deletion"
+  },
+  "catCreditOptinDataSharing": {
+    "message": "Opt-in required for data sharing"
+  },
+  "catCreditNoAutoRenewal": {
+    "message": "No automatic renewal"
+  },
+  "catCreditTransparentRetention": {
+    "message": "Transparent data retention period"
+  },
+  "catCreditDataExport": {
+    "message": "Free data export"
+  },
+  "catCreditArbitrationOptout": {
+    "message": "Arbitration opt-out window"
+  },
+  "catCreditUserOwnsContent": {
+    "message": "User retains content ownership"
+  },
+  "summaryTemplateOne": {
+    "message": "Document contains: $1$.",
+    "placeholders": {
+      "1": {
+        "content": "$1",
+        "example": "Mandatory arbitration"
+      }
+    }
+  },
+  "summaryTemplateTwo": {
+    "message": "Document contains: $1$ and $2$.",
+    "placeholders": {
+      "1": {
+        "content": "$1",
+        "example": "Mandatory arbitration"
+      },
+      "2": {
+        "content": "$2",
+        "example": "Class action waiver"
+      }
+    }
+  }
 }

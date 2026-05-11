@@ -1,49 +1,192 @@
 {
-  "extName": { "message": "Assent" },
+  "extName": {
+    "message": "Assent"
+  },
   "extDescription": {
     "message": "Llegeix els documents contractuals per tu. Ressalta clàusules potencialment desfavorables abans que acceptis."
   },
-
-  "scoreLabelLow": { "message": "Risc baix" },
-  "scoreLabelMedium": { "message": "Risc moderat" },
-  "scoreLabelHigh": { "message": "Risc alt" },
-  "scoreLabelExtreme": { "message": "Risc extrem" },
-  "scoreSublabel": { "message": "Només detecció de patrons - no és assessorament legal." },
-
-  "stateIdle": { "message": "No s'ha detectat cap document en aquesta pàgina." },
-  "stateLoading": { "message": "Analitzant document…" },
-  "stateError": { "message": "Anàlisi no disponible" },
-  "errorNoDeviceAI": { "message": "El model de llenguatge al dispositiu no està a punt." },
-
-  "sectionTopThree": { "message": "Punts principals" },
-  "sectionFlags": { "message": "Clàusules marcades" },
-  "sectionCredits": { "message": "Disposicions destacables" },
-
-  "btnShowInDocument": { "message": "Mostra al document" },
-  "btnViewMethodology": { "message": "Com funciona" },
-
-  "labelGrade": { "message": "Nota" },
-  "labelEvidence": { "message": "Prova:" },
-  "labelDate": { "message": "Analitzat" },
-
-  "disclaimerTitle": { "message": "Sobre aquest resultat" },
+  "scoreLabelLow": {
+    "message": "Risc baix"
+  },
+  "scoreLabelMedium": {
+    "message": "Risc moderat"
+  },
+  "scoreLabelHigh": {
+    "message": "Risc alt"
+  },
+  "scoreLabelExtreme": {
+    "message": "Risc extrem"
+  },
+  "scoreSublabel": {
+    "message": "Només detecció de patrons - no és assessorament legal."
+  },
+  "stateIdle": {
+    "message": "No s'ha detectat cap document en aquesta pàgina."
+  },
+  "stateLoading": {
+    "message": "Analitzant document…"
+  },
+  "stateError": {
+    "message": "Anàlisi no disponible"
+  },
+  "errorNoDeviceAI": {
+    "message": "El model de llenguatge al dispositiu no està a punt."
+  },
+  "sectionTopThree": {
+    "message": "Punts principals"
+  },
+  "sectionFlags": {
+    "message": "Clàusules marcades"
+  },
+  "sectionCredits": {
+    "message": "Disposicions destacables"
+  },
+  "btnShowInDocument": {
+    "message": "Mostra al document"
+  },
+  "btnViewMethodology": {
+    "message": "Com funciona"
+  },
+  "labelGrade": {
+    "message": "Nota"
+  },
+  "labelEvidence": {
+    "message": "Prova:"
+  },
+  "labelDate": {
+    "message": "Analitzat"
+  },
+  "disclaimerTitle": {
+    "message": "Sobre aquest resultat"
+  },
   "disclaimerBody": {
     "message": "Resultat produït per detecció automàtica de patrons executant-se al dispositiu de l'usuari. Cada marca fa referència a una citació textual verificable de forma independent. Això no és una opinió legal ni assessorament legal i no està afiliat a l'editor del document analitzat. La puntuació reflecteix només patrons de llenguatge i pot ser incompleta o errònia. Llegeix sempre el document original abans d'acceptar."
   },
-
-  "donationTitle": { "message": "Aquesta extensió és independent i gratuïta" },
+  "donationTitle": {
+    "message": "Aquesta extensió és independent i gratuïta"
+  },
   "donationBody": {
     "message": "Sense anuncis. Sense rastreig. Sense venda de dades. Si t'ha estat útil, una petita contribució ajuda a continuar el desenvolupament."
   },
-  "donationBtnTen": { "message": "Donar suport · 10 €" },
-  "donationBtnCustom": { "message": "Triar import" },
-  "donationBtnLater": { "message": "Potser més tard" },
-  "donationBtnNever": { "message": "No, gràcies" },
-
-  "footerAttribution": { "message": "Open source · independent · sense afiliació amb tercers" },
-  "footerSupport": { "message": "Donar suport al desenvolupament" },
-
-  "overlayScanning": { "message": "Analitzant…" },
-  "overlayDone": { "message": "Obrir detalls" },
-  "overlayError": { "message": "Anàlisi no disponible" }
+  "donationBtnTen": {
+    "message": "Donar suport · 10 €"
+  },
+  "donationBtnCustom": {
+    "message": "Triar import"
+  },
+  "donationBtnLater": {
+    "message": "Potser més tard"
+  },
+  "donationBtnNever": {
+    "message": "No, gràcies"
+  },
+  "footerAttribution": {
+    "message": "Open source · independent · sense afiliació amb tercers"
+  },
+  "footerSupport": {
+    "message": "Donar suport al desenvolupament"
+  },
+  "overlayScanning": {
+    "message": "Analitzant…"
+  },
+  "overlayDone": {
+    "message": "Obrir detalls"
+  },
+  "overlayError": {
+    "message": "Anàlisi no disponible"
+  },
+  "catFlagMandatoryArbitration": {
+    "message": "Mandatory arbitration"
+  },
+  "catFlagClassActionWaiver": {
+    "message": "Class action waiver"
+  },
+  "catFlagBroadLicenseIrrevocable": {
+    "message": "Irrevocable broad content licence"
+  },
+  "catFlagUnilateralChange": {
+    "message": "Unilateral terms change without notice"
+  },
+  "catFlagDataResale": {
+    "message": "Personal data resale to undisclosed parties"
+  },
+  "catFlagBroadIndemnity": {
+    "message": "Broad user indemnity"
+  },
+  "catFlagBroadLiabilityCap": {
+    "message": "Broad limitation of liability"
+  },
+  "catFlagBroadWarrantyDisclaimer": {
+    "message": "Broad warranty disclaimer"
+  },
+  "catFlagBroadDataSharing": {
+    "message": "Broad data sharing with third parties"
+  },
+  "catFlagAccountTermination": {
+    "message": "Account termination without notice"
+  },
+  "catFlagContentRemoval": {
+    "message": "Content removal at sole discretion"
+  },
+  "catFlagAutoRenewal": {
+    "message": "Auto-renewal without a clear opt-out"
+  },
+  "catFlagRetentionUndefined": {
+    "message": "Undefined data retention period"
+  },
+  "catFlagDistantVenue": {
+    "message": "Distant dispute venue"
+  },
+  "catFlagServicesAsIs": {
+    "message": "Service provided \"as is\""
+  },
+  "catFlagOtherUnfavourable": {
+    "message": "Other unfavourable clause"
+  },
+  "catCreditRefundWindow": {
+    "message": "Explicit refund window"
+  },
+  "catCreditEasyDeletion": {
+    "message": "Easy account deletion"
+  },
+  "catCreditOptinDataSharing": {
+    "message": "Opt-in required for data sharing"
+  },
+  "catCreditNoAutoRenewal": {
+    "message": "No automatic renewal"
+  },
+  "catCreditTransparentRetention": {
+    "message": "Transparent data retention period"
+  },
+  "catCreditDataExport": {
+    "message": "Free data export"
+  },
+  "catCreditArbitrationOptout": {
+    "message": "Arbitration opt-out window"
+  },
+  "catCreditUserOwnsContent": {
+    "message": "User retains content ownership"
+  },
+  "summaryTemplateOne": {
+    "message": "Document contains: $1$.",
+    "placeholders": {
+      "1": {
+        "content": "$1",
+        "example": "Mandatory arbitration"
+      }
+    }
+  },
+  "summaryTemplateTwo": {
+    "message": "Document contains: $1$ and $2$.",
+    "placeholders": {
+      "1": {
+        "content": "$1",
+        "example": "Mandatory arbitration"
+      },
+      "2": {
+        "content": "$2",
+        "example": "Class action waiver"
+      }
+    }
+  }
 }

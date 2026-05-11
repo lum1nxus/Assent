@@ -1,49 +1,192 @@
 {
-  "extName": { "message": "Assent" },
+  "extName": {
+    "message": "Assent"
+  },
   "extDescription": {
     "message": "Leest overeenkomstdocumenten zodat jij dat niet hoeft. Markeert mogelijk ongunstige clausules voordat je akkoord gaat."
   },
-
-  "scoreLabelLow": { "message": "Laag risico" },
-  "scoreLabelMedium": { "message": "Matig risico" },
-  "scoreLabelHigh": { "message": "Hoog risico" },
-  "scoreLabelExtreme": { "message": "Extreem risico" },
-  "scoreSublabel": { "message": "Alleen patroondetectie - geen juridisch advies." },
-
-  "stateIdle": { "message": "Geen document gevonden op deze pagina." },
-  "stateLoading": { "message": "Document wordt gescand…" },
-  "stateError": { "message": "Analyse niet beschikbaar" },
-  "errorNoDeviceAI": { "message": "Taalmodel op het apparaat is niet gereed." },
-
-  "sectionTopThree": { "message": "Belangrijkste punten" },
-  "sectionFlags": { "message": "Gemarkeerde clausules" },
-  "sectionCredits": { "message": "Opvallende bepalingen" },
-
-  "btnShowInDocument": { "message": "Toon in document" },
-  "btnViewMethodology": { "message": "Hoe dit werkt" },
-
-  "labelGrade": { "message": "Cijfer" },
-  "labelEvidence": { "message": "Bewijs:" },
-  "labelDate": { "message": "Geanalyseerd" },
-
-  "disclaimerTitle": { "message": "Over deze uitvoer" },
+  "scoreLabelLow": {
+    "message": "Laag risico"
+  },
+  "scoreLabelMedium": {
+    "message": "Matig risico"
+  },
+  "scoreLabelHigh": {
+    "message": "Hoog risico"
+  },
+  "scoreLabelExtreme": {
+    "message": "Extreem risico"
+  },
+  "scoreSublabel": {
+    "message": "Alleen patroondetectie - geen juridisch advies."
+  },
+  "stateIdle": {
+    "message": "Geen document gevonden op deze pagina."
+  },
+  "stateLoading": {
+    "message": "Document wordt gescand…"
+  },
+  "stateError": {
+    "message": "Analyse niet beschikbaar"
+  },
+  "errorNoDeviceAI": {
+    "message": "Taalmodel op het apparaat is niet gereed."
+  },
+  "sectionTopThree": {
+    "message": "Belangrijkste punten"
+  },
+  "sectionFlags": {
+    "message": "Gemarkeerde clausules"
+  },
+  "sectionCredits": {
+    "message": "Opvallende bepalingen"
+  },
+  "btnShowInDocument": {
+    "message": "Toon in document"
+  },
+  "btnViewMethodology": {
+    "message": "Hoe dit werkt"
+  },
+  "labelGrade": {
+    "message": "Cijfer"
+  },
+  "labelEvidence": {
+    "message": "Bewijs:"
+  },
+  "labelDate": {
+    "message": "Geanalyseerd"
+  },
+  "disclaimerTitle": {
+    "message": "Over deze uitvoer"
+  },
   "disclaimerBody": {
     "message": "Uitvoer geproduceerd door geautomatiseerde patroondetectie die op het apparaat van de gebruiker draait. Elke markering verwijst naar een letterlijk citaat dat onafhankelijk te verifiëren is. Dit is geen juridisch oordeel, geen juridisch advies en niet gelieerd aan de uitgever van het geanalyseerde document. De score weerspiegelt uitsluitend taalpatronen en kan onvolledig of onjuist zijn. Lees altijd het oorspronkelijke document voordat je akkoord gaat."
   },
-
-  "donationTitle": { "message": "Deze extensie is onafhankelijk en gratis" },
+  "donationTitle": {
+    "message": "Deze extensie is onafhankelijk en gratis"
+  },
   "donationBody": {
     "message": "Geen advertenties. Geen tracking. Geen verkoop van gegevens. Als het nuttig was, helpt een kleine bijdrage de ontwikkeling voort te zetten."
   },
-  "donationBtnTen": { "message": "Ondersteunen · € 10" },
-  "donationBtnCustom": { "message": "Bedrag kiezen" },
-  "donationBtnLater": { "message": "Misschien later" },
-  "donationBtnNever": { "message": "Nee, bedankt" },
-
-  "footerAttribution": { "message": "Open source · onafhankelijk · niet gelieerd aan derden" },
-  "footerSupport": { "message": "Ontwikkeling steunen" },
-
-  "overlayScanning": { "message": "Scannen…" },
-  "overlayDone": { "message": "Details openen" },
-  "overlayError": { "message": "Analyse niet beschikbaar" }
+  "donationBtnTen": {
+    "message": "Ondersteunen · € 10"
+  },
+  "donationBtnCustom": {
+    "message": "Bedrag kiezen"
+  },
+  "donationBtnLater": {
+    "message": "Misschien later"
+  },
+  "donationBtnNever": {
+    "message": "Nee, bedankt"
+  },
+  "footerAttribution": {
+    "message": "Open source · onafhankelijk · niet gelieerd aan derden"
+  },
+  "footerSupport": {
+    "message": "Ontwikkeling steunen"
+  },
+  "overlayScanning": {
+    "message": "Scannen…"
+  },
+  "overlayDone": {
+    "message": "Details openen"
+  },
+  "overlayError": {
+    "message": "Analyse niet beschikbaar"
+  },
+  "catFlagMandatoryArbitration": {
+    "message": "Mandatory arbitration"
+  },
+  "catFlagClassActionWaiver": {
+    "message": "Class action waiver"
+  },
+  "catFlagBroadLicenseIrrevocable": {
+    "message": "Irrevocable broad content licence"
+  },
+  "catFlagUnilateralChange": {
+    "message": "Unilateral terms change without notice"
+  },
+  "catFlagDataResale": {
+    "message": "Personal data resale to undisclosed parties"
+  },
+  "catFlagBroadIndemnity": {
+    "message": "Broad user indemnity"
+  },
+  "catFlagBroadLiabilityCap": {
+    "message": "Broad limitation of liability"
+  },
+  "catFlagBroadWarrantyDisclaimer": {
+    "message": "Broad warranty disclaimer"
+  },
+  "catFlagBroadDataSharing": {
+    "message": "Broad data sharing with third parties"
+  },
+  "catFlagAccountTermination": {
+    "message": "Account termination without notice"
+  },
+  "catFlagContentRemoval": {
+    "message": "Content removal at sole discretion"
+  },
+  "catFlagAutoRenewal": {
+    "message": "Auto-renewal without a clear opt-out"
+  },
+  "catFlagRetentionUndefined": {
+    "message": "Undefined data retention period"
+  },
+  "catFlagDistantVenue": {
+    "message": "Distant dispute venue"
+  },
+  "catFlagServicesAsIs": {
+    "message": "Service provided \"as is\""
+  },
+  "catFlagOtherUnfavourable": {
+    "message": "Other unfavourable clause"
+  },
+  "catCreditRefundWindow": {
+    "message": "Explicit refund window"
+  },
+  "catCreditEasyDeletion": {
+    "message": "Easy account deletion"
+  },
+  "catCreditOptinDataSharing": {
+    "message": "Opt-in required for data sharing"
+  },
+  "catCreditNoAutoRenewal": {
+    "message": "No automatic renewal"
+  },
+  "catCreditTransparentRetention": {
+    "message": "Transparent data retention period"
+  },
+  "catCreditDataExport": {
+    "message": "Free data export"
+  },
+  "catCreditArbitrationOptout": {
+    "message": "Arbitration opt-out window"
+  },
+  "catCreditUserOwnsContent": {
+    "message": "User retains content ownership"
+  },
+  "summaryTemplateOne": {
+    "message": "Document contains: $1$.",
+    "placeholders": {
+      "1": {
+        "content": "$1",
+        "example": "Mandatory arbitration"
+      }
+    }
+  },
+  "summaryTemplateTwo": {
+    "message": "Document contains: $1$ and $2$.",
+    "placeholders": {
+      "1": {
+        "content": "$1",
+        "example": "Mandatory arbitration"
+      },
+      "2": {
+        "content": "$2",
+        "example": "Class action waiver"
+      }
+    }
+  }
 }

@@ -1,49 +1,192 @@
 {
-  "extName": { "message": "Assent" },
+  "extName": {
+    "message": "Assent"
+  },
   "extDescription": {
     "message": "Чете договорни документи вместо вас. Подчертава потенциално неблагоприятни клаузи, преди да приемете."
   },
-
-  "scoreLabelLow": { "message": "Нисък риск" },
-  "scoreLabelMedium": { "message": "Умерен риск" },
-  "scoreLabelHigh": { "message": "Висок риск" },
-  "scoreLabelExtreme": { "message": "Изключителен риск" },
-  "scoreSublabel": { "message": "Само откриване на модели - не е правен съвет." },
-
-  "stateIdle": { "message": "На тази страница не е открит документ." },
-  "stateLoading": { "message": "Сканиране на документа…" },
-  "stateError": { "message": "Анализът не е наличен" },
-  "errorNoDeviceAI": { "message": "Езиковият модел на устройството не е готов." },
-
-  "sectionTopThree": { "message": "Основни точки" },
-  "sectionFlags": { "message": "Маркирани клаузи" },
-  "sectionCredits": { "message": "Значими разпоредби" },
-
-  "btnShowInDocument": { "message": "Покажи в документа" },
-  "btnViewMethodology": { "message": "Как работи" },
-
-  "labelGrade": { "message": "Оценка" },
-  "labelEvidence": { "message": "Доказателство:" },
-  "labelDate": { "message": "Анализирано" },
-
-  "disclaimerTitle": { "message": "За този резултат" },
+  "scoreLabelLow": {
+    "message": "Нисък риск"
+  },
+  "scoreLabelMedium": {
+    "message": "Умерен риск"
+  },
+  "scoreLabelHigh": {
+    "message": "Висок риск"
+  },
+  "scoreLabelExtreme": {
+    "message": "Изключителен риск"
+  },
+  "scoreSublabel": {
+    "message": "Само откриване на модели - не е правен съвет."
+  },
+  "stateIdle": {
+    "message": "На тази страница не е открит документ."
+  },
+  "stateLoading": {
+    "message": "Сканиране на документа…"
+  },
+  "stateError": {
+    "message": "Анализът не е наличен"
+  },
+  "errorNoDeviceAI": {
+    "message": "Езиковият модел на устройството не е готов."
+  },
+  "sectionTopThree": {
+    "message": "Основни точки"
+  },
+  "sectionFlags": {
+    "message": "Маркирани клаузи"
+  },
+  "sectionCredits": {
+    "message": "Значими разпоредби"
+  },
+  "btnShowInDocument": {
+    "message": "Покажи в документа"
+  },
+  "btnViewMethodology": {
+    "message": "Как работи"
+  },
+  "labelGrade": {
+    "message": "Оценка"
+  },
+  "labelEvidence": {
+    "message": "Доказателство:"
+  },
+  "labelDate": {
+    "message": "Анализирано"
+  },
+  "disclaimerTitle": {
+    "message": "За този резултат"
+  },
   "disclaimerBody": {
     "message": "Резултат, генериран от автоматично откриване на модели, работещо на устройството на потребителя. Всеки маркер се позовава на дословен цитат, който може да бъде проверен независимо. Това не е правно становище, не е правен съвет и не е свързано с издателя на анализирания документ. Оценката отразява само езикови модели и може да е непълна или грешна. Винаги четете оригиналния документ, преди да приемете."
   },
-
-  "donationTitle": { "message": "Това разширение е независимо и безплатно" },
+  "donationTitle": {
+    "message": "Това разширение е независимо и безплатно"
+  },
   "donationBody": {
     "message": "Без реклами. Без проследяване. Без продажба на данни. Ако е било полезно, малък принос помага за продължаване на разработката."
   },
-  "donationBtnTen": { "message": "Подкрепи · 10 €" },
-  "donationBtnCustom": { "message": "Избери сума" },
-  "donationBtnLater": { "message": "Може би по-късно" },
-  "donationBtnNever": { "message": "Не, благодаря" },
-
-  "footerAttribution": { "message": "Open source · независимо · без връзка с трети страни" },
-  "footerSupport": { "message": "Подкрепи разработката" },
-
-  "overlayScanning": { "message": "Сканиране…" },
-  "overlayDone": { "message": "Отвори детайли" },
-  "overlayError": { "message": "Анализът не е наличен" }
+  "donationBtnTen": {
+    "message": "Подкрепи · 10 €"
+  },
+  "donationBtnCustom": {
+    "message": "Избери сума"
+  },
+  "donationBtnLater": {
+    "message": "Може би по-късно"
+  },
+  "donationBtnNever": {
+    "message": "Не, благодаря"
+  },
+  "footerAttribution": {
+    "message": "Open source · независимо · без връзка с трети страни"
+  },
+  "footerSupport": {
+    "message": "Подкрепи разработката"
+  },
+  "overlayScanning": {
+    "message": "Сканиране…"
+  },
+  "overlayDone": {
+    "message": "Отвори детайли"
+  },
+  "overlayError": {
+    "message": "Анализът не е наличен"
+  },
+  "catFlagMandatoryArbitration": {
+    "message": "Mandatory arbitration"
+  },
+  "catFlagClassActionWaiver": {
+    "message": "Class action waiver"
+  },
+  "catFlagBroadLicenseIrrevocable": {
+    "message": "Irrevocable broad content licence"
+  },
+  "catFlagUnilateralChange": {
+    "message": "Unilateral terms change without notice"
+  },
+  "catFlagDataResale": {
+    "message": "Personal data resale to undisclosed parties"
+  },
+  "catFlagBroadIndemnity": {
+    "message": "Broad user indemnity"
+  },
+  "catFlagBroadLiabilityCap": {
+    "message": "Broad limitation of liability"
+  },
+  "catFlagBroadWarrantyDisclaimer": {
+    "message": "Broad warranty disclaimer"
+  },
+  "catFlagBroadDataSharing": {
+    "message": "Broad data sharing with third parties"
+  },
+  "catFlagAccountTermination": {
+    "message": "Account termination without notice"
+  },
+  "catFlagContentRemoval": {
+    "message": "Content removal at sole discretion"
+  },
+  "catFlagAutoRenewal": {
+    "message": "Auto-renewal without a clear opt-out"
+  },
+  "catFlagRetentionUndefined": {
+    "message": "Undefined data retention period"
+  },
+  "catFlagDistantVenue": {
+    "message": "Distant dispute venue"
+  },
+  "catFlagServicesAsIs": {
+    "message": "Service provided \"as is\""
+  },
+  "catFlagOtherUnfavourable": {
+    "message": "Other unfavourable clause"
+  },
+  "catCreditRefundWindow": {
+    "message": "Explicit refund window"
+  },
+  "catCreditEasyDeletion": {
+    "message": "Easy account deletion"
+  },
+  "catCreditOptinDataSharing": {
+    "message": "Opt-in required for data sharing"
+  },
+  "catCreditNoAutoRenewal": {
+    "message": "No automatic renewal"
+  },
+  "catCreditTransparentRetention": {
+    "message": "Transparent data retention period"
+  },
+  "catCreditDataExport": {
+    "message": "Free data export"
+  },
+  "catCreditArbitrationOptout": {
+    "message": "Arbitration opt-out window"
+  },
+  "catCreditUserOwnsContent": {
+    "message": "User retains content ownership"
+  },
+  "summaryTemplateOne": {
+    "message": "Document contains: $1$.",
+    "placeholders": {
+      "1": {
+        "content": "$1",
+        "example": "Mandatory arbitration"
+      }
+    }
+  },
+  "summaryTemplateTwo": {
+    "message": "Document contains: $1$ and $2$.",
+    "placeholders": {
+      "1": {
+        "content": "$1",
+        "example": "Mandatory arbitration"
+      },
+      "2": {
+        "content": "$2",
+        "example": "Class action waiver"
+      }
+    }
+  }
 }

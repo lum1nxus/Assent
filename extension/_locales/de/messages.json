@@ -1,49 +1,192 @@
 {
-  "extName": { "message": "Assent" },
+  "extName": {
+    "message": "Assent"
+  },
   "extDescription": {
     "message": "Liest Nutzungsbedingungen, damit du es nicht musst. Hebt potenziell ungünstige Klauseln hervor, bevor du zustimmst."
   },
-
-  "scoreLabelLow": { "message": "Geringes Risiko" },
-  "scoreLabelMedium": { "message": "Mittleres Risiko" },
-  "scoreLabelHigh": { "message": "Hohes Risiko" },
-  "scoreLabelExtreme": { "message": "Extremes Risiko" },
-  "scoreSublabel": { "message": "Reine Mustererkennung - keine Rechtsberatung." },
-
-  "stateIdle": { "message": "Kein Dokument auf dieser Seite erkannt." },
-  "stateLoading": { "message": "Dokument wird gescannt…" },
-  "stateError": { "message": "Analyse nicht verfügbar" },
-  "errorNoDeviceAI": { "message": "Sprachmodell auf dem Gerät ist nicht einsatzbereit." },
-
-  "sectionTopThree": { "message": "Wichtigste Punkte" },
-  "sectionFlags": { "message": "Markierte Klauseln" },
-  "sectionCredits": { "message": "Bemerkenswerte Bestimmungen" },
-
-  "btnShowInDocument": { "message": "Im Dokument zeigen" },
-  "btnViewMethodology": { "message": "Wie das funktioniert" },
-
-  "labelGrade": { "message": "Note" },
-  "labelEvidence": { "message": "Beleg:" },
-  "labelDate": { "message": "Analysiert" },
-
-  "disclaimerTitle": { "message": "Über diese Ausgabe" },
+  "scoreLabelLow": {
+    "message": "Geringes Risiko"
+  },
+  "scoreLabelMedium": {
+    "message": "Mittleres Risiko"
+  },
+  "scoreLabelHigh": {
+    "message": "Hohes Risiko"
+  },
+  "scoreLabelExtreme": {
+    "message": "Extremes Risiko"
+  },
+  "scoreSublabel": {
+    "message": "Reine Mustererkennung - keine Rechtsberatung."
+  },
+  "stateIdle": {
+    "message": "Kein Dokument auf dieser Seite erkannt."
+  },
+  "stateLoading": {
+    "message": "Dokument wird gescannt…"
+  },
+  "stateError": {
+    "message": "Analyse nicht verfügbar"
+  },
+  "errorNoDeviceAI": {
+    "message": "Sprachmodell auf dem Gerät ist nicht einsatzbereit."
+  },
+  "sectionTopThree": {
+    "message": "Wichtigste Punkte"
+  },
+  "sectionFlags": {
+    "message": "Markierte Klauseln"
+  },
+  "sectionCredits": {
+    "message": "Bemerkenswerte Bestimmungen"
+  },
+  "btnShowInDocument": {
+    "message": "Im Dokument zeigen"
+  },
+  "btnViewMethodology": {
+    "message": "Wie das funktioniert"
+  },
+  "labelGrade": {
+    "message": "Note"
+  },
+  "labelEvidence": {
+    "message": "Beleg:"
+  },
+  "labelDate": {
+    "message": "Analysiert"
+  },
+  "disclaimerTitle": {
+    "message": "Über diese Ausgabe"
+  },
   "disclaimerBody": {
     "message": "Ausgabe einer automatisierten Mustererkennung, die auf dem Gerät des Nutzers läuft. Jede Markierung verweist auf ein wörtliches Zitat, das unabhängig überprüft werden kann. Dies ist keine Rechtsmeinung, keine Rechtsberatung und steht in keinerlei Verbindung zum Herausgeber des analysierten Dokuments. Die Bewertung spiegelt ausschließlich Sprachmuster wider und kann unvollständig oder falsch sein. Lies stets das Originaldokument, bevor du zustimmst."
   },
-
-  "donationTitle": { "message": "Diese Erweiterung ist unabhängig und kostenlos" },
+  "donationTitle": {
+    "message": "Diese Erweiterung ist unabhängig und kostenlos"
+  },
   "donationBody": {
     "message": "Keine Werbung. Kein Tracking. Kein Datenverkauf. Wenn sie nützlich war, hilft eine kleine Spende, die Entwicklung fortzusetzen."
   },
-  "donationBtnTen": { "message": "Unterstützen · 10 €" },
-  "donationBtnCustom": { "message": "Betrag wählen" },
-  "donationBtnLater": { "message": "Vielleicht später" },
-  "donationBtnNever": { "message": "Nein danke" },
-
-  "footerAttribution": { "message": "Open Source · unabhängig · nicht mit Dritten verbunden" },
-  "footerSupport": { "message": "Entwicklung unterstützen" },
-
-  "overlayScanning": { "message": "Wird gescannt…" },
-  "overlayDone": { "message": "Details öffnen" },
-  "overlayError": { "message": "Analyse nicht verfügbar" }
+  "donationBtnTen": {
+    "message": "Unterstützen · 10 €"
+  },
+  "donationBtnCustom": {
+    "message": "Betrag wählen"
+  },
+  "donationBtnLater": {
+    "message": "Vielleicht später"
+  },
+  "donationBtnNever": {
+    "message": "Nein danke"
+  },
+  "footerAttribution": {
+    "message": "Open Source · unabhängig · nicht mit Dritten verbunden"
+  },
+  "footerSupport": {
+    "message": "Entwicklung unterstützen"
+  },
+  "overlayScanning": {
+    "message": "Wird gescannt…"
+  },
+  "overlayDone": {
+    "message": "Details öffnen"
+  },
+  "overlayError": {
+    "message": "Analyse nicht verfügbar"
+  },
+  "catFlagMandatoryArbitration": {
+    "message": "Mandatory arbitration"
+  },
+  "catFlagClassActionWaiver": {
+    "message": "Class action waiver"
+  },
+  "catFlagBroadLicenseIrrevocable": {
+    "message": "Irrevocable broad content licence"
+  },
+  "catFlagUnilateralChange": {
+    "message": "Unilateral terms change without notice"
+  },
+  "catFlagDataResale": {
+    "message": "Personal data resale to undisclosed parties"
+  },
+  "catFlagBroadIndemnity": {
+    "message": "Broad user indemnity"
+  },
+  "catFlagBroadLiabilityCap": {
+    "message": "Broad limitation of liability"
+  },
+  "catFlagBroadWarrantyDisclaimer": {
+    "message": "Broad warranty disclaimer"
+  },
+  "catFlagBroadDataSharing": {
+    "message": "Broad data sharing with third parties"
+  },
+  "catFlagAccountTermination": {
+    "message": "Account termination without notice"
+  },
+  "catFlagContentRemoval": {
+    "message": "Content removal at sole discretion"
+  },
+  "catFlagAutoRenewal": {
+    "message": "Auto-renewal without a clear opt-out"
+  },
+  "catFlagRetentionUndefined": {
+    "message": "Undefined data retention period"
+  },
+  "catFlagDistantVenue": {
+    "message": "Distant dispute venue"
+  },
+  "catFlagServicesAsIs": {
+    "message": "Service provided \"as is\""
+  },
+  "catFlagOtherUnfavourable": {
+    "message": "Other unfavourable clause"
+  },
+  "catCreditRefundWindow": {
+    "message": "Explicit refund window"
+  },
+  "catCreditEasyDeletion": {
+    "message": "Easy account deletion"
+  },
+  "catCreditOptinDataSharing": {
+    "message": "Opt-in required for data sharing"
+  },
+  "catCreditNoAutoRenewal": {
+    "message": "No automatic renewal"
+  },
+  "catCreditTransparentRetention": {
+    "message": "Transparent data retention period"
+  },
+  "catCreditDataExport": {
+    "message": "Free data export"
+  },
+  "catCreditArbitrationOptout": {
+    "message": "Arbitration opt-out window"
+  },
+  "catCreditUserOwnsContent": {
+    "message": "User retains content ownership"
+  },
+  "summaryTemplateOne": {
+    "message": "Document contains: $1$.",
+    "placeholders": {
+      "1": {
+        "content": "$1",
+        "example": "Mandatory arbitration"
+      }
+    }
+  },
+  "summaryTemplateTwo": {
+    "message": "Document contains: $1$ and $2$.",
+    "placeholders": {
+      "1": {
+        "content": "$1",
+        "example": "Mandatory arbitration"
+      },
+      "2": {
+        "content": "$2",
+        "example": "Class action waiver"
+      }
+    }
+  }
 }

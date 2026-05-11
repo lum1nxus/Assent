@@ -1,51 +1,192 @@
 {
-  "extName": { "message": "Assent" },
+  "extName": {
+    "message": "Assent"
+  },
   "extDescription": {
     "message": "Чита уговорне документе уместо вас. Истиче потенцијално неповољне клаузуле пре него што прихватите."
   },
-
-  "scoreLabelLow": { "message": "Низак ризик" },
-  "scoreLabelMedium": { "message": "Умерен ризик" },
-  "scoreLabelHigh": { "message": "Висок ризик" },
-  "scoreLabelExtreme": { "message": "Екстреман ризик" },
-  "scoreSublabel": { "message": "Само откривање образаца - није правни савет." },
-
-  "stateIdle": { "message": "На овој страници није откривен документ." },
-  "stateLoading": { "message": "Скенирање документа…" },
-  "stateError": { "message": "Анализа није доступна" },
-  "errorNoDeviceAI": { "message": "Језички модел на уређају није спреман." },
-
-  "sectionTopThree": { "message": "Главне тачке" },
-  "sectionFlags": { "message": "Означене клаузуле" },
-  "sectionCredits": { "message": "Значајне одредбе" },
-
-  "btnShowInDocument": { "message": "Прикажи у документу" },
-  "btnViewMethodology": { "message": "Како ово ради" },
-
-  "labelGrade": { "message": "Оцена" },
-  "labelEvidence": { "message": "Доказ:" },
-  "labelDate": { "message": "Анализирано" },
-
-  "disclaimerTitle": { "message": "О овом резултату" },
+  "scoreLabelLow": {
+    "message": "Низак ризик"
+  },
+  "scoreLabelMedium": {
+    "message": "Умерен ризик"
+  },
+  "scoreLabelHigh": {
+    "message": "Висок ризик"
+  },
+  "scoreLabelExtreme": {
+    "message": "Екстреман ризик"
+  },
+  "scoreSublabel": {
+    "message": "Само откривање образаца - није правни савет."
+  },
+  "stateIdle": {
+    "message": "На овој страници није откривен документ."
+  },
+  "stateLoading": {
+    "message": "Скенирање документа…"
+  },
+  "stateError": {
+    "message": "Анализа није доступна"
+  },
+  "errorNoDeviceAI": {
+    "message": "Језички модел на уређају није спреман."
+  },
+  "sectionTopThree": {
+    "message": "Главне тачке"
+  },
+  "sectionFlags": {
+    "message": "Означене клаузуле"
+  },
+  "sectionCredits": {
+    "message": "Значајне одредбе"
+  },
+  "btnShowInDocument": {
+    "message": "Прикажи у документу"
+  },
+  "btnViewMethodology": {
+    "message": "Како ово ради"
+  },
+  "labelGrade": {
+    "message": "Оцена"
+  },
+  "labelEvidence": {
+    "message": "Доказ:"
+  },
+  "labelDate": {
+    "message": "Анализирано"
+  },
+  "disclaimerTitle": {
+    "message": "О овом резултату"
+  },
   "disclaimerBody": {
     "message": "Резултат произведен аутоматским откривањем образаца које се извршава на уређају корисника. Свака ознака упућује на дослован цитат који се може независно проверити. Ово није правно мишљење, није правни савет и није повезано са издавачем анализираног документа. Оцена одражава само језичке обрасце и може бити непотпуна или погрешна. Увек прочитајте оригинални документ пре него што прихватите."
   },
-
-  "donationTitle": { "message": "Ово проширење је независно и бесплатно" },
+  "donationTitle": {
+    "message": "Ово проширење је независно и бесплатно"
+  },
   "donationBody": {
     "message": "Без огласа. Без праћења. Без продаје података. Ако вам је било корисно, мали допринос помаже да се настави развој."
   },
-  "donationBtnTen": { "message": "Подржи · 10 €" },
-  "donationBtnCustom": { "message": "Изабери износ" },
-  "donationBtnLater": { "message": "Можда касније" },
-  "donationBtnNever": { "message": "Не, хвала" },
-
+  "donationBtnTen": {
+    "message": "Подржи · 10 €"
+  },
+  "donationBtnCustom": {
+    "message": "Изабери износ"
+  },
+  "donationBtnLater": {
+    "message": "Можда касније"
+  },
+  "donationBtnNever": {
+    "message": "Не, хвала"
+  },
   "footerAttribution": {
     "message": "Open source · независно · без повезаности са трећим странама"
   },
-  "footerSupport": { "message": "Подржи развој" },
-
-  "overlayScanning": { "message": "Скенирање…" },
-  "overlayDone": { "message": "Отвори детаље" },
-  "overlayError": { "message": "Анализа није доступна" }
+  "footerSupport": {
+    "message": "Подржи развој"
+  },
+  "overlayScanning": {
+    "message": "Скенирање…"
+  },
+  "overlayDone": {
+    "message": "Отвори детаље"
+  },
+  "overlayError": {
+    "message": "Анализа није доступна"
+  },
+  "catFlagMandatoryArbitration": {
+    "message": "Mandatory arbitration"
+  },
+  "catFlagClassActionWaiver": {
+    "message": "Class action waiver"
+  },
+  "catFlagBroadLicenseIrrevocable": {
+    "message": "Irrevocable broad content licence"
+  },
+  "catFlagUnilateralChange": {
+    "message": "Unilateral terms change without notice"
+  },
+  "catFlagDataResale": {
+    "message": "Personal data resale to undisclosed parties"
+  },
+  "catFlagBroadIndemnity": {
+    "message": "Broad user indemnity"
+  },
+  "catFlagBroadLiabilityCap": {
+    "message": "Broad limitation of liability"
+  },
+  "catFlagBroadWarrantyDisclaimer": {
+    "message": "Broad warranty disclaimer"
+  },
+  "catFlagBroadDataSharing": {
+    "message": "Broad data sharing with third parties"
+  },
+  "catFlagAccountTermination": {
+    "message": "Account termination without notice"
+  },
+  "catFlagContentRemoval": {
+    "message": "Content removal at sole discretion"
+  },
+  "catFlagAutoRenewal": {
+    "message": "Auto-renewal without a clear opt-out"
+  },
+  "catFlagRetentionUndefined": {
+    "message": "Undefined data retention period"
+  },
+  "catFlagDistantVenue": {
+    "message": "Distant dispute venue"
+  },
+  "catFlagServicesAsIs": {
+    "message": "Service provided \"as is\""
+  },
+  "catFlagOtherUnfavourable": {
+    "message": "Other unfavourable clause"
+  },
+  "catCreditRefundWindow": {
+    "message": "Explicit refund window"
+  },
+  "catCreditEasyDeletion": {
+    "message": "Easy account deletion"
+  },
+  "catCreditOptinDataSharing": {
+    "message": "Opt-in required for data sharing"
+  },
+  "catCreditNoAutoRenewal": {
+    "message": "No automatic renewal"
+  },
+  "catCreditTransparentRetention": {
+    "message": "Transparent data retention period"
+  },
+  "catCreditDataExport": {
+    "message": "Free data export"
+  },
+  "catCreditArbitrationOptout": {
+    "message": "Arbitration opt-out window"
+  },
+  "catCreditUserOwnsContent": {
+    "message": "User retains content ownership"
+  },
+  "summaryTemplateOne": {
+    "message": "Document contains: $1$.",
+    "placeholders": {
+      "1": {
+        "content": "$1",
+        "example": "Mandatory arbitration"
+      }
+    }
+  },
+  "summaryTemplateTwo": {
+    "message": "Document contains: $1$ and $2$.",
+    "placeholders": {
+      "1": {
+        "content": "$1",
+        "example": "Mandatory arbitration"
+      },
+      "2": {
+        "content": "$2",
+        "example": "Class action waiver"
+      }
+    }
+  }
 }

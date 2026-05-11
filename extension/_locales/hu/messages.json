@@ -1,51 +1,192 @@
 {
-  "extName": { "message": "Assent" },
+  "extName": {
+    "message": "Assent"
+  },
   "extDescription": {
     "message": "Elolvassa a szerződéses dokumentumokat ön helyett. Kiemeli a potenciálisan kedvezőtlen kikötéseket, mielőtt elfogadná őket."
   },
-
-  "scoreLabelLow": { "message": "Alacsony kockázat" },
-  "scoreLabelMedium": { "message": "Mérsékelt kockázat" },
-  "scoreLabelHigh": { "message": "Magas kockázat" },
-  "scoreLabelExtreme": { "message": "Szélsőséges kockázat" },
-  "scoreSublabel": { "message": "Csak mintafelismerés - nem jogi tanácsadás." },
-
-  "stateIdle": { "message": "Ezen az oldalon nem észleltünk dokumentumot." },
-  "stateLoading": { "message": "Dokumentum vizsgálata…" },
-  "stateError": { "message": "Az elemzés nem érhető el" },
-  "errorNoDeviceAI": { "message": "Az eszközön lévő nyelvi modell nem áll készen." },
-
-  "sectionTopThree": { "message": "Fő pontok" },
-  "sectionFlags": { "message": "Megjelölt kikötések" },
-  "sectionCredits": { "message": "Figyelemre méltó rendelkezések" },
-
-  "btnShowInDocument": { "message": "Megjelenítés a dokumentumban" },
-  "btnViewMethodology": { "message": "Hogyan működik" },
-
-  "labelGrade": { "message": "Osztályzat" },
-  "labelEvidence": { "message": "Bizonyíték:" },
-  "labelDate": { "message": "Elemezve" },
-
-  "disclaimerTitle": { "message": "Erről az eredményről" },
+  "scoreLabelLow": {
+    "message": "Alacsony kockázat"
+  },
+  "scoreLabelMedium": {
+    "message": "Mérsékelt kockázat"
+  },
+  "scoreLabelHigh": {
+    "message": "Magas kockázat"
+  },
+  "scoreLabelExtreme": {
+    "message": "Szélsőséges kockázat"
+  },
+  "scoreSublabel": {
+    "message": "Csak mintafelismerés - nem jogi tanácsadás."
+  },
+  "stateIdle": {
+    "message": "Ezen az oldalon nem észleltünk dokumentumot."
+  },
+  "stateLoading": {
+    "message": "Dokumentum vizsgálata…"
+  },
+  "stateError": {
+    "message": "Az elemzés nem érhető el"
+  },
+  "errorNoDeviceAI": {
+    "message": "Az eszközön lévő nyelvi modell nem áll készen."
+  },
+  "sectionTopThree": {
+    "message": "Fő pontok"
+  },
+  "sectionFlags": {
+    "message": "Megjelölt kikötések"
+  },
+  "sectionCredits": {
+    "message": "Figyelemre méltó rendelkezések"
+  },
+  "btnShowInDocument": {
+    "message": "Megjelenítés a dokumentumban"
+  },
+  "btnViewMethodology": {
+    "message": "Hogyan működik"
+  },
+  "labelGrade": {
+    "message": "Osztályzat"
+  },
+  "labelEvidence": {
+    "message": "Bizonyíték:"
+  },
+  "labelDate": {
+    "message": "Elemezve"
+  },
+  "disclaimerTitle": {
+    "message": "Erről az eredményről"
+  },
   "disclaimerBody": {
     "message": "Az eredményt a felhasználó eszközén futó automatikus mintafelismerés állította elő. Minden jelölés szó szerinti idézetre hivatkozik, amely függetlenül ellenőrizhető. Ez nem jogi vélemény, nem jogi tanácsadás, és nem áll kapcsolatban az elemzett dokumentum kiadójával. A pontszám csak nyelvi mintákat tükröz, és hiányos vagy hibás lehet. Mindig olvassa el az eredeti dokumentumot, mielőtt elfogadja."
   },
-
-  "donationTitle": { "message": "Ez a kiegészítő független és ingyenes" },
+  "donationTitle": {
+    "message": "Ez a kiegészítő független és ingyenes"
+  },
   "donationBody": {
     "message": "Nincs hirdetés. Nincs követés. Nincs adateladás. Ha hasznosnak találta, egy kis hozzájárulás segít a fejlesztés folytatásában."
   },
-  "donationBtnTen": { "message": "Támogatás · 10 €" },
-  "donationBtnCustom": { "message": "Összeg kiválasztása" },
-  "donationBtnLater": { "message": "Talán később" },
-  "donationBtnNever": { "message": "Nem, köszönöm" },
-
+  "donationBtnTen": {
+    "message": "Támogatás · 10 €"
+  },
+  "donationBtnCustom": {
+    "message": "Összeg kiválasztása"
+  },
+  "donationBtnLater": {
+    "message": "Talán később"
+  },
+  "donationBtnNever": {
+    "message": "Nem, köszönöm"
+  },
   "footerAttribution": {
     "message": "Open source · független · nincs harmadik féllel kapcsolatban"
   },
-  "footerSupport": { "message": "A fejlesztés támogatása" },
-
-  "overlayScanning": { "message": "Vizsgálat…" },
-  "overlayDone": { "message": "Részletek megnyitása" },
-  "overlayError": { "message": "Az elemzés nem érhető el" }
+  "footerSupport": {
+    "message": "A fejlesztés támogatása"
+  },
+  "overlayScanning": {
+    "message": "Vizsgálat…"
+  },
+  "overlayDone": {
+    "message": "Részletek megnyitása"
+  },
+  "overlayError": {
+    "message": "Az elemzés nem érhető el"
+  },
+  "catFlagMandatoryArbitration": {
+    "message": "Mandatory arbitration"
+  },
+  "catFlagClassActionWaiver": {
+    "message": "Class action waiver"
+  },
+  "catFlagBroadLicenseIrrevocable": {
+    "message": "Irrevocable broad content licence"
+  },
+  "catFlagUnilateralChange": {
+    "message": "Unilateral terms change without notice"
+  },
+  "catFlagDataResale": {
+    "message": "Personal data resale to undisclosed parties"
+  },
+  "catFlagBroadIndemnity": {
+    "message": "Broad user indemnity"
+  },
+  "catFlagBroadLiabilityCap": {
+    "message": "Broad limitation of liability"
+  },
+  "catFlagBroadWarrantyDisclaimer": {
+    "message": "Broad warranty disclaimer"
+  },
+  "catFlagBroadDataSharing": {
+    "message": "Broad data sharing with third parties"
+  },
+  "catFlagAccountTermination": {
+    "message": "Account termination without notice"
+  },
+  "catFlagContentRemoval": {
+    "message": "Content removal at sole discretion"
+  },
+  "catFlagAutoRenewal": {
+    "message": "Auto-renewal without a clear opt-out"
+  },
+  "catFlagRetentionUndefined": {
+    "message": "Undefined data retention period"
+  },
+  "catFlagDistantVenue": {
+    "message": "Distant dispute venue"
+  },
+  "catFlagServicesAsIs": {
+    "message": "Service provided \"as is\""
+  },
+  "catFlagOtherUnfavourable": {
+    "message": "Other unfavourable clause"
+  },
+  "catCreditRefundWindow": {
+    "message": "Explicit refund window"
+  },
+  "catCreditEasyDeletion": {
+    "message": "Easy account deletion"
+  },
+  "catCreditOptinDataSharing": {
+    "message": "Opt-in required for data sharing"
+  },
+  "catCreditNoAutoRenewal": {
+    "message": "No automatic renewal"
+  },
+  "catCreditTransparentRetention": {
+    "message": "Transparent data retention period"
+  },
+  "catCreditDataExport": {
+    "message": "Free data export"
+  },
+  "catCreditArbitrationOptout": {
+    "message": "Arbitration opt-out window"
+  },
+  "catCreditUserOwnsContent": {
+    "message": "User retains content ownership"
+  },
+  "summaryTemplateOne": {
+    "message": "Document contains: $1$.",
+    "placeholders": {
+      "1": {
+        "content": "$1",
+        "example": "Mandatory arbitration"
+      }
+    }
+  },
+  "summaryTemplateTwo": {
+    "message": "Document contains: $1$ and $2$.",
+    "placeholders": {
+      "1": {
+        "content": "$1",
+        "example": "Mandatory arbitration"
+      },
+      "2": {
+        "content": "$2",
+        "example": "Class action waiver"
+      }
+    }
+  }
 }
