@@ -1,3 +1,5 @@
+import { parseLooseJson } from "./sanitize-json.js";
+
 const BASE_SYSTEM_PROMPT = `You are an automated text-pattern analyser for consumer-facing legal documents.
 
 You read a passage of a Terms of Service or similar document and identify language patterns that may be unfavourable to the consumer. You produce STRICT JSON only - no prose, no markdown fences.
@@ -286,12 +288,7 @@ function cleanField(text, brandTokens) {
 function parseAndValidate(raw, brandTokens) {
   let obj;
   try {
-    const trimmed = String(raw)
-      .trim()
-      .replace(/^```(?:json)?/, "")
-      .replace(/```$/, "")
-      .trim();
-    obj = JSON.parse(trimmed);
+    obj = parseLooseJson(raw);
   } catch (err) {
     throw new Error(`AI returned invalid JSON: ${err.message}`);
   }
