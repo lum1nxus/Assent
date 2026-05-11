@@ -1,0 +1,444 @@
+{
+  "_meta": {
+    "purpose": "Synthetic ToS corpus used to calibrate the rubric. 30 hand-written profiles spread across the A..F bands. Each entry carries the flag and credit lists that the on-device model is expected to extract on a similar real document, plus the expected grade after computeScore() is applied. No real company names appear here.",
+    "schema": {
+      "id": "kebab-case unique identifier",
+      "profile": "friendly | reasonable | moderate | concerning | aggressive | extreme",
+      "text": "short, hand-authored excerpt with the marquee clauses for that profile",
+      "flags": "[{ category, severity }] - what the model should extract",
+      "credits": "[{ category }] - what the model should extract",
+      "expected_grade": "A | B | C | D | F"
+    }
+  },
+  "fixtures": [
+    {
+      "id": "f-minimal-privacy",
+      "profile": "friendly",
+      "text": "We do not track you. You may delete your account at any time from settings. We do not auto-renew subscriptions. We retain billing data for 12 months and delete it thereafter.",
+      "flags": [],
+      "credits": [
+        { "category": "easy_account_deletion" },
+        { "category": "no_automatic_renewal" },
+        { "category": "transparent_retention_period" }
+      ],
+      "expected_grade": "A"
+    },
+    {
+      "id": "f-foss-messenger",
+      "profile": "friendly",
+      "text": "The Service is provided on an 'as is' basis. You may delete your account at any time from settings. We will not share your data with third parties unless you explicitly opt in. We retain message metadata for 30 days and delete it thereafter.",
+      "flags": [{ "category": "services_as_is", "severity": "partial" }],
+      "credits": [
+        { "category": "easy_account_deletion" },
+        { "category": "explicit_optin_data_sharing" },
+        { "category": "transparent_retention_period" }
+      ],
+      "expected_grade": "A"
+    },
+    {
+      "id": "f-developer-tools",
+      "profile": "friendly",
+      "text": "THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED. You retain all rights to any content you create using the Service. You may export your data at any time in a portable format. You may delete your account at any time.",
+      "flags": [{ "category": "broad_warranty_disclaimer", "severity": "full" }],
+      "credits": [
+        { "category": "easy_account_deletion" },
+        { "category": "user_retains_content_ownership" },
+        { "category": "free_data_export" }
+      ],
+      "expected_grade": "A"
+    },
+    {
+      "id": "f-read-only-news",
+      "profile": "friendly",
+      "text": "Reading articles requires no account. If you create one, you may delete it at any time from settings. The Service is provided on an 'as is' basis without warranty.",
+      "flags": [{ "category": "services_as_is", "severity": "partial" }],
+      "credits": [{ "category": "easy_account_deletion" }],
+      "expected_grade": "A"
+    },
+    {
+      "id": "f-small-indie-app",
+      "profile": "friendly",
+      "text": "THE SERVICE IS PROVIDED 'AS IS' WITHOUT WARRANTIES OF ANY KIND. We offer a 30-day refund window on all paid plans. You may delete your account at any time from settings. Your content is yours and you can export it freely.",
+      "flags": [{ "category": "broad_warranty_disclaimer", "severity": "full" }],
+      "credits": [
+        { "category": "easy_account_deletion" },
+        { "category": "explicit_refund_window" },
+        { "category": "free_data_export" }
+      ],
+      "expected_grade": "A"
+    },
+
+    {
+      "id": "b-small-b2b-saas",
+      "profile": "reasonable",
+      "text": "THE SERVICE IS PROVIDED 'AS IS'. To the extent permitted by law, our aggregate liability is limited to the fees paid in the prior twelve months. The Service is provided on an 'as is' basis. We offer a 30-day refund window. You may delete your workspace at any time from settings.",
+      "flags": [
+        { "category": "broad_warranty_disclaimer", "severity": "full" },
+        { "category": "broad_limitation_of_liability", "severity": "full" },
+        { "category": "services_as_is", "severity": "partial" }
+      ],
+      "credits": [
+        { "category": "easy_account_deletion" },
+        { "category": "explicit_refund_window" }
+      ],
+      "expected_grade": "B"
+    },
+    {
+      "id": "b-regional-marketplace",
+      "profile": "reasonable",
+      "text": "THE SERVICES ARE PROVIDED ON AN 'AS IS' AND 'AS AVAILABLE' BASIS. Our liability is limited to amounts paid in the prior twelve months. The Services are provided on an 'as is' basis. You agree to submit to the jurisdiction of the courts of our home region. Refunds are available within 14 days of purchase. You may close your account from settings.",
+      "flags": [
+        { "category": "broad_warranty_disclaimer", "severity": "full" },
+        { "category": "broad_limitation_of_liability", "severity": "full" },
+        { "category": "services_as_is", "severity": "full" },
+        { "category": "governing_law_distant_venue", "severity": "partial" }
+      ],
+      "credits": [
+        { "category": "easy_account_deletion" },
+        { "category": "explicit_refund_window" }
+      ],
+      "expected_grade": "B"
+    },
+    {
+      "id": "b-indie-game-store",
+      "profile": "reasonable",
+      "text": "THE STORE IS PROVIDED 'AS IS' WITHOUT WARRANTY OF ANY KIND. Our liability is capped at the amount you paid for the game in question. Subscriptions to our premium tier automatically renew at the end of each billing period; cancel any time from settings.",
+      "flags": [
+        { "category": "broad_warranty_disclaimer", "severity": "full" },
+        { "category": "broad_limitation_of_liability", "severity": "full" },
+        { "category": "auto_renewal_no_clear_optout", "severity": "full" }
+      ],
+      "credits": [{ "category": "explicit_refund_window" }],
+      "expected_grade": "B"
+    },
+    {
+      "id": "b-niche-forum",
+      "profile": "reasonable",
+      "text": "By posting content you grant us a worldwide, royalty-free, perpetual licence to host and display it on the Service. We may remove content that violates our guidelines at our discretion. You retain ownership of your content. You may delete your account from settings.",
+      "flags": [
+        { "category": "broad_content_license_irrevocable", "severity": "full" },
+        { "category": "content_removal_sole_discretion", "severity": "partial" }
+      ],
+      "credits": [
+        { "category": "easy_account_deletion" },
+        { "category": "user_retains_content_ownership" }
+      ],
+      "expected_grade": "B"
+    },
+    {
+      "id": "b-paid-news-paper",
+      "profile": "reasonable",
+      "text": "THE SERVICE IS PROVIDED 'AS IS'. Our liability is limited to the subscription fees paid in the prior year. Your subscription automatically renews each month; cancel from settings. Refunds are available within 14 days of payment. You may delete your account from settings.",
+      "flags": [
+        { "category": "broad_warranty_disclaimer", "severity": "full" },
+        { "category": "broad_limitation_of_liability", "severity": "full" },
+        { "category": "auto_renewal_no_clear_optout", "severity": "full" },
+        { "category": "governing_law_distant_venue", "severity": "partial" }
+      ],
+      "credits": [
+        { "category": "easy_account_deletion" },
+        { "category": "explicit_refund_window" }
+      ],
+      "expected_grade": "B"
+    },
+
+    {
+      "id": "c-mainstream-news-sub",
+      "profile": "moderate",
+      "text": "THE SERVICE IS PROVIDED 'AS IS' AND 'AS AVAILABLE'. Our liability is limited to amounts paid in the prior year. Your subscription renews automatically until you cancel. We may suspend or terminate your account at our discretion. You agree to bring any dispute in the courts located at our headquarters. Refunds are available within 14 days.",
+      "flags": [
+        { "category": "broad_warranty_disclaimer", "severity": "full" },
+        { "category": "broad_limitation_of_liability", "severity": "full" },
+        { "category": "auto_renewal_no_clear_optout", "severity": "full" },
+        { "category": "account_termination_no_notice", "severity": "full" },
+        { "category": "governing_law_distant_venue", "severity": "partial" }
+      ],
+      "credits": [{ "category": "explicit_refund_window" }],
+      "expected_grade": "C"
+    },
+    {
+      "id": "c-mid-b2b-saas",
+      "profile": "moderate",
+      "text": "Any dispute shall be resolved by binding individual arbitration in our home jurisdiction. You waive the right to participate in a class action. THE SERVICE IS PROVIDED 'AS IS'. Our liability is limited to fees paid in the prior twelve months. You agree to submit to the exclusive jurisdiction of the courts located at our headquarters. We offer a 30-day refund window and you may delete your workspace from settings.",
+      "flags": [
+        { "category": "mandatory_arbitration", "severity": "full" },
+        { "category": "class_action_waiver", "severity": "full" },
+        { "category": "broad_warranty_disclaimer", "severity": "full" },
+        { "category": "broad_limitation_of_liability", "severity": "full" },
+        { "category": "governing_law_distant_venue", "severity": "partial" }
+      ],
+      "credits": [
+        { "category": "easy_account_deletion" },
+        { "category": "explicit_refund_window" }
+      ],
+      "expected_grade": "C"
+    },
+    {
+      "id": "c-corp-blog-platform",
+      "profile": "moderate",
+      "text": "By posting content you grant us a perpetual, irrevocable, worldwide, royalty-free licence to use, modify, and sublicense it. We may modify these Terms at any time without prior notice. THE SERVICE IS PROVIDED 'AS IS'. You may close your account from settings.",
+      "flags": [
+        { "category": "broad_content_license_irrevocable", "severity": "full" },
+        { "category": "unilateral_terms_change_no_notice", "severity": "full" },
+        { "category": "broad_warranty_disclaimer", "severity": "partial" }
+      ],
+      "credits": [{ "category": "easy_account_deletion" }],
+      "expected_grade": "C"
+    },
+    {
+      "id": "c-regional-streaming",
+      "profile": "moderate",
+      "text": "THE SERVICE IS PROVIDED 'AS IS'. Our liability is capped at the subscription fees paid in the prior year. Your subscription auto-renews monthly. We may terminate your account at our sole discretion. By uploading content you grant us a worldwide, royalty-free, perpetual licence. Refunds available within 14 days. You may delete your account from settings.",
+      "flags": [
+        { "category": "broad_warranty_disclaimer", "severity": "full" },
+        { "category": "broad_limitation_of_liability", "severity": "full" },
+        { "category": "auto_renewal_no_clear_optout", "severity": "full" },
+        { "category": "broad_content_license_irrevocable", "severity": "full" },
+        { "category": "account_termination_no_notice", "severity": "full" }
+      ],
+      "credits": [
+        { "category": "easy_account_deletion" },
+        { "category": "explicit_refund_window" }
+      ],
+      "expected_grade": "C"
+    },
+    {
+      "id": "c-learning-platform",
+      "profile": "moderate",
+      "text": "THE SERVICE IS PROVIDED 'AS IS'. Our liability is limited to the fees paid in the prior twelve months. We may suspend or terminate your account at our sole discretion. Subscriptions automatically renew. To the extent permitted, you waive the right to participate in a class-wide arbitration. Refunds are available within 30 days of payment.",
+      "flags": [
+        { "category": "broad_warranty_disclaimer", "severity": "full" },
+        { "category": "broad_limitation_of_liability", "severity": "full" },
+        { "category": "account_termination_no_notice", "severity": "full" },
+        { "category": "auto_renewal_no_clear_optout", "severity": "full" },
+        { "category": "class_action_waiver", "severity": "partial" }
+      ],
+      "credits": [{ "category": "explicit_refund_window" }],
+      "expected_grade": "C"
+    },
+
+    {
+      "id": "d-mainstream-dating",
+      "profile": "concerning",
+      "text": "Any dispute shall be resolved by binding individual arbitration. You waive any right to participate in a class action. THE SERVICE IS PROVIDED 'AS IS'. Our liability is limited. We may share information with our advertising partners. We may remove content at our sole discretion. You may delete your account at any time.",
+      "flags": [
+        { "category": "mandatory_arbitration", "severity": "full" },
+        { "category": "class_action_waiver", "severity": "full" },
+        { "category": "broad_warranty_disclaimer", "severity": "full" },
+        { "category": "broad_limitation_of_liability", "severity": "full" },
+        { "category": "broad_data_sharing_third_party", "severity": "full" },
+        { "category": "content_removal_sole_discretion", "severity": "full" }
+      ],
+      "credits": [{ "category": "easy_account_deletion" }],
+      "expected_grade": "D"
+    },
+    {
+      "id": "d-ad-social-feed",
+      "profile": "concerning",
+      "text": "By posting content you grant us a perpetual, irrevocable, worldwide, royalty-free licence to use, modify, and sublicense it. We may share your information with our advertising partners. We may modify these Terms at any time without prior notice. We may remove content at our sole discretion. THE SERVICE IS PROVIDED 'AS IS'. Our liability is limited. You may delete your account from settings.",
+      "flags": [
+        { "category": "broad_content_license_irrevocable", "severity": "full" },
+        { "category": "broad_data_sharing_third_party", "severity": "full" },
+        { "category": "unilateral_terms_change_no_notice", "severity": "full" },
+        { "category": "content_removal_sole_discretion", "severity": "full" },
+        { "category": "broad_warranty_disclaimer", "severity": "full" },
+        { "category": "broad_limitation_of_liability", "severity": "full" }
+      ],
+      "credits": [{ "category": "easy_account_deletion" }],
+      "expected_grade": "D"
+    },
+    {
+      "id": "d-gig-marketplace",
+      "profile": "concerning",
+      "text": "Any dispute shall be resolved by binding individual arbitration. You waive any right to participate in a class action. You agree to indemnify, defend and hold us harmless from any claim arising from your use of the Service. THE SERVICE IS PROVIDED 'AS IS'. Our liability is limited. We may suspend or terminate your account at our sole discretion.",
+      "flags": [
+        { "category": "mandatory_arbitration", "severity": "full" },
+        { "category": "class_action_waiver", "severity": "full" },
+        { "category": "broad_indemnity_from_user", "severity": "full" },
+        { "category": "broad_warranty_disclaimer", "severity": "full" },
+        { "category": "broad_limitation_of_liability", "severity": "full" },
+        { "category": "account_termination_no_notice", "severity": "full" }
+      ],
+      "credits": [],
+      "expected_grade": "D"
+    },
+    {
+      "id": "d-ride-hailing",
+      "profile": "concerning",
+      "text": "Any dispute shall be resolved by binding individual arbitration. You waive any right to participate in a class action. We may share location and trip information with our advertising and analytics partners. Our liability is limited. THE SERVICE IS PROVIDED 'AS IS'. You agree to submit to the courts located at our headquarters.",
+      "flags": [
+        { "category": "mandatory_arbitration", "severity": "full" },
+        { "category": "class_action_waiver", "severity": "full" },
+        { "category": "broad_data_sharing_third_party", "severity": "full" },
+        { "category": "broad_limitation_of_liability", "severity": "full" },
+        { "category": "broad_warranty_disclaimer", "severity": "full" },
+        { "category": "governing_law_distant_venue", "severity": "partial" }
+      ],
+      "credits": [{ "category": "easy_account_deletion" }],
+      "expected_grade": "D"
+    },
+    {
+      "id": "d-crypto-exchange",
+      "profile": "concerning",
+      "text": "Any dispute shall be resolved by binding individual arbitration. You waive any right to participate in a class action. THE SERVICE IS PROVIDED 'AS IS'. Our liability is limited to the fees you paid in the prior month. We may remove content or close your account at our sole discretion. We may share certain information with our analytics partners. Refunds are available within 5 business days for unused funds.",
+      "flags": [
+        { "category": "mandatory_arbitration", "severity": "full" },
+        { "category": "class_action_waiver", "severity": "full" },
+        { "category": "broad_warranty_disclaimer", "severity": "full" },
+        { "category": "broad_limitation_of_liability", "severity": "full" },
+        { "category": "content_removal_sole_discretion", "severity": "full" },
+        { "category": "broad_data_sharing_third_party", "severity": "partial" }
+      ],
+      "credits": [{ "category": "explicit_refund_window" }],
+      "expected_grade": "D"
+    },
+    {
+      "id": "d-big-tech-ads",
+      "profile": "aggressive",
+      "text": "Any dispute shall be resolved by binding individual arbitration in our home jurisdiction. You waive any right to participate in a class action. We may share your information with our advertising partners. By posting content you grant us a worldwide, royalty-free licence. We may modify these Terms at any time without prior notice. THE SERVICE IS PROVIDED 'AS IS'.",
+      "flags": [
+        { "category": "mandatory_arbitration", "severity": "full" },
+        { "category": "class_action_waiver", "severity": "full" },
+        { "category": "broad_data_sharing_third_party", "severity": "full" },
+        { "category": "broad_content_license_irrevocable", "severity": "partial" },
+        { "category": "unilateral_terms_change_no_notice", "severity": "full" },
+        { "category": "broad_warranty_disclaimer", "severity": "partial" }
+      ],
+      "credits": [{ "category": "easy_account_deletion" }],
+      "expected_grade": "D"
+    },
+    {
+      "id": "d-payment-processor",
+      "profile": "aggressive",
+      "text": "Any dispute shall be resolved by binding individual arbitration in our home jurisdiction. You waive any right to participate in a class action or class-wide arbitration. THE SERVICE IS PROVIDED 'AS IS'. Our aggregate liability is limited to the fees paid in the prior twelve months. We may suspend or close your account at our sole discretion. Refunds for unused funds are available within 30 days.",
+      "flags": [
+        { "category": "mandatory_arbitration", "severity": "high" },
+        { "category": "class_action_waiver", "severity": "high" },
+        { "category": "broad_warranty_disclaimer", "severity": "full" },
+        { "category": "broad_limitation_of_liability", "severity": "full" },
+        { "category": "account_termination_no_notice", "severity": "full" }
+      ],
+      "credits": [{ "category": "explicit_refund_window" }],
+      "expected_grade": "D"
+    },
+    {
+      "id": "d-social-video-platform",
+      "profile": "aggressive",
+      "text": "By posting content you grant us a perpetual, irrevocable, worldwide, royalty-free licence to use, modify, distribute and sublicense it. Any dispute shall be resolved by binding individual arbitration. We may share your information with our advertising partners. We may modify these Terms at any time without prior notice. You may delete your account from settings.",
+      "flags": [
+        { "category": "broad_content_license_irrevocable", "severity": "full" },
+        { "category": "mandatory_arbitration", "severity": "full" },
+        { "category": "broad_data_sharing_third_party", "severity": "full" },
+        { "category": "unilateral_terms_change_no_notice", "severity": "full" }
+      ],
+      "credits": [{ "category": "easy_account_deletion" }],
+      "expected_grade": "D"
+    },
+    {
+      "id": "d-music-irrevocable-license",
+      "profile": "aggressive",
+      "text": "By submitting any content you grant us a perpetual, irrevocable, worldwide, royalty-free licence to use, modify, distribute, and sublicense it. Any dispute shall be resolved by binding individual arbitration. THE SERVICE IS PROVIDED 'AS IS'. Our liability is limited. We may share certain information with our analytics partners.",
+      "flags": [
+        { "category": "broad_content_license_irrevocable", "severity": "full" },
+        { "category": "mandatory_arbitration", "severity": "full" },
+        { "category": "broad_warranty_disclaimer", "severity": "full" },
+        { "category": "broad_limitation_of_liability", "severity": "full" },
+        { "category": "broad_data_sharing_third_party", "severity": "partial" }
+      ],
+      "credits": [],
+      "expected_grade": "D"
+    },
+    {
+      "id": "d-consumer-lending",
+      "profile": "aggressive",
+      "text": "Any dispute shall be resolved by binding individual arbitration. You waive any right to participate in a class action. You agree to indemnify and hold us harmless from any claim. Our liability is limited to the fees paid in the prior month. THE SERVICE IS PROVIDED 'AS IS'.",
+      "flags": [
+        { "category": "mandatory_arbitration", "severity": "full" },
+        { "category": "class_action_waiver", "severity": "full" },
+        { "category": "broad_indemnity_from_user", "severity": "full" },
+        { "category": "broad_warranty_disclaimer", "severity": "full" },
+        { "category": "broad_limitation_of_liability", "severity": "full" }
+      ],
+      "credits": [],
+      "expected_grade": "D"
+    },
+
+    {
+      "id": "f-aggressive-crypto",
+      "profile": "extreme",
+      "text": "Any dispute shall be resolved by binding individual arbitration. You waive any right to participate in a class action or class-wide arbitration. You agree to indemnify and hold us harmless from any claim. By using the Service you grant us a perpetual, irrevocable, worldwide, royalty-free licence to any content you submit. We may sell or share your information with third parties. We may share information with our advertising partners.",
+      "flags": [
+        { "category": "mandatory_arbitration", "severity": "high" },
+        { "category": "class_action_waiver", "severity": "high" },
+        { "category": "broad_indemnity_from_user", "severity": "full" },
+        { "category": "broad_content_license_irrevocable", "severity": "full" },
+        { "category": "data_resale_undisclosed_parties", "severity": "full" },
+        { "category": "broad_data_sharing_third_party", "severity": "full" }
+      ],
+      "credits": [],
+      "expected_grade": "F"
+    },
+    {
+      "id": "f-predatory-lending",
+      "profile": "extreme",
+      "text": "Any dispute shall be resolved by binding individual arbitration in our home jurisdiction. You waive any right to participate in a class action. You agree to indemnify, defend and hold us harmless from any claim arising from your use of the Service. Our liability is limited. THE SERVICE IS PROVIDED 'AS IS'. We may sell your information to third parties.",
+      "flags": [
+        { "category": "mandatory_arbitration", "severity": "high" },
+        { "category": "class_action_waiver", "severity": "high" },
+        { "category": "broad_indemnity_from_user", "severity": "high" },
+        { "category": "broad_limitation_of_liability", "severity": "high" },
+        { "category": "broad_warranty_disclaimer", "severity": "full" },
+        { "category": "data_resale_undisclosed_parties", "severity": "full" }
+      ],
+      "credits": [],
+      "expected_grade": "F"
+    },
+    {
+      "id": "f-data-broker-disguised",
+      "profile": "extreme",
+      "text": "By using the Service you grant us a perpetual, irrevocable, worldwide, royalty-free licence to any content and data you submit. You agree to indemnify us from any claim. We may sell or share your information with third parties and partners. We retain data for as long as we deem necessary. We may suspend or close your account at our sole discretion. We may modify these Terms at any time without prior notice.",
+      "flags": [
+        { "category": "broad_content_license_irrevocable", "severity": "high" },
+        { "category": "broad_indemnity_from_user", "severity": "high" },
+        { "category": "data_resale_undisclosed_parties", "severity": "high" },
+        { "category": "broad_data_sharing_third_party", "severity": "full" },
+        { "category": "retention_period_undefined", "severity": "full" },
+        { "category": "account_termination_no_notice", "severity": "full" },
+        { "category": "unilateral_terms_change_no_notice", "severity": "full" }
+      ],
+      "credits": [],
+      "expected_grade": "F"
+    },
+    {
+      "id": "f-worst-walled-garden",
+      "profile": "extreme",
+      "text": "By posting content you grant us a perpetual, irrevocable, worldwide, royalty-free licence to use, modify, distribute and sublicense it. Any dispute shall be resolved by binding individual arbitration. You waive any right to participate in a class action. We may suspend or close your account at our sole discretion. We may remove content at our sole discretion. We may share your information with our advertising partners.",
+      "flags": [
+        { "category": "broad_content_license_irrevocable", "severity": "high" },
+        { "category": "mandatory_arbitration", "severity": "high" },
+        { "category": "class_action_waiver", "severity": "high" },
+        { "category": "account_termination_no_notice", "severity": "full" },
+        { "category": "content_removal_sole_discretion", "severity": "full" },
+        { "category": "broad_data_sharing_third_party", "severity": "full" }
+      ],
+      "credits": [],
+      "expected_grade": "F"
+    },
+    {
+      "id": "f-shell-passthrough",
+      "profile": "extreme",
+      "text": "Any dispute shall be resolved by binding individual arbitration. You waive any right to participate in a class action. You agree to indemnify and defend us against any claim. Our liability is limited. By using the Service you grant us a perpetual, irrevocable, worldwide, royalty-free licence. THE SERVICE IS PROVIDED 'AS IS'. We may sell your information to third parties.",
+      "flags": [
+        { "category": "mandatory_arbitration", "severity": "high" },
+        { "category": "class_action_waiver", "severity": "high" },
+        { "category": "broad_indemnity_from_user", "severity": "high" },
+        { "category": "broad_limitation_of_liability", "severity": "high" },
+        { "category": "broad_content_license_irrevocable", "severity": "high" },
+        { "category": "broad_warranty_disclaimer", "severity": "full" },
+        { "category": "data_resale_undisclosed_parties", "severity": "full" }
+      ],
+      "credits": [],
+      "expected_grade": "F"
+    }
+  ]
+}

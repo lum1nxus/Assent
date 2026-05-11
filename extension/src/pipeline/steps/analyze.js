@@ -101,6 +101,48 @@ STRICT RULES:
 - Quotes are the only place where such names may appear (verbatim, since they are part of the document).
 - Output ONLY valid JSON.
 
+DISAMBIGUATION GUIDE - common near-miss patterns. If a passage looks like the NOT-MATCH column, omit it; do not coerce it into the closest category.
+
+- mandatory_arbitration:
+  MATCH: "Any dispute shall be resolved by binding individual arbitration."
+  NOT MATCH: "You may, at your option, submit a dispute to arbitration." Optional or opt-in arbitration is not a flag.
+- class_action_waiver:
+  MATCH: "You waive any right to participate in a class action or class-wide arbitration."
+  NOT MATCH: "Disputes will be resolved between the parties." Without an explicit waiver of class proceedings, omit the flag.
+- broad_content_license_irrevocable:
+  MATCH: "you grant us a perpetual, irrevocable, worldwide, royalty-free licence to use, modify, and sublicense it" (a licence to USER-submitted content).
+  NOT MATCH: "We retain all intellectual property rights in our Services." This is the service's own IP, not a grant from the user.
+- broad_warranty_disclaimer:
+  MATCH: "THE SERVICE IS PROVIDED 'AS IS' WITHOUT WARRANTY OF ANY KIND."
+  NOT MATCH: "SOME JURISDICTIONS DO NOT ALLOW THE EXCLUSION OF IMPLIED WARRANTIES." This is a standard procedural disclaimer.
+- broad_indemnity_from_user:
+  MATCH: "You agree to indemnify, defend and hold us harmless from any claim."
+  NOT MATCH: "Our liability is limited to amounts paid in the prior twelve months." That is broad_limitation_of_liability, not indemnity.
+- broad_limitation_of_liability:
+  MATCH: "Our aggregate liability is limited to the fees paid in the prior twelve months."
+  NOT MATCH: "You agree to indemnify us." That is broad_indemnity_from_user.
+- data_resale_undisclosed_parties:
+  MATCH: "We may sell or share your information with third parties for marketing purposes."
+  NOT MATCH: "We share payment data with our payment processor to charge your card." A named purpose with a specific sub-processor is not data resale.
+- broad_data_sharing_third_party:
+  MATCH: "We may share your information with our advertising and analytics partners."
+  NOT MATCH: "We do not share your data with third parties unless you explicitly opt in." Opt-in language is a credit, not a flag.
+- account_termination_no_notice:
+  MATCH: "We may suspend or terminate your account at any time, at our sole discretion."
+  NOT MATCH: "You may close your account at any time from settings." That is a credit (easy_account_deletion), not a flag.
+- content_removal_sole_discretion:
+  MATCH: "We may remove any content at our sole discretion."
+  NOT MATCH: "You may delete your own posts at any time."
+- unilateral_terms_change_no_notice:
+  MATCH: "We may modify these Terms at any time without prior notice."
+  NOT MATCH: "We will notify you of material changes at least 30 days in advance." Advance notice mitigates the flag - omit.
+- auto_renewal_no_clear_optout:
+  MATCH: "Your subscription automatically renews until you cancel" without a clear cancellation path.
+  NOT MATCH: "We do not auto-renew subscriptions." That is a credit (no_automatic_renewal).
+- services_as_is:
+  MATCH: a short "Service is provided on an 'as is' basis" without a full ALL-CAPS warranty disclaimer.
+  NOT MATCH: If a full ALL-CAPS warranty disclaimer is present, prefer broad_warranty_disclaimer instead and omit services_as_is.
+
 EXAMPLE 1 - friendly Terms (privacy-focused service):
 Input excerpt:
 "We do not track you. You may delete your account at any time from settings. We do not auto-renew subscriptions. Our Services are provided on 'as is' basis. We retain billing data for 12 months and delete it thereafter."
@@ -129,6 +171,16 @@ Output:
     { "category": "class_action_waiver", "severity": "high", "quote": "You waive any right to participate in a class action" },
     { "category": "unilateral_terms_change_no_notice", "severity": "full", "quote": "We may modify these Terms at any time without prior notice" }
   ],
+  "credits": []
+}
+
+EXAMPLE 3 - near-miss (do not flag standard procedural language):
+Input excerpt:
+"We retain all intellectual property rights in our Services, but we make the source code available under open-source licenses. SOME JURISDICTIONS DO NOT ALLOW THE EXCLUSION OF IMPLIED WARRANTIES, SO THE ABOVE EXCLUSION MAY NOT APPLY TO YOU. We are not responsible for content created by third parties."
+Output:
+{
+  "serviceType": "general_tech",
+  "flags": [],
   "credits": []
 }`;
 

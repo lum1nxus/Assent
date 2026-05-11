@@ -97,17 +97,17 @@ Assent performs **automated text-pattern detection only**. The on-device model c
 
 ### Rubric
 
-Each detected clause contributes a fixed number of points based on its category. Severity modifies the contribution: `high` ×1.5, `full` ×1.0, `partial` ×0.5. Positive ("credit") clauses subtract points. The score is `clamp(round(penalty − bonus), 0, 100)`.
+Each detected clause contributes a fixed number of points based on its category. Severity modifies the contribution: `high` ×1.5, `full` ×1.0, `partial` ×0.5. Positive ("credit") clauses subtract points. The bonus from credits is capped at `max(8, penalty × 0.4)` to prevent a small number of good clauses from washing out material flags. The final score is `clamp(round(penalty − cappedBonus), 0, 100)`.
 
 The full taxonomy lives in `extension/src/pipeline/rubric/categories.js`. The current weights are:
 
 | Category                            | Kind   | Weight |
 | ----------------------------------- | ------ | ------ |
-| `mandatory_arbitration`             | flag   | 18     |
-| `class_action_waiver`               | flag   | 16     |
-| `broad_content_license_irrevocable` | flag   | 16     |
+| `broad_content_license_irrevocable` | flag   | 18     |
+| `data_resale_undisclosed_parties`   | flag   | 16     |
+| `mandatory_arbitration`             | flag   | 15     |
+| `class_action_waiver`               | flag   | 14     |
 | `unilateral_terms_change_no_notice` | flag   | 14     |
-| `data_resale_undisclosed_parties`   | flag   | 14     |
 | `broad_indemnity_from_user`         | flag   | 12     |
 | `broad_data_sharing_third_party`    | flag   | 8      |
 | `broad_limitation_of_liability`     | flag   | 8      |
@@ -132,11 +132,13 @@ The full taxonomy lives in `extension/src/pipeline/rubric/categories.js`. The cu
 
 | Score  | Grade |
 | ------ | ----- |
-| 0-12   | A     |
-| 13-25  | B     |
-| 26-45  | C     |
-| 46-70  | D     |
-| 71-100 | F     |
+| 0-8    | A     |
+| 9-22   | B     |
+| 23-44  | C     |
+| 45-65  | D     |
+| 66-100 | F     |
+
+The rubric is calibrated against `tests/fixtures/synthetic-tos/corpus.json`, a hand-authored set of 30 synthetic Terms of Service profiles spread across all five bands. Any change to weights or thresholds must keep that corpus passing - see `tests/rubric-corpus.test.js`.
 
 No information about the analysed document or its publisher is hard-coded into the extension. The extension makes no editorial claim about any specific organisation; it reports what the on-device model detected in the text supplied to it at runtime.
 

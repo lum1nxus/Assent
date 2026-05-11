@@ -1,5 +1,8 @@
 import { CATEGORIES, SEVERITY_MULTIPLIER } from "./categories.js";
 
+const CREDIT_CAP_FLOOR = 8;
+const CREDIT_CAP_RATIO = 0.4;
+
 export function computeScore(flags = [], credits = []) {
   let penalty = 0;
   if (Array.isArray(flags)) {
@@ -24,7 +27,9 @@ export function computeScore(flags = [], credits = []) {
     }
   }
 
-  const raw = Math.round(penalty - bonus);
+  const bonusCap = Math.max(CREDIT_CAP_FLOOR, penalty * CREDIT_CAP_RATIO);
+  const cappedBonus = Math.min(bonus, bonusCap);
+  const raw = Math.round(penalty - cappedBonus);
   const score = clamp(raw, 0, 100);
   return { score, grade: gradeOf(score) };
 }
@@ -34,16 +39,16 @@ export function gradeOf(score) {
   if (!Number.isFinite(n)) {
     return "F";
   }
-  if (n <= 12) {
+  if (n <= 8) {
     return "A";
   }
-  if (n <= 25) {
+  if (n <= 22) {
     return "B";
   }
-  if (n <= 45) {
+  if (n <= 44) {
     return "C";
   }
-  if (n <= 70) {
+  if (n <= 65) {
     return "D";
   }
   return "F";

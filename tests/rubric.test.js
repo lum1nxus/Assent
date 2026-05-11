@@ -7,14 +7,14 @@ import { resolveTitle } from "../extension/src/pipeline/rubric/labels.js";
 
 test("gradeOf maps thresholds correctly", () => {
   assert.equal(gradeOf(0), "A");
-  assert.equal(gradeOf(12), "A");
-  assert.equal(gradeOf(13), "B");
-  assert.equal(gradeOf(25), "B");
-  assert.equal(gradeOf(26), "C");
-  assert.equal(gradeOf(45), "C");
-  assert.equal(gradeOf(46), "D");
-  assert.equal(gradeOf(70), "D");
-  assert.equal(gradeOf(71), "F");
+  assert.equal(gradeOf(8), "A");
+  assert.equal(gradeOf(9), "B");
+  assert.equal(gradeOf(22), "B");
+  assert.equal(gradeOf(23), "C");
+  assert.equal(gradeOf(44), "C");
+  assert.equal(gradeOf(45), "D");
+  assert.equal(gradeOf(65), "D");
+  assert.equal(gradeOf(66), "F");
   assert.equal(gradeOf(100), "F");
 });
 
@@ -42,7 +42,7 @@ test("a single partial low-weight flag stays in A", () => {
   assert.equal(r.grade, "A");
 });
 
-test("three high-impact flags push score above D", () => {
+test("three high-impact flags push score into D", () => {
   const r = computeScore(
     [
       { category: "mandatory_arbitration", severity: "high" },
@@ -51,7 +51,7 @@ test("three high-impact flags push score above D", () => {
     ],
     [],
   );
-  assert.equal(r.score, 18 * 1.5 + 16 + 12 * 1.5);
+  assert.equal(r.score, Math.round(15 * 1.5 + 14 + 12 * 1.5));
   assert.equal(r.grade, "D");
 });
 
@@ -66,7 +66,7 @@ test("a stack of unfavourable clauses lands in F", () => {
     ],
     [],
   );
-  assert.equal(r.score, 18 * 1.5 + 16 + 12 * 1.5 + 8 * 1.5 + 14);
+  assert.equal(r.score, Math.round(15 * 1.5 + 14 + 12 * 1.5 + 8 * 1.5 + 14));
   assert.equal(r.grade, "F");
 });
 
@@ -89,7 +89,7 @@ test("unknown categories are dropped, not added to the score", () => {
 
 test("unknown severity defaults to 1.0x weight", () => {
   const r = computeScore([{ category: "mandatory_arbitration", severity: "weird" }], []);
-  assert.equal(r.score, 18);
+  assert.equal(r.score, 15);
   assert.equal(r.grade, "B");
 });
 
@@ -124,8 +124,10 @@ test("a positive clause in a flag slot is ignored, and vice versa", () => {
 });
 
 test("expected category weights match the published rubric", () => {
-  assert.equal(CATEGORIES.mandatory_arbitration.weight, 18);
-  assert.equal(CATEGORIES.class_action_waiver.weight, 16);
+  assert.equal(CATEGORIES.mandatory_arbitration.weight, 15);
+  assert.equal(CATEGORIES.class_action_waiver.weight, 14);
+  assert.equal(CATEGORIES.broad_content_license_irrevocable.weight, 18);
+  assert.equal(CATEGORIES.data_resale_undisclosed_parties.weight, 16);
   assert.equal(CATEGORIES.easy_account_deletion.weight, 6);
   assert.equal(CATEGORIES.easy_account_deletion.kind, "credit");
   assert.equal(CATEGORIES.mandatory_arbitration.kind, "flag");
@@ -178,6 +180,30 @@ test("computeScore on a content-platform-shaped output is much lower", () => {
     [],
   );
   assert.ok(contentPlatform.score < 30, `expected < 30, got ${contentPlatform.score}`);
+});
+
+test("credit cap prevents stuffing credits to wash out flags", () => {
+  const flags = [
+    { category: "mandatory_arbitration", severity: "high" },
+    { category: "class_action_waiver", severity: "full" },
+    { category: "broad_indemnity_from_user", severity: "full" },
+  ];
+  const stackedCredits = computeScore(flags, [
+    { category: "easy_account_deletion" },
+    { category: "explicit_refund_window" },
+    { category: "no_automatic_renewal" },
+    { category: "transparent_retention_period" },
+    { category: "free_data_export" },
+    { category: "user_retains_content_ownership" },
+  ]);
+  const noCredits = computeScore(flags, []);
+  const drop = noCredits.score - stackedCredits.score;
+  assert.ok(
+    drop <= Math.ceil(noCredits.score * 0.45),
+    `credits should shave at most ~40% of penalty, got drop=${drop} from ${noCredits.score}`,
+  );
+  assert.equal(noCredits.grade, "D");
+  assert.equal(stackedCredits.grade, "C");
 });
 
 test("two services with different risk profiles get different grades", () => {
