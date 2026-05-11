@@ -1,0 +1,9 @@
+{
+  "name": "regression-negation-unilateral-change",
+  "description": "AI flags unilateral_terms_change but the quote requires customer consent. Reproduces the Tuta screenshot bug.",
+  "documentText": "With the consent of the customer, the provider can make other changes to the content of the contract, including these Terms and Conditions. The provider will notify you of any material change at least 30 days in advance.",
+  "rawAiResponse": "{\"serviceType\":\"general_tech\",\"flags\":[{\"category\":\"unilateral_terms_change_no_notice\",\"severity\":\"full\",\"quote\":\"With the consent of the customer, the provider can make other changes to the content of the contract, including these Terms and Conditions\"}],\"credits\":[]}",
+  "expectedFlags": [],
+  "expectedCredits": [],
+  "expectedReason": "negation guard must reject a unilateral-change quote that explicitly requires customer consent"
+}

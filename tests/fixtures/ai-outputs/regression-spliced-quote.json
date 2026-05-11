@@ -1,0 +1,9 @@
+{
+  "name": "regression-spliced-quote",
+  "description": "AI splices two non-adjacent fragments of the document with '...' to fake an arbitration clause. Reproduces the Bitwarden screenshot bug.",
+  "documentText": "You agree that you will not under any circumstances: attempt to disrupt the service, tamper with the servers, or upload malicious code. Disputes between you and us related to fees may, if both parties agree in writing, be resolved by binding individual arbitration. The provider has the right to suspend or terminate your access at any time, with or without notice.",
+  "rawAiResponse": "{\"serviceType\":\"general_tech\",\"flags\":[{\"category\":\"mandatory_arbitration\",\"severity\":\"full\",\"quote\":\"You agree that you will not under any circumstances: ... resolve by binding individual arbitration\"}],\"credits\":[]}",
+  "expectedFlags": [],
+  "expectedCredits": [],
+  "expectedReason": "splice guard must reject quotes that contain '...' since the schema requires a verbatim substring"
+}

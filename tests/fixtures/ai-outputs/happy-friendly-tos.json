@@ -1,0 +1,13 @@
+{
+  "name": "happy-friendly-tos",
+  "description": "A clean classification on a privacy-friendly document. Sanity check that valid AI output passes the pipeline unchanged.",
+  "documentText": "We do not track you. You may delete your account at any time from settings. We do not auto-renew subscriptions. We retain billing data for 12 months and delete it thereafter. The Service is provided on an 'as is' basis.",
+  "rawAiResponse": "{\"serviceType\":\"general_tech\",\"flags\":[{\"category\":\"services_as_is\",\"severity\":\"partial\",\"quote\":\"The Service is provided on an 'as is' basis\"}],\"credits\":[{\"category\":\"easy_account_deletion\",\"quote\":\"You may delete your account at any time from settings\"},{\"category\":\"no_automatic_renewal\",\"quote\":\"We do not auto-renew subscriptions\"},{\"category\":\"transparent_retention_period\",\"quote\":\"We retain billing data for 12 months and delete it thereafter\"}]}",
+  "expectedFlags": [{ "category": "services_as_is", "severity": "partial" }],
+  "expectedCredits": [
+    { "category": "easy_account_deletion" },
+    { "category": "no_automatic_renewal" },
+    { "category": "transparent_retention_period" }
+  ],
+  "expectedReason": "a well-formed friendly classification passes the pipeline as is"
+}

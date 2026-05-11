@@ -17,8 +17,31 @@ alwaysApply: false
 - Use shape-based names: `highRiskFintech`, `contentPlatform`, `friendlyTerms`, `aggressiveTerms`, `genericProvider`.
 - If you need a representative ToS clause, paraphrase into neutral language or invent a placeholder operator name like "the provider".
 
+## Three-layer testing strategy
+
+- **Layer 1 - unit**: pure functions (rubric, sanitiser, keyword guards, label resolver). Lives in `tests/*.test.js`.
+- **Layer 2 - AI-output replay**: each JSON in `tests/fixtures/ai-outputs/` is a captured or hand-authored `(documentText, rawAiResponse)` pair plus the `expectedFlags` and `expectedCredits` the pipeline should produce after every guard. `tests/analyze-pipeline.test.js` and `npm run eval` exercise the entire `parseAndValidate` path in pure Node without Chrome.
+- **Layer 3 - real Chrome end-to-end**: manual, slow, only when you need to verify the live on-device model. See `TESTING.md`.
+
 ## Coverage targets
 
 - Every new category in `rubric/categories.js` requires a rubric test asserting its weight and at least one positive plus one negative keyword-guard test.
 - Every pipeline step gains a unit test for happy path and one degenerate input.
-- Regressions found in the wild get a named test that reproduces the failure before the fix lands.
+- Every bug reported from a real Chrome session lands a Layer-2 fixture under `tests/fixtures/ai-outputs/regression-*.json` before the fix is merged. The fix and the fixture ship in the same commit.
+- Adding a new flag or credit category requires extending the synthetic ToS corpus in `tests/fixtures/synthetic-tos/corpus.json` so the calibration test keeps the band distribution honest.
+
+## AI-output fixture shape
+
+```json
+{
+  "name": "regression-short-id",
+  "description": "what this fixture exercises",
+  "documentText": "the text fed to the on-device model",
+  "rawAiResponse": "the verbatim string the model returned",
+  "expectedFlags": [{ "category": "...", "severity": "..." }],
+  "expectedCredits": [{ "category": "..." }],
+  "expectedReason": "why the pipeline should produce the above"
+}
+```
+
+Never include real brand names in fixture names, descriptions, or invented document text. Real `documentText` captured from a live page may contain brand names verbatim - that is the only acceptable place.

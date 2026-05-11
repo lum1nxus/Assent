@@ -49,6 +49,37 @@ export const CREDIT_KEYWORD_GUARDS = {
   user_retains_content_ownership: [/(own|owner|retain)/i, /(content|material|work|post)/i],
 };
 
+const FLAG_NEGATION_PATTERNS = [
+  /\bdoes not apply\b/i,
+  /\bwill not apply\b/i,
+  /\bshall not apply\b/i,
+  /\bnot subject to\b/i,
+  /\b(?:will|do|does|shall|would|may|can)\s+not\s+(?:sell|share|disclose|trade|rent|lease|transfer|provide|use|process)\b/i,
+  /\b(?:don't|doesn't|won't|wouldn't|can't|cannot|couldn't|shouldn't)\s+(?:sell|share|disclose|trade|rent|lease|transfer|provide|use|process)\b/i,
+  /\bwith(?:\s+the)?\s+(?:user'?s?|customer'?s?|your|consumer'?s?|reader'?s?)\s+(?:prior\s+)?(?:explicit\s+|written\s+|express\s+)?(?:consent|permission|approval|agreement|authorization)\b/i,
+  /\bwith(?:\s+the)?\s+(?:prior\s+)?(?:explicit\s+|written\s+|express\s+)?(?:consent|permission|approval|agreement|authorization)\s+of\s+(?:the\s+)?(?:user|customer|consumer|reader|subscriber|client|you)\b/i,
+  /\bonly\s+(?:with|after|upon|if)\s+(?:your|user|customer)\s+(?:consent|permission|opt[\s-]?in|approval)\b/i,
+  /\bopt[\s-]?in\s+(?:only|required|basis|first)\b/i,
+  /\b(?:we|our company|the (?:service|provider|company|platform))\s+(?:does|do|will|shall|would|may)\s+not\b/i,
+  /\bunder no circumstances will (?:we|our|the (?:service|provider|company))\s+(?:sell|share|disclose|trade|rent|lease|transfer)\b/i,
+];
+
+export function quoteContainsNegation(quote) {
+  if (typeof quote !== "string" || quote.length === 0) {
+    return false;
+  }
+  return FLAG_NEGATION_PATTERNS.some((p) => p.test(quote));
+}
+
+const SPLICE_MARKERS = [/\.\.\./, /\u2026/, /\[\s*\.\.\.\s*\]/, /\[\s*omitted\s*\]/i];
+
+export function quoteLooksSpliced(quote) {
+  if (typeof quote !== "string" || quote.length === 0) {
+    return false;
+  }
+  return SPLICE_MARKERS.some((p) => p.test(quote));
+}
+
 export function quoteMatchesCategoryKeywords(quote, category, kind) {
   const map = kind === "flag" ? FLAG_KEYWORD_GUARDS : CREDIT_KEYWORD_GUARDS;
   const patterns = map[category];

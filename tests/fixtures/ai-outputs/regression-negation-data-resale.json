@@ -1,0 +1,9 @@
+{
+  "name": "regression-negation-data-resale",
+  "description": "AI flags data_resale but the quote contains an explicit promise NOT to sell. Reproduces the Stripe screenshot bug.",
+  "documentText": "We collect billing information necessary to charge your card. The provider will not sell or lease Personal Data that is collected through the Services to anyone. We may share certain information with service providers strictly to operate the platform.",
+  "rawAiResponse": "{\"serviceType\":\"fintech\",\"flags\":[{\"category\":\"data_resale_undisclosed_parties\",\"severity\":\"full\",\"quote\":\"The provider will not sell or lease Personal Data that is collected through the Services to anyone\"}],\"credits\":[]}",
+  "expectedFlags": [],
+  "expectedCredits": [],
+  "expectedReason": "negation guard must reject 'will not sell' classified as a data-resale flag"
+}

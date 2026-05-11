@@ -1,0 +1,15 @@
+{
+  "name": "happy-aggressive-tos",
+  "description": "A clean classification on an aggressive social-platform-shaped document. Sanity check that strong flag profiles pass through with severity preserved.",
+  "documentText": "By posting content you grant us a perpetual, irrevocable, worldwide, royalty-free licence to use, modify, and sublicense it. Any dispute shall be resolved by binding individual arbitration. You waive any right to participate in a class action. We may modify these Terms at any time without prior notice. We may suspend or terminate your account at our sole discretion.",
+  "rawAiResponse": "{\"serviceType\":\"social_media\",\"flags\":[{\"category\":\"broad_content_license_irrevocable\",\"severity\":\"high\",\"quote\":\"you grant us a perpetual, irrevocable, worldwide, royalty-free licence to use, modify, and sublicense it\"},{\"category\":\"mandatory_arbitration\",\"severity\":\"high\",\"quote\":\"Any dispute shall be resolved by binding individual arbitration\"},{\"category\":\"class_action_waiver\",\"severity\":\"high\",\"quote\":\"You waive any right to participate in a class action\"},{\"category\":\"unilateral_terms_change_no_notice\",\"severity\":\"full\",\"quote\":\"We may modify these Terms at any time without prior notice\"},{\"category\":\"account_termination_no_notice\",\"severity\":\"full\",\"quote\":\"We may suspend or terminate your account at our sole discretion\"}],\"credits\":[]}",
+  "expectedFlags": [
+    { "category": "broad_content_license_irrevocable", "severity": "high" },
+    { "category": "mandatory_arbitration", "severity": "high" },
+    { "category": "class_action_waiver", "severity": "high" },
+    { "category": "unilateral_terms_change_no_notice", "severity": "full" },
+    { "category": "account_termination_no_notice", "severity": "full" }
+  ],
+  "expectedCredits": [],
+  "expectedReason": "a well-formed aggressive classification passes the pipeline as is and lands in the F band after scoring"
+}

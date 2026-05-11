@@ -1,0 +1,9 @@
+{
+  "name": "regression-markdown-fenced-response",
+  "description": "AI wraps its output in a ```json ... ``` markdown fence. The sanitiser must strip the fence before parsing.",
+  "documentText": "You may delete your account at any time from settings.",
+  "rawAiResponse": "```json\n{\"serviceType\":\"general_tech\",\"flags\":[],\"credits\":[{\"category\":\"easy_account_deletion\",\"quote\":\"You may delete your account at any time from settings\"}]}\n```",
+  "expectedFlags": [],
+  "expectedCredits": [{ "category": "easy_account_deletion" }],
+  "expectedReason": "the JSON parser strips markdown fences before parsing"
+}
