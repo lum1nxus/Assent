@@ -1,0 +1,35 @@
+---
+description: Chrome MV3 security and architecture rules for Assent.
+globs: extension/**
+alwaysApply: false
+---
+
+# Chrome MV3 extension
+
+## Permissions
+
+- Manifest must stay minimal. Justify every entry in `manifest.json` in `README.md` under "Permissions".
+- Never add `<all_urls>` to `host_permissions` if `activeTab` plus content-script matches is sufficient.
+- Never add `web_accessible_resources` unless an in-page script must fetch the asset.
+
+## Network and content
+
+- No remote code execution. No `eval`, no `new Function`, no inline `<script>` in any HTML file. CSP `script-src 'self'` is enforced.
+- Any background `fetch()` must pass `{ credentials: "omit", referrerPolicy: "no-referrer" }` and an explicit byte cap.
+- Treat any text from the analysed page as untrusted. Never `innerHTML`-assign it. Use `textContent`, `Element.append`, or `DocumentFragment`.
+
+## Message passing
+
+- Validate `sender.id === chrome.runtime.id` and `sender.tab` in every `chrome.runtime.onMessage` handler before trusting the payload.
+- Type-check every payload field before use. Drop unknown actions silently with a `console.warn`.
+
+## Side panel and content script
+
+- The side panel is the source of truth for UI state. The content script only emits detection events and renders the in-page pill.
+- All persistent state lives in `chrome.storage.session` keyed by `tab_<id>`. Persistent cross-session state goes in `chrome.storage.local`.
+- The service worker must call `startKeepAlive()` while a pipeline run is in progress and `stopKeepAlive()` on completion.
+
+## Accessibility
+
+- Severity is never encoded by colour alone. Every severity indicator must also carry a textual or iconographic marker.
+- Body text colour must meet WCAG AA contrast (4.5:1) against the side panel background.

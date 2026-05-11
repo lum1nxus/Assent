@@ -1,0 +1,34 @@
+---
+description: Closed-taxonomy pipeline and deterministic scoring rules for Assent.
+globs: extension/src/pipeline/**
+alwaysApply: false
+---
+
+# Pipeline and rubric
+
+## Closed taxonomy
+
+- All flag and credit categories live in `extension/src/pipeline/rubric/categories.js`. That file is the single source of truth.
+- The on-device model is only allowed to emit `category` ids from that file. Any new clause class requires a new entry in `categories.js` first; the AI prompt then enumerates it.
+- Never let AI invent free-form labels, free-form titles, or free-form summaries. Titles come from `resolveTitle()`; summaries come from `buildSummary()`.
+
+## Code scores, AI classifies
+
+- The 0..100 score is computed by `computeScore(flags, credits)` in `rubric/score.js`. The AI never returns a score.
+- The grade letter (A..F) is computed by `gradeOf(score)` in the same file.
+- If you add a new category, update its `kind`, `weight`, and severity multipliers in `categories.js` and add a rubric test in `tests/rubric.test.js`.
+
+## Keyword guards
+
+- Every flag or credit must pass `quoteMatchesCategoryKeywords()` in `pipeline/steps/category-guards.js` before being persisted.
+- Adding a new category implies adding its guard regex(es). A category without a guard silently passes - that is acceptable only for `other_unfavourable_clause` and similar escape hatches.
+
+## Quote integrity
+
+- AI must return `quote` as a verbatim substring of the document text. `parseAndValidate()` in `analyze.js` rejects anything else via `quoteAppearsInDocument()`.
+- Highlighting in `content.js` relies on `normalizeChars()` to fold smart quotes, dashes and NBSP. Never compare raw strings.
+
+## Pipeline is a chain of pure steps
+
+- Each step in `pipeline/steps/*.js` takes `(input, ctx)` and returns `{ value }` or `{ error }`. No global state.
+- Add new steps to the `PIPELINE` array in `pipeline/index.js`. Do not branch step order based on flags inside a step.

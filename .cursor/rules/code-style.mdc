@@ -1,0 +1,28 @@
+---
+description: Core code style for Assent. Always apply.
+alwaysApply: true
+---
+
+# Code style
+
+## No comments
+
+- Do not write comments. No JSDoc, no inline `//`, no block `/* */`, no banner separators.
+- Names of variables and functions must carry the intent. If a comment is needed, rename instead.
+- The single allowed exception is the frontmatter at the top of `.mdc` rule files.
+
+## ASCII punctuation only
+
+- Replace em-dashes (`—`) and en-dashes (`–`) with hyphens (`-`) in code, JSON, JSDoc, Markdown, HTML, locale strings.
+- Replace curly quotes (`" " ' '`) with straight quotes (`" '`) in user-facing strings except when quoting a verbatim document excerpt.
+- Replace `…` with `...`.
+
+## Imports
+
+- ES modules only (`import` / `export`). No CommonJS in `extension/`, `tests/`.
+- One default export per file maximum; prefer named exports.
+
+## Formatting and lint
+
+- Prettier and ESLint are the source of truth. Run `npm run format` and `npm run lint` before committing.
+- Do not silence lint rules with inline `eslint-disable` unless the rule itself is broken; fix the code instead.
