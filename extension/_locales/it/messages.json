@@ -1,0 +1,46 @@
+{
+  "extName": { "message": "Assent" },
+  "extDescription": {
+    "message": "Legge i Termini di Servizio per te. Mostra un punteggio di rischio prima che tu clicchi su 'Accetto'."
+  },
+
+  "scoreLabelLow": { "message": "Rischio basso" },
+  "scoreLabelMedium": { "message": "Rischio moderato" },
+  "scoreLabelHigh": { "message": "Rischio alto" },
+  "scoreLabelExtreme": { "message": "Rischio estremo" },
+
+  "stateIdle": { "message": "Nessun Termine di Servizio rilevato in questa pagina." },
+  "stateLoading": { "message": "Scansione dei Termini di Servizio…" },
+  "stateError": { "message": "Analisi non disponibile" },
+  "errorNoDeviceAI": {
+    "message": "L'IA on-device non è disponibile. Punteggio basato solo sul database."
+  },
+
+  "sectionTopThree": { "message": "Le 3 cose principali da sapere" },
+  "sectionFlags": { "message": "Clausole segnalate" },
+  "sectionCredits": { "message": "Buone pratiche rilevate" },
+  "sectionAlternative": { "message": "Alternativa a rischio minore" },
+
+  "btnShowInDocument": { "message": "Mostra nel documento" },
+  "btnViewMethodology": { "message": "Metodologia" },
+
+  "labelGrade": { "message": "Voto" },
+  "labelEvidence": { "message": "Prova:" },
+  "labelDate": { "message": "Analizzato" },
+  "labelSourceDB": { "message": "pre-analizzato" },
+  "labelSourceAI": { "message": "IA on-device" },
+
+  "disclaimerTitle": { "message": "Su questa analisi" },
+  "disclaimerBody": {
+    "message": "Rilevamento automatico di pattern — non è una consulenza legale. Ogni segnalazione è supportata dal testo del documento pubblico."
+  },
+
+  "donationTitle": { "message": "Assent è gratuito e creato da un solo sviluppatore" },
+  "donationBody": {
+    "message": "Niente pubblicità. Niente tracciamento. Nessuna vendita dei tuoi dati. Se Assent ti ha aiutato a evitare brutti Termini, considera di offrirmi un caffè — mantiene vivo il progetto."
+  },
+  "donationBtnTen": { "message": "☕ Offri un caffè · 10 €" },
+  "donationBtnCustom": { "message": "Scegli importo" },
+  "donationBtnLater": { "message": "Forse più tardi" },
+  "donationBtnNever": { "message": "No grazie" }
+}

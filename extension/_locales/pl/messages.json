@@ -1,0 +1,46 @@
+{
+  "extName": { "message": "Assent" },
+  "extDescription": {
+    "message": "Czyta Regulamin za Ciebie. Pokazuje ocenę ryzyka, zanim klikniesz 'Akceptuję'."
+  },
+
+  "scoreLabelLow": { "message": "Niskie ryzyko" },
+  "scoreLabelMedium": { "message": "Umiarkowane ryzyko" },
+  "scoreLabelHigh": { "message": "Wysokie ryzyko" },
+  "scoreLabelExtreme": { "message": "Ekstremalne ryzyko" },
+
+  "stateIdle": { "message": "Nie wykryto Regulaminu na tej stronie." },
+  "stateLoading": { "message": "Skanowanie Regulaminu…" },
+  "stateError": { "message": "Analiza niedostępna" },
+  "errorNoDeviceAI": {
+    "message": "AI na urządzeniu nie jest dostępne. Wynik oparty wyłącznie na bazie danych."
+  },
+
+  "sectionTopThree": { "message": "3 najważniejsze rzeczy do zapamiętania" },
+  "sectionFlags": { "message": "Oflagowane klauzule" },
+  "sectionCredits": { "message": "Wykryto dobre praktyki" },
+  "sectionAlternative": { "message": "Alternatywa o niższym ryzyku" },
+
+  "btnShowInDocument": { "message": "Pokaż w dokumencie" },
+  "btnViewMethodology": { "message": "Metodologia" },
+
+  "labelGrade": { "message": "Ocena" },
+  "labelEvidence": { "message": "Dowód:" },
+  "labelDate": { "message": "Analiza" },
+  "labelSourceDB": { "message": "wstępnie przeanalizowano" },
+  "labelSourceAI": { "message": "AI na urządzeniu" },
+
+  "disclaimerTitle": { "message": "O tej analizie" },
+  "disclaimerBody": {
+    "message": "Automatyczne wykrywanie wzorców — nie jest to porada prawna. Każde oflagowanie poparte jest treścią z publicznie dostępnego dokumentu."
+  },
+
+  "donationTitle": { "message": "Assent jest darmowy i tworzony przez jednego programistę" },
+  "donationBody": {
+    "message": "Bez reklam. Bez śledzenia. Bez sprzedaży Twoich danych. Jeśli Assent Ci pomógł, rozważ postawienie mi kawy — to utrzymuje projekt przy życiu."
+  },
+  "donationBtnTen": { "message": "☕ Postaw kawę · 10 €" },
+  "donationBtnCustom": { "message": "Wybierz kwotę" },
+  "donationBtnLater": { "message": "Może później" },
+  "donationBtnNever": { "message": "Nie, dziękuję" }
+}

@@ -1,0 +1,89 @@
+{
+  "extName": { "message": "Assent", "description": "Extension name" },
+  "extDescription": {
+    "message": "Reads the Terms of Service so you don't have to. Shows a risk score before you click 'I Agree'.",
+    "description": "Extension store description"
+  },
+
+  "scoreLabelLow": { "message": "Low risk", "description": "Score badge: 0–3.5" },
+  "scoreLabelMedium": { "message": "Moderate risk", "description": "Score badge: 3.6–5.5" },
+  "scoreLabelHigh": { "message": "High risk", "description": "Score badge: 5.6–7.5" },
+  "scoreLabelExtreme": { "message": "Extreme risk", "description": "Score badge: 7.6+" },
+
+  "stateIdle": {
+    "message": "No Terms of Service detected on this page.",
+    "description": "Side panel when nothing was analyzed"
+  },
+  "stateLoading": { "message": "Scanning Terms of Service…", "description": "Spinner label" },
+  "stateError": { "message": "Analysis unavailable", "description": "Error heading" },
+  "errorNoDeviceAI": {
+    "message": "On-device AI is not available on this device. Score based on database only.",
+    "description": "Fallback message when Chrome AI unavailable"
+  },
+
+  "sectionTopThree": {
+    "message": "Top 3 things to know",
+    "description": "Heading above the top-3 risks bullet list"
+  },
+  "sectionFlags": {
+    "message": "Flagged clauses",
+    "description": "Heading above the full flag list"
+  },
+  "sectionCredits": {
+    "message": "Good practices detected",
+    "description": "Heading above the credits list"
+  },
+  "sectionAlternative": {
+    "message": "Lower-risk alternative",
+    "description": "Heading above the better-alternative suggestion"
+  },
+
+  "btnShowInDocument": {
+    "message": "Show in document",
+    "description": "Button that highlights the quote in the original ToS"
+  },
+  "btnViewMethodology": { "message": "How we score", "description": "Link to methodology docs" },
+
+  "labelGrade": { "message": "Grade", "description": "Letter grade label" },
+  "labelEvidence": {
+    "message": "Evidence:",
+    "description": "Label before a verbatim quote in a flag card"
+  },
+  "labelDate": { "message": "Analyzed", "description": "Label before the analysis date" },
+  "labelSourceDB": {
+    "message": "pre-analyzed",
+    "description": "Source badge when result comes from static DB"
+  },
+  "labelSourceAI": {
+    "message": "on-device AI",
+    "description": "Source badge when result comes from Chrome built-in AI"
+  },
+
+  "disclaimerTitle": {
+    "message": "About this analysis",
+    "description": "Disclaimer block heading"
+  },
+  "disclaimerBody": {
+    "message": "Automated pattern detection — not legal advice. Each flag is backed by language found in the publicly available document.",
+    "description": "Standard disclaimer"
+  },
+
+  "donationTitle": {
+    "message": "Assent is free and made by one developer",
+    "description": "Donation card title"
+  },
+  "donationBody": {
+    "message": "No ads. No tracking. No selling your data. If Assent helped you avoid a bad ToS, consider buying me a coffee — it keeps the project alive.",
+    "description": "Donation card body"
+  },
+  "donationBtnTen": {
+    "message": "☕ Buy me a coffee · €10",
+    "description": "Primary donate button — prefilled €10"
+  },
+  "donationBtnCustom": {
+    "message": "Choose amount",
+    "description": "Secondary donate button — user picks amount"
+  },
+  "donationBtnLater": { "message": "Maybe later", "description": "Snooze for 90 days" },
+  "donationBtnNever": { "message": "No thanks", "description": "Dismiss forever" }
+}

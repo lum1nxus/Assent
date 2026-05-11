@@ -1,0 +1,275 @@
+{
+  "_meta": {
+    "version": "4.0",
+    "generated": "2026-05-11",
+    "jurisdiction": "EU",
+    "methodology": "https://github.com/lum1nxus/Assent#methodology",
+    "disclaimer": "Scores are based on automated analysis of publicly available Terms of Service documents under EU jurisdiction. Results are provided for informational purposes only and do not constitute legal advice. Analysis is based on document versions available at generation date; terms may have changed since.",
+    "schema": {
+      "lookup": "Each service maps directly to its EU profile. _ref entries are aliases (e.g. instagram.com → facebook.com).",
+      "fields": ["score", "grade", "serviceType", "analyzedAt", "tosVersion", "flags", "credits", "jurisdictionNote"]
+    }
+  },
+  "services": {
+    "tiktok.com": {
+      "score": 7.2, "serviceType": "social_media", "grade": "D",
+      "analyzedAt": "2026-05-05", "tosVersion": "2025-Q4-EU",
+      "flags": [
+        { "id": "data_third_parties",      "severity": "full",   "title": "Data sharing with third parties",    "quote": "we may share your information with our affiliates and business partners" },
+        { "id": "ai_training_data",        "severity": "full",   "title": "AI model training on user data",     "quote": "we use the information we collect to train and improve our AI models" },
+        { "id": "pre_upload_collection",   "severity": "full",   "title": "Pre-upload content collection",      "quote": "we collect information about content you create, even before you post it" },
+        { "id": "biometric_data",          "severity": "full",   "title": "Biometric data collection",          "quote": "we may collect biometric identifiers including face and voice data" },
+        { "id": "location_tracking",       "severity": "full",   "title": "Location & behavioral tracking",     "quote": "we collect your approximate or precise location information" },
+        { "id": "silent_changes",          "severity": "partial","title": "Silent terms changes",               "quote": "we will notify users of material changes in advance" }
+      ],
+      "credits": [
+        { "id": "gdpr_ccpa_compliance",    "title": "GDPR compliance",       "creditValue": 0.6, "note": "GDPR applies; TikTok is under DSA regulation and has faced EU enforcement actions" },
+        { "id": "data_deletion_right",     "title": "Data deletion right",    "creditValue": 0.4, "note": "GDPR Article 17 right to erasure applies" }
+      ],
+      "jurisdictionNote": "TikTok's EU terms are subject to GDPR and the EU Digital Services Act (DSA). Binding arbitration is not applicable under EU consumer law. However, data practices remain deeply concerning."
+    },
+
+    "facebook.com": {
+      "score": 7.5, "serviceType": "social_media", "grade": "D",
+      "analyzedAt": "2026-05-05", "tosVersion": "2024-EU",
+      "flags": [
+        { "id": "data_third_parties",      "severity": "full",   "title": "Data sharing with third parties",    "quote": "we share information with third-party partners and advertisers" },
+        { "id": "ai_training_data",        "severity": "full",   "title": "AI model training on user data",     "quote": "your data may be used to train our AI systems" },
+        { "id": "tracking_off_platform",   "severity": "full",   "title": "Cross-site tracking",                "quote": "we receive information about you from third-party websites and apps" },
+        { "id": "deleted_data_retained",   "severity": "partial","title": "Deleted data not truly erased",      "quote": "deletion may take up to 90 days from backup systems" },
+        { "id": "location_tracking",       "severity": "partial","title": "Location & behavioral tracking",     "quote": "we collect location where permitted under applicable law" }
+      ],
+      "credits": [
+        { "id": "gdpr_ccpa_compliance",    "title": "GDPR compliance",         "creditValue": 0.6, "note": "Meta has been fined multiple times by EU DPAs — compliance is enforced" },
+        { "id": "data_portability",        "title": "Data portability",         "creditValue": 0.4, "note": "Download Your Information available per GDPR Art. 20" },
+        { "id": "data_deletion_right",     "title": "Data deletion right",      "creditValue": 0.4, "note": "GDPR Art. 17 right to erasure" }
+      ],
+      "jurisdictionNote": "Meta has faced repeated GDPR enforcement actions in the EU (Ireland DPC, DPAs in Germany, France). EU users have stronger rights but the company's data practices remain a concern."
+    },
+    "instagram.com": { "_ref": "facebook.com" },
+
+    "x.com": {
+      "score": 6.8, "serviceType": "social_media", "grade": "C",
+      "analyzedAt": "2026-05-05", "tosVersion": "2025-05-EU",
+      "flags": [
+        { "id": "broad_content_license",   "severity": "full",   "title": "Broad content license",              "quote": "you grant X a broad, royalty-free license to make your Content available to the rest of the world" },
+        { "id": "ai_training_data",        "severity": "full",   "title": "AI model training on user data",     "quote": "your content may be used to train our machine learning models" },
+        { "id": "termination_without_cause","severity": "full",  "title": "Termination without cause",          "quote": "X may suspend or terminate your account at any time" },
+        { "id": "liability_cap_trivial",   "severity": "full",   "title": "Liability capped at €100",           "quote": "X's total liability shall not exceed €100 or the amount you paid" },
+        { "id": "silent_changes",          "severity": "full",   "title": "Silent terms changes",               "quote": "your continued access to the Services after changes constitutes acceptance" }
+      ],
+      "credits": [
+        { "id": "gdpr_ccpa_compliance",    "title": "GDPR compliance",          "creditValue": 0.6, "note": "X Corp operates xAI under EU GDPR; subject to DSA regulation" },
+        { "id": "data_deletion_right",     "title": "Data deletion right",       "creditValue": 0.4, "note": "GDPR Art. 17 right to erasure applies" }
+      ],
+      "jurisdictionNote": "Binding arbitration and class action waivers are unenforceable under EU consumer law. However, the broad content license, AI training, and €100 liability cap remain deeply concerning."
+    },
+    "twitter.com": { "_ref": "x.com" },
+
+    "google.com": {
+      "score": 6.5, "serviceType": "general_tech", "grade": "C",
+      "analyzedAt": "2026-05-05", "tosVersion": "2024-05-EU",
+      "flags": [
+        { "id": "ai_training_data",        "severity": "partial","title": "AI model training on user data",     "quote": "we use your data to train and improve our AI services (opt-out available in EU)" },
+        { "id": "data_third_parties",      "severity": "partial","title": "Data sharing with third parties",    "quote": "we share personal information with affiliates on the basis of legitimate interests" },
+        { "id": "location_tracking",       "severity": "full",   "title": "Location & behavioral tracking",     "quote": "Google collects your location information based on IP, GPS, and other signals" },
+        { "id": "government_disclosure",   "severity": "full",   "title": "Gov. disclosure without notice",     "quote": "we may disclose your information to law enforcement" },
+        { "id": "silent_changes",          "severity": "partial","title": "Silent terms changes",               "quote": "we will provide notice of changes through in-product notifications" }
+      ],
+      "credits": [
+        { "id": "gdpr_ccpa_compliance",    "title": "GDPR compliance",         "creditValue": 0.6, "note": "Google has faced significant GDPR enforcement; EU users have strong opt-out rights" },
+        { "id": "data_portability",        "title": "Data portability",         "creditValue": 0.4, "note": "Google Takeout + GDPR Art. 20 portability rights" },
+        { "id": "data_deletion_right",     "title": "Data deletion right",      "creditValue": 0.4, "note": "GDPR Art. 17 right to erasure" },
+        { "id": "arbitration_opt_out",     "title": "No binding arbitration",   "creditValue": 0.5, "note": "EU terms do not include binding arbitration for consumers" }
+      ],
+      "jurisdictionNote": "Google's EU terms do not include mandatory arbitration. EU users have stronger data rights under GDPR, including opt-out for AI training."
+    },
+
+    "netflix.com": {
+      "score": 5.0, "serviceType": "content", "grade": "C",
+      "analyzedAt": "2026-05-05", "tosVersion": "2026-01-EU",
+      "flags": [
+        { "id": "termination_without_cause","severity": "partial","title": "Termination without cause",         "quote": "Netflix may terminate your service with reasonable notice" },
+        { "id": "silent_changes",          "severity": "partial","title": "Silent terms changes",              "quote": "we will notify you of material changes at least 30 days in advance" },
+        { "id": "auto_renewal",            "severity": "full",   "title": "Auto-renewal subscription",         "quote": "your subscription will automatically renew each billing period" },
+        { "id": "deleted_data_retained",   "severity": "partial","title": "Deleted data not truly erased",     "quote": "some information may be retained in backup systems" }
+      ],
+      "credits": [
+        { "id": "gdpr_ccpa_compliance",    "title": "GDPR compliance",         "creditValue": 0.6, "note": "Netflix Netherlands B.V. processes EU user data under GDPR" },
+        { "id": "advance_notice_changes",  "title": "30-day advance notice",   "creditValue": 0.4, "note": "EU terms require 30 days notice before material changes" },
+        { "id": "arbitration_opt_out",     "title": "No binding arbitration",   "creditValue": 0.5, "note": "EU terms do not include binding arbitration clauses" },
+        { "id": "data_deletion_right",     "title": "Data deletion right",      "creditValue": 0.4, "note": "GDPR Art. 17 applies" }
+      ],
+      "jurisdictionNote": "Netflix's EU terms are significantly more favorable than US terms. No mandatory arbitration, 30-day advance notice of changes, and GDPR rights apply."
+    },
+
+    "paypal.com": {
+      "score": 4.2, "serviceType": "fintech", "grade": "B",
+      "analyzedAt": "2026-05-05", "tosVersion": "2026-01-EU",
+      "flags": [
+        { "id": "fund_holds_indefinite",   "severity": "partial","title": "Fund holds",                         "quote": "PayPal may place holds on funds pending investigation" },
+        { "id": "data_third_parties",      "severity": "partial","title": "Data sharing with third parties",    "quote": "we share personal data with service providers acting on our behalf" },
+        { "id": "termination_without_cause","severity": "partial","title": "Termination without cause",         "quote": "we may limit or close your account with 2 months notice" }
+      ],
+      "credits": [
+        { "id": "gdpr_ccpa_compliance",    "title": "GDPR compliance",         "creditValue": 0.6, "note": "PayPal (Europe) S.à r.l. is regulated by the Luxembourg CSSF and operates under GDPR" },
+        { "id": "advance_notice_changes",  "title": "2-month advance notice",  "creditValue": 0.4, "note": "EU Payment Services Directive requires 2 months advance notice of changes" },
+        { "id": "fund_holds_capped",       "title": "Fund holds capped",        "creditValue": 0.6, "note": "EU Payment Services Directive limits hold duration and requires justification" },
+        { "id": "appeal_process",          "title": "Formal appeal process",    "creditValue": 0.3, "note": "EU regulated — complaints to Luxembourg CSSF and national financial ombudsmen" }
+      ],
+      "jurisdictionNote": "PayPal in the EU operates under PayPal (Europe) S.à r.l., regulated by the Luxembourg CSSF. EU Payment Services Directive provides significantly stronger consumer protections: 2-month advance notice, capped fund holds, no binding arbitration."
+    },
+
+    "spotify.com": {
+      "score": 3.8, "serviceType": "content", "grade": "B",
+      "analyzedAt": "2026-05-05", "tosVersion": "2025-08-EU",
+      "flags": [
+        { "id": "data_third_parties",      "severity": "partial","title": "Data sharing with third parties",    "quote": "we share data with partners on the basis of your consent or legitimate interests" },
+        { "id": "auto_renewal",            "severity": "full",   "title": "Auto-renewal subscription",          "quote": "your subscription renews automatically" },
+        { "id": "silent_changes",          "severity": "partial","title": "Silent terms changes",               "quote": "we will notify you of significant changes before they take effect" }
+      ],
+      "credits": [
+        { "id": "gdpr_ccpa_compliance",    "title": "GDPR compliance",         "creditValue": 0.6, "note": "Spotify AB is a Swedish company; GDPR applies as primary privacy law" },
+        { "id": "arbitration_opt_out",     "title": "No binding arbitration",   "creditValue": 0.5, "note": "EU terms do not include mandatory arbitration for consumers" },
+        { "id": "advance_notice_changes",  "title": "Advance notice of changes","creditValue": 0.4, "note": "Spotify provides advance notice of material changes to EU users" },
+        { "id": "data_portability",        "title": "Data portability",         "creditValue": 0.4, "note": "Download Your Data feature available; GDPR Art. 20 portability rights" },
+        { "id": "data_deletion_right",     "title": "Data deletion right",      "creditValue": 0.4, "note": "GDPR Art. 17 right to erasure" },
+        { "id": "right_to_reject_changes", "title": "Right to reject changes",  "creditValue": 0.3, "note": "EU users can close account if they reject new terms" }
+      ],
+      "jurisdictionNote": "Spotify is a Swedish company — GDPR is its primary privacy framework. EU terms are significantly better: no binding arbitration, advance notice of changes, and full GDPR data rights."
+    },
+
+    "uber.com": {
+      "score": 4.8, "serviceType": "marketplace", "grade": "C",
+      "analyzedAt": "2026-05-05", "tosVersion": "2025-EU",
+      "flags": [
+        { "id": "location_tracking",       "severity": "full",   "title": "Location & behavioral tracking",     "quote": "Uber collects your precise location even when the app is running in the background" },
+        { "id": "data_third_parties",      "severity": "partial","title": "Data sharing with third parties",    "quote": "we share personal data with partners on the basis of your consent or legitimate interests" },
+        { "id": "termination_without_cause","severity": "partial","title": "Termination without cause",         "quote": "Uber may deactivate your account with notice in accordance with applicable law" }
+      ],
+      "credits": [
+        { "id": "gdpr_ccpa_compliance",    "title": "GDPR compliance",          "creditValue": 0.6, "note": "Uber B.V. (Netherlands) is the data controller for EU users" },
+        { "id": "data_deletion_right",     "title": "Data deletion right",       "creditValue": 0.4, "note": "GDPR Art. 17 right to erasure" },
+        { "id": "data_portability",        "title": "Data portability",          "creditValue": 0.4, "note": "Uber allows data download via Privacy Center" }
+      ],
+      "jurisdictionNote": "Uber's EU entity is Uber B.V. (Amsterdam). No binding arbitration for EU consumers. Location tracking remains a core concern — Uber cannot function without it, but the scope of background tracking is still broad."
+    },
+
+    "airbnb.com": {
+      "score": 4.1, "serviceType": "marketplace", "grade": "B",
+      "analyzedAt": "2026-05-05", "tosVersion": "2025-06-EU",
+      "flags": [
+        { "id": "user_indemnification",    "severity": "partial","title": "User pays company's legal fees",     "quote": "you agree to indemnify Airbnb from claims arising from your breach of these terms" },
+        { "id": "silent_changes",          "severity": "partial","title": "Silent terms changes",               "quote": "we will notify you of material changes before they take effect" },
+        { "id": "termination_without_cause","severity": "partial","title": "Termination without cause",         "quote": "Airbnb may terminate your access with notice" }
+      ],
+      "credits": [
+        { "id": "gdpr_ccpa_compliance",    "title": "GDPR compliance",          "creditValue": 0.6, "note": "Airbnb Ireland UC is the EU data controller; GDPR applies" },
+        { "id": "data_deletion_right",     "title": "Data deletion right",       "creditValue": 0.4, "note": "GDPR Art. 17 right to erasure" },
+        { "id": "data_portability",        "title": "Data portability",          "creditValue": 0.4, "note": "Data export available via Privacy settings" },
+        { "id": "advance_notice_changes",  "title": "Advance notice of changes", "creditValue": 0.4, "note": "EU terms require notice before material changes" }
+      ],
+      "jurisdictionNote": "Airbnb Ireland UC is the EU entity. No binding arbitration under EU consumer law. User indemnification is significantly narrowed — EU courts generally reject broad indemnification in consumer contracts."
+    },
+
+    "microsoft.com": {
+      "score": 3.9, "serviceType": "general_tech", "grade": "B",
+      "analyzedAt": "2026-05-05", "tosVersion": "2025-EU",
+      "flags": [
+        { "id": "data_third_parties",      "severity": "partial","title": "Data sharing with third parties",    "quote": "we share data with partners and affiliates to provide and improve services" },
+        { "id": "silent_changes",          "severity": "partial","title": "Silent terms changes",               "quote": "we will provide notice of material changes before they take effect" }
+      ],
+      "credits": [
+        { "id": "gdpr_ccpa_compliance",    "title": "GDPR compliance",          "creditValue": 0.6, "note": "Microsoft Ireland Operations Ltd is the EU data controller" },
+        { "id": "data_portability",        "title": "Data portability",          "creditValue": 0.4, "note": "Microsoft Account data export + GDPR Art. 20" },
+        { "id": "data_deletion_right",     "title": "Data deletion right",       "creditValue": 0.4, "note": "Account closure and data deletion available" },
+        { "id": "advance_notice_changes",  "title": "Advance notice of changes", "creditValue": 0.4, "note": "EU terms specify advance notice before material changes" }
+      ],
+      "jurisdictionNote": "Microsoft explicitly states its arbitration clause is 'US only'. EU users face none of it. Microsoft Ireland is the EU entity — GDPR applies with full force."
+    },
+
+    "linkedin.com": {
+      "score": 4.0, "serviceType": "social_media", "grade": "B",
+      "analyzedAt": "2026-05-05", "tosVersion": "2025-11-EU",
+      "flags": [
+        { "id": "ai_training_data",        "severity": "partial","title": "AI model training on user data",     "quote": "LinkedIn uses member data to train generative AI models (opt-out available in EU)" },
+        { "id": "data_third_parties",      "severity": "partial","title": "Data sharing with third parties",    "quote": "we share your data with Microsoft affiliates on the basis of legitimate interests" },
+        { "id": "tracking_off_platform",   "severity": "partial","title": "Cross-site tracking",                "quote": "we collect data about your activity on and off LinkedIn where permitted" }
+      ],
+      "credits": [
+        { "id": "gdpr_ccpa_compliance",    "title": "GDPR compliance",          "creditValue": 0.6, "note": "LinkedIn Ireland Unlimited Company is the EU data controller" },
+        { "id": "data_portability",        "title": "Data portability",          "creditValue": 0.4, "note": "Data export + GDPR Art. 20 portability" },
+        { "id": "data_deletion_right",     "title": "Data deletion right",       "creditValue": 0.4, "note": "GDPR Art. 17 right to erasure; account closure removes profile" },
+        { "id": "advance_notice_changes",  "title": "Advance notice of changes", "creditValue": 0.4, "note": "EU terms require advance notice before material changes" },
+        { "id": "no_ai_training",          "title": "AI training opt-out",       "creditValue": 0.5, "note": "EU users can opt out of AI training use of their data under GDPR" }
+      ],
+      "jurisdictionNote": "LinkedIn Ireland is the EU entity. No mandatory arbitration in EU terms. GDPR gives EU users a meaningful opt-out from AI training. Still cross-site tracking is a concern."
+    },
+
+    "booking.com": {
+      "score": 3.2, "serviceType": "marketplace", "grade": "B",
+      "analyzedAt": "2026-05-05", "tosVersion": "2025-09-EU",
+      "flags": [
+        { "id": "data_third_parties",      "severity": "partial","title": "Data sharing with third parties",    "quote": "we share your data with accommodation and transport providers to fulfil your booking" },
+        { "id": "tracking_off_platform",   "severity": "partial","title": "Cross-site tracking",                "quote": "we use cookies and measurement tools; you can manage preferences in our Cookie Centre" },
+        { "id": "silent_changes",          "severity": "partial","title": "Silent terms changes",               "quote": "we will notify you of material changes before they take effect" }
+      ],
+      "credits": [
+        { "id": "gdpr_ccpa_compliance",    "title": "GDPR compliance (HQ in NL)", "creditValue": 0.6, "note": "Booking.com B.V. is headquartered in Amsterdam. Dutch DPA (AP) is the lead supervisory authority." },
+        { "id": "data_deletion_right",     "title": "Data deletion right",         "creditValue": 0.4, "note": "GDPR Art. 17 right to erasure" },
+        { "id": "data_portability",        "title": "Data portability",             "creditValue": 0.4, "note": "GDPR Art. 20 portability right" },
+        { "id": "advance_notice_changes",  "title": "Advance notice of changes",   "creditValue": 0.4, "note": "EU terms specify advance notice" }
+      ],
+      "jurisdictionNote": "Booking.com B.V. is a Dutch company — GDPR is its home law, not just a compliance checkbox. No binding arbitration for EU consumers. Cookie consent management is available. One of the better EU profiles among marketplaces."
+    },
+
+    "apple.com": {
+      "score": 1.9, "serviceType": "general_tech", "grade": "A",
+      "analyzedAt": "2026-05-05", "tosVersion": "2025-07-EU",
+      "flags": [
+        { "id": "silent_changes",          "severity": "partial","title": "Silent terms changes",               "quote": "we will notify you of material changes via email before they take effect" }
+      ],
+      "credits": [
+        { "id": "no_ai_training",          "title": "No AI training on user data", "creditValue": 0.5, "note": "Apple Intelligence processes data on-device; not used for AI model training" },
+        { "id": "gdpr_ccpa_compliance",    "title": "GDPR compliance",             "creditValue": 0.6, "note": "Apple Distribution International Ltd (Ireland) is the EU entity" },
+        { "id": "data_portability",        "title": "Data portability",             "creditValue": 0.4, "note": "privacy.apple.com data download + GDPR Art. 20" },
+        { "id": "data_deletion_right",     "title": "Data deletion right",          "creditValue": 0.4, "note": "Account deletion removes all associated data; GDPR Art. 17" },
+        { "id": "advance_notice_changes",  "title": "Advance notice of changes",   "creditValue": 0.4, "note": "Apple notifies by email before material changes" },
+        { "id": "right_to_reject_changes", "title": "Right to reject changes",      "creditValue": 0.3, "note": "Users can stop using the service if they reject new terms" }
+      ],
+      "jurisdictionNote": "Apple is among the best performers for EU users. No binding arbitration, on-device AI processing, strong GDPR compliance via Apple Distribution International (Ireland). Closest to an ideal ToS profile in this dataset."
+    },
+    "icloud.com": { "_ref": "apple.com" },
+
+    "revolut.com": {
+      "score": 3.0, "serviceType": "fintech", "grade": "B",
+      "analyzedAt": "2026-05-05", "tosVersion": "2025-09",
+      "flags": [
+        { "id": "data_third_parties",      "severity": "partial","title": "Data sharing with third parties",    "quote": "we may share your data with service providers and payment networks" },
+        { "id": "silent_changes",          "severity": "partial","title": "Silent terms changes",               "quote": "we will notify you of changes with reasonable notice" }
+      ],
+      "credits": [
+        { "id": "gdpr_ccpa_compliance",    "title": "GDPR compliance",         "creditValue": 0.6, "note": "Revolut is regulated by Bank of Lithuania under EU banking law; GDPR applies" },
+        { "id": "fund_holds_capped",       "title": "Fund holds capped",        "creditValue": 0.6, "note": "Regulated fintech; holds subject to EU Payment Services Directive limits" },
+        { "id": "data_deletion_right",     "title": "Data deletion right",      "creditValue": 0.4, "note": "Right to erasure stated per GDPR Article 17" },
+        { "id": "appeal_process",          "title": "Formal appeal process",    "creditValue": 0.3, "note": "Regulated complaints process with Financial Ombudsman access" }
+      ]
+    },
+
+    "wise.com": {
+      "score": 2.3, "serviceType": "fintech", "grade": "A",
+      "analyzedAt": "2026-05-05", "tosVersion": "2025",
+      "flags": [
+        { "id": "silent_changes",          "severity": "partial","title": "Silent terms changes",               "quote": "we will give you advance notice of material changes" }
+      ],
+      "credits": [
+        { "id": "gdpr_ccpa_compliance",    "title": "GDPR compliance",         "creditValue": 0.6, "note": "Wise is regulated by FCA (UK) and De Nederlandsche Bank (EU)" },
+        { "id": "fund_holds_capped",       "title": "Fund holds capped",        "creditValue": 0.6, "note": "Regulated by FCA; holds subject to strict limits" },
+        { "id": "advance_notice_changes",  "title": "Advance notice",          "creditValue": 0.4, "note": "Wise provides advance notice before material ToS changes" },
+        { "id": "data_deletion_right",     "title": "Data deletion right",      "creditValue": 0.4, "note": "GDPR right to erasure explicitly stated" },
+        { "id": "data_portability",        "title": "Data portability",         "creditValue": 0.4, "note": "GDPR Article 20 data portability rights stated" },
+        { "id": "appeal_process",          "title": "Formal appeal process",    "creditValue": 0.3, "note": "FCA regulated complaints process" }
+      ]
+    }
+  }
+}

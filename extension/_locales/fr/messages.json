@@ -1,0 +1,46 @@
+{
+  "extName": { "message": "Assent" },
+  "extDescription": {
+    "message": "Lit les Conditions d'Utilisation à votre place. Affiche un score de risque avant que vous cliquiez sur 'J'accepte'."
+  },
+
+  "scoreLabelLow": { "message": "Risque faible" },
+  "scoreLabelMedium": { "message": "Risque modéré" },
+  "scoreLabelHigh": { "message": "Risque élevé" },
+  "scoreLabelExtreme": { "message": "Risque extrême" },
+
+  "stateIdle": { "message": "Aucune Conditions d'Utilisation détectées sur cette page." },
+  "stateLoading": { "message": "Analyse des Conditions d'Utilisation…" },
+  "stateError": { "message": "Analyse indisponible" },
+  "errorNoDeviceAI": {
+    "message": "L'IA sur l'appareil n'est pas disponible. Score basé uniquement sur la base de données."
+  },
+
+  "sectionTopThree": { "message": "Les 3 points essentiels" },
+  "sectionFlags": { "message": "Clauses signalées" },
+  "sectionCredits": { "message": "Bonnes pratiques détectées" },
+  "sectionAlternative": { "message": "Alternative moins risquée" },
+
+  "btnShowInDocument": { "message": "Voir dans le document" },
+  "btnViewMethodology": { "message": "Méthodologie" },
+
+  "labelGrade": { "message": "Note" },
+  "labelEvidence": { "message": "Preuve :" },
+  "labelDate": { "message": "Analysé" },
+  "labelSourceDB": { "message": "pré-analysé" },
+  "labelSourceAI": { "message": "IA sur l'appareil" },
+
+  "disclaimerTitle": { "message": "À propos de cette analyse" },
+  "disclaimerBody": {
+    "message": "Détection de motifs automatisée — pas un conseil juridique. Chaque signalement est appuyé par une formulation du document public."
+  },
+
+  "donationTitle": { "message": "Assent est gratuit et créé par un seul développeur" },
+  "donationBody": {
+    "message": "Pas de pubs. Pas de tracking. Aucune revente de vos données. Si Assent vous a aidé à éviter de mauvaises Conditions, offrez-moi un café — cela maintient le projet en vie."
+  },
+  "donationBtnTen": { "message": "☕ Offrir un café · 10 €" },
+  "donationBtnCustom": { "message": "Choisir le montant" },
+  "donationBtnLater": { "message": "Plus tard" },
+  "donationBtnNever": { "message": "Non merci" }
+}

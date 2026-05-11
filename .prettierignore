@@ -1,0 +1,3 @@
+node_modules
+worker/node_modules
+extension/data/services.json

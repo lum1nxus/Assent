@@ -1,0 +1,46 @@
+{
+  "extName": { "message": "Assent" },
+  "extDescription": {
+    "message": "Liest die AGB für dich. Zeigt eine Risikobewertung an, bevor du auf 'Ich stimme zu' klickst."
+  },
+
+  "scoreLabelLow": { "message": "Geringes Risiko" },
+  "scoreLabelMedium": { "message": "Mittleres Risiko" },
+  "scoreLabelHigh": { "message": "Hohes Risiko" },
+  "scoreLabelExtreme": { "message": "Extremes Risiko" },
+
+  "stateIdle": { "message": "Keine AGB auf dieser Seite erkannt." },
+  "stateLoading": { "message": "AGB werden gescannt…" },
+  "stateError": { "message": "Analyse nicht verfügbar" },
+  "errorNoDeviceAI": {
+    "message": "KI auf dem Gerät ist hier nicht verfügbar. Bewertung basiert nur auf der Datenbank."
+  },
+
+  "sectionTopThree": { "message": "Die 3 wichtigsten Punkte" },
+  "sectionFlags": { "message": "Markierte Klauseln" },
+  "sectionCredits": { "message": "Gute Praktiken erkannt" },
+  "sectionAlternative": { "message": "Risikoärmere Alternative" },
+
+  "btnShowInDocument": { "message": "Im Dokument zeigen" },
+  "btnViewMethodology": { "message": "Wie wir bewerten" },
+
+  "labelGrade": { "message": "Note" },
+  "labelEvidence": { "message": "Beleg:" },
+  "labelDate": { "message": "Analysiert" },
+  "labelSourceDB": { "message": "vorab analysiert" },
+  "labelSourceAI": { "message": "KI auf dem Gerät" },
+
+  "disclaimerTitle": { "message": "Über diese Analyse" },
+  "disclaimerBody": {
+    "message": "Automatisierte Mustererkennung — keine Rechtsberatung. Jede Markierung basiert auf Formulierungen aus dem öffentlich verfügbaren Dokument."
+  },
+
+  "donationTitle": { "message": "Assent ist kostenlos und wird von einem Entwickler gemacht" },
+  "donationBody": {
+    "message": "Keine Werbung. Kein Tracking. Kein Datenverkauf. Wenn Assent dir geholfen hat, freue ich mich über einen Kaffee — das hält das Projekt am Leben."
+  },
+  "donationBtnTen": { "message": "☕ Kaffee spenden · 10 €" },
+  "donationBtnCustom": { "message": "Betrag wählen" },
+  "donationBtnLater": { "message": "Vielleicht später" },
+  "donationBtnNever": { "message": "Nein danke" }
+}

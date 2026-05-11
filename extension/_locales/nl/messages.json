@@ -1,0 +1,46 @@
+{
+  "extName": { "message": "Assent" },
+  "extDescription": {
+    "message": "Leest de Algemene Voorwaarden zodat jij dat niet hoeft. Toont een risicoscore voordat je op 'Ik ga akkoord' klikt."
+  },
+
+  "scoreLabelLow": { "message": "Laag risico" },
+  "scoreLabelMedium": { "message": "Matig risico" },
+  "scoreLabelHigh": { "message": "Hoog risico" },
+  "scoreLabelExtreme": { "message": "Extreem risico" },
+
+  "stateIdle": { "message": "Geen Algemene Voorwaarden gevonden op deze pagina." },
+  "stateLoading": { "message": "Algemene Voorwaarden worden gescand…" },
+  "stateError": { "message": "Analyse niet beschikbaar" },
+  "errorNoDeviceAI": {
+    "message": "AI op het apparaat is hier niet beschikbaar. Score gebaseerd op database alleen."
+  },
+
+  "sectionTopThree": { "message": "De 3 belangrijkste punten" },
+  "sectionFlags": { "message": "Gemarkeerde clausules" },
+  "sectionCredits": { "message": "Goede praktijken gedetecteerd" },
+  "sectionAlternative": { "message": "Alternatief met lager risico" },
+
+  "btnShowInDocument": { "message": "Toon in document" },
+  "btnViewMethodology": { "message": "Methodologie" },
+
+  "labelGrade": { "message": "Cijfer" },
+  "labelEvidence": { "message": "Bewijs:" },
+  "labelDate": { "message": "Geanalyseerd" },
+  "labelSourceDB": { "message": "vooraf geanalyseerd" },
+  "labelSourceAI": { "message": "AI op apparaat" },
+
+  "disclaimerTitle": { "message": "Over deze analyse" },
+  "disclaimerBody": {
+    "message": "Geautomatiseerde patroondetectie — geen juridisch advies. Elke markering is onderbouwd met tekst uit het openbaar beschikbare document."
+  },
+
+  "donationTitle": { "message": "Assent is gratis en wordt gemaakt door één ontwikkelaar" },
+  "donationBody": {
+    "message": "Geen advertenties. Geen tracking. Geen verkoop van je gegevens. Als Assent je geholpen heeft, overweeg dan om een kop koffie te trakteren — het houdt het project levend."
+  },
+  "donationBtnTen": { "message": "☕ Trakteer op koffie · € 10" },
+  "donationBtnCustom": { "message": "Bedrag kiezen" },
+  "donationBtnLater": { "message": "Misschien later" },
+  "donationBtnNever": { "message": "Nee, bedankt" }
+}
