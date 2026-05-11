@@ -1,0 +1,35 @@
+---
+description: Legal posture rules for Assent. Always apply.
+alwaysApply: true
+---
+
+# Legal posture
+
+The product is unaffiliated, on-device, and presents pattern-matching output, not legal advice. Anything that can be construed as accusing a named service of wrongdoing is a lawsuit risk.
+
+## No brand or product names
+
+- Never reference real companies, products, brands, regulations, statutes, or treaties in:
+  - source files (`extension/**`, `tests/**`, `scripts/**`)
+  - prompts and few-shot examples for the on-device model
+  - documentation (`README.md`, `TESTING.md`, `CHANGELOG.md`)
+  - commit messages and merge request descriptions
+  - test fixture names and test case titles
+- The only allowed exception is the PayPal donation integration in `donation.js` and `README.md`, where PayPal is the actual payment provider being integrated.
+
+## Verbatim quotes are the only place names may appear
+
+- Document excerpts quoted from the analysed page may contain names because they are a verbatim extract of someone else's text. Do not paraphrase or strip them.
+- AI-generated titles, summaries, and rationales must never name a company, regulation, country, or law.
+
+## How to write neutral examples
+
+Use generic, descriptive nouns:
+- "the service" / "the provider" / "the platform"
+- "a fintech-shaped output", "a content-platform-shaped output", "a high-risk profile"
+- "Provider statement: ..." instead of "<Company> says: ..."
+
+## Disclaimers are mandatory
+
+- Every persisted analysis result must carry the disclaimer object built in `extension/src/pipeline/steps/persist.js`.
+- Do not remove `not_legal_advice` or `not_affiliated` flags from that object.

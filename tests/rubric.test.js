@@ -154,8 +154,8 @@ test("buildSummary picks the two highest-weighted flags", () => {
   assert.ok(!out.includes("Services As Is"), `should not include lowest-weight: ${out}`);
 });
 
-test("computeScore on the Stripe-shaped output goes well above 45", () => {
-  const stripe = computeScore(
+test("computeScore on a high-risk fintech-shaped output goes well above 45", () => {
+  const highRiskFintech = computeScore(
     [
       { category: "mandatory_arbitration", severity: "high" },
       { category: "class_action_waiver", severity: "full" },
@@ -165,19 +165,19 @@ test("computeScore on the Stripe-shaped output goes well above 45", () => {
     ],
     [],
   );
-  assert.ok(stripe.score > 45, `expected > 45, got ${stripe.score}`);
-  assert.ok(stripe.grade === "D" || stripe.grade === "F");
+  assert.ok(highRiskFintech.score > 45, `expected > 45, got ${highRiskFintech.score}`);
+  assert.ok(highRiskFintech.grade === "D" || highRiskFintech.grade === "F");
 });
 
-test("computeScore on the Spotify-shaped output is much lower", () => {
-  const spotify = computeScore(
+test("computeScore on a content-platform-shaped output is much lower", () => {
+  const contentPlatform = computeScore(
     [
       { category: "broad_content_license_irrevocable", severity: "high" },
       { category: "services_as_is", severity: "partial" },
     ],
     [],
   );
-  assert.ok(spotify.score < 30, `expected < 30, got ${spotify.score}`);
+  assert.ok(contentPlatform.score < 30, `expected < 30, got ${contentPlatform.score}`);
 });
 
 test("two services with different risk profiles get different grades", () => {

@@ -7,5 +7,6 @@ build/
 .vscode/
 .env
 .env.local
-.cursor/
+.cursor/*
+!.cursor/rules/
 assent-*.zip

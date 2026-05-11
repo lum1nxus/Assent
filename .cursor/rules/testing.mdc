@@ -1,0 +1,24 @@
+---
+description: Test conventions for Assent.
+globs: tests/**
+alwaysApply: false
+---
+
+# Testing
+
+## Framework
+
+- Use Node's built-in test runner: `import { test } from "node:test"` and `import assert from "node:assert/strict"`.
+- No Jest, no Vitest, no Mocha. The runner is invoked by `npm test`.
+
+## No brand names in fixtures
+
+- Test names, variable names, and string fixtures must never reference a real company, product, regulation, or country.
+- Use shape-based names: `highRiskFintech`, `contentPlatform`, `friendlyTerms`, `aggressiveTerms`, `genericProvider`.
+- If you need a representative ToS clause, paraphrase into neutral language or invent a placeholder operator name like "the provider".
+
+## Coverage targets
+
+- Every new category in `rubric/categories.js` requires a rubric test asserting its weight and at least one positive plus one negative keyword-guard test.
+- Every pipeline step gains a unit test for happy path and one degenerate input.
+- Regressions found in the wild get a named test that reproduces the failure before the fix lands.

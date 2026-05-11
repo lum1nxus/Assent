@@ -58,7 +58,7 @@ test("parseLooseJson succeeds where raw JSON.parse fails", () => {
   assert.deepEqual(parseLooseJson(src), { quote: "first line\nsecond line" });
 });
 
-test("parseLooseJson regresses the duckduckgo failure mode", () => {
+test("parseLooseJson regresses a control-character failure mode from production", () => {
   const src = [
     "{",
     '  "score": 0,',
@@ -69,7 +69,7 @@ test("parseLooseJson regresses the duckduckgo failure mode", () => {
     "    {",
     '      "id": "transparent_retention",',
     '      "title": "Transparent retention",',
-    '      "note": "DuckDuckGo says:\nWe do not store personal data."',
+    '      "note": "Provider statement:\nWe do not store personal data."',
     "    }",
     "  ]",
     "}",
