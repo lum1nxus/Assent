@@ -1,7 +1,7 @@
 {
   "name": "assent",
   "private": true,
-  "version": "0.1.0",
+  "version": "0.2.0",
   "type": "module",
   "description": "Reads the Terms of Service so you don't have to. Shows a risk score before you click 'I Agree'.",
   "homepage": "https://github.com/lum1nxus/Assent",
@@ -17,6 +17,7 @@
     "test": "node --test tests/*.test.js",
     "eval": "node scripts/eval-pipeline.mjs",
     "eval:verbose": "node scripts/eval-pipeline.mjs --verbose",
+    "replay": "node scripts/replay-debug.mjs",
     "zip": "rm -f assent-*.zip && cd extension && zip -r ../assent-${npm_package_version}.zip . -x '*.DS_Store' '*/.DS_Store'"
   },
   "devDependencies": {

@@ -39,20 +39,58 @@ npm run lint
 npm run format:check
 ```
 
-## 0a. Adding a new AI-output regression test
+## 0a. The one-click debug workflow (preferred)
 
-When the side panel shows a wrong classification on a real page in Chrome
-and you want it to never come back:
+The side panel has a built-in capture tool so you never have to paste
+DevTools snippets again. The bottom of every side panel shows the
+extension version (for example `Assent v0.2.0`) next to a `Debug` button.
 
-1. Capture it from the real session - see `scripts/capture.md`. The
-   service-worker DevTools snippet there prints a fixture-shaped JSON.
-2. Save the captured object as
-   `tests/fixtures/ai-outputs/captured-<short-id>.json`.
-3. Edit `expectedFlags`, `expectedCredits` and `expectedReason` to the
-   output you want the pipeline to produce after the fix. If the
-   captured behaviour is wrong, that is fine - the test will fail until
-   the guard or prompt is updated, then it will lock the fix in place.
-4. `npm test` and `npm run eval` should both report the new fixture.
+1. Reproduce the bug in Chrome. Wait for analysis to finish.
+2. Open the side panel. Click `Debug` at the bottom.
+3. A dialog appears with a JSON bundle containing:
+   - the version that produced the result
+   - the URL and domain
+   - the persisted score, grade, flags, credits
+   - `documentText` - the exact text sent to the model
+   - `rawAiResponse` - the raw model output before any guard ran
+   - extraction stats: word count, detected language, jurisdiction
+4. Click `Download .json` to save the bundle locally, or `Copy` to put
+   it on the clipboard.
+
+You can now replay that exact case in pure Node without a browser:
+
+```sh
+npm run replay -- /path/to/assent-debug-<...>.json
+```
+
+The replay prints what `parseAndValidate` and the rubric produce now,
+compared to what was persisted in Chrome at capture time. Any difference
+is a guard or rubric change since the bundle was captured.
+
+To lock the case in as a permanent regression test:
+
+```sh
+npm run replay -- /path/to/bundle.json --save-as captured-<short-id>
+```
+
+This writes a fixture to `tests/fixtures/ai-outputs/captured-<short-id>.json`
+with the replay output already filled in as `expectedFlags` and
+`expectedCredits`. If the captured behaviour is the bug we want to fix,
+edit those fields to the output you want after the fix - the new test
+will fail until the guard or prompt is updated, then it locks the fix
+in place.
+
+The bundle name also encodes the extension version, so you can always
+tell whether a screenshot or a captured file came from an old build.
+
+## 0b. Adding a new AI-output regression test by hand
+
+If you cannot reproduce the bug in Chrome (for example you only have a
+screenshot or a quote), you can still author a fixture manually:
+
+1. Create `tests/fixtures/ai-outputs/<name>.json` with the keys
+   documented in `tests/fixtures/ai-outputs/README.md`.
+2. `npm test` and `npm run eval` will report the new fixture.
 
 This means every reported bug ships with its own regression test before
 the fix lands.

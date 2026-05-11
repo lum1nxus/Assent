@@ -457,6 +457,104 @@
         color: var(--accent);
         font-weight: 500;
       }
+      .footer-version-row {
+        margin-top: 10px;
+        display: flex;
+        gap: 10px;
+        justify-content: center;
+        align-items: center;
+        font-size: 10px;
+        color: var(--text-dim);
+      }
+      .footer-version {
+        font-variant-numeric: tabular-nums;
+      }
+      .btn-debug {
+        background: transparent;
+        border: 1px solid var(--border);
+        color: var(--text-dim);
+        padding: 3px 8px;
+        border-radius: 4px;
+        font-size: 10px;
+        cursor: pointer;
+        font-family: inherit;
+        letter-spacing: 0.02em;
+      }
+      .btn-debug:hover {
+        color: var(--text);
+        border-color: var(--text-dim);
+      }
+
+      .debug-dialog {
+        background: var(--bg-card);
+        color: var(--text);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        padding: 0;
+        width: min(92vw, 520px);
+        max-width: 92vw;
+        max-height: 80vh;
+      }
+      .debug-dialog::backdrop {
+        background: rgba(0, 0, 0, 0.6);
+      }
+      .debug-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 12px 14px;
+        border-bottom: 1px solid var(--border);
+      }
+      .debug-title {
+        font-weight: 600;
+        font-size: 13px;
+      }
+      .debug-meta {
+        font-size: 10px;
+        color: var(--text-dim);
+      }
+      .debug-body {
+        padding: 12px 14px;
+      }
+      .debug-textarea {
+        width: 100%;
+        min-height: 220px;
+        max-height: 45vh;
+        background: var(--bg);
+        color: var(--text);
+        border: 1px solid var(--border);
+        border-radius: 6px;
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        font-size: 11px;
+        padding: 8px 10px;
+        resize: vertical;
+        line-height: 1.4;
+      }
+      .debug-actions {
+        display: flex;
+        gap: 8px;
+        justify-content: flex-end;
+        padding: 10px 14px 14px;
+        border-top: 1px solid var(--border);
+      }
+      .btn-debug-action {
+        background: var(--bg-card-hover);
+        color: var(--text);
+        border: 1px solid var(--border);
+        padding: 6px 12px;
+        border-radius: 5px;
+        font-size: 11px;
+        cursor: pointer;
+        font-family: inherit;
+      }
+      .btn-debug-action:hover {
+        background: var(--accent);
+        color: #1a1625;
+        border-color: var(--accent);
+      }
+      .btn-debug-action.btn-debug-close {
+        background: transparent;
+      }
     </style>
   </head>
   <body>
@@ -466,6 +564,22 @@
     </div>
     <main id="app"></main>
     <footer class="footer" id="persistent-footer"></footer>
+    <dialog class="debug-dialog" id="debug-dialog">
+      <div class="debug-header">
+        <div>
+          <div class="debug-title">Debug bundle</div>
+          <div class="debug-meta" id="debug-meta">-</div>
+        </div>
+        <button class="btn-debug-action btn-debug-close" id="debug-close" type="button">Close</button>
+      </div>
+      <div class="debug-body">
+        <textarea class="debug-textarea" id="debug-textarea" readonly spellcheck="false"></textarea>
+      </div>
+      <div class="debug-actions">
+        <button class="btn-debug-action" id="debug-copy" type="button">Copy</button>
+        <button class="btn-debug-action" id="debug-download" type="button">Download .json</button>
+      </div>
+    </dialog>
   </body>
   <script type="module" src="./sidepanel.js"></script>
 </html>
