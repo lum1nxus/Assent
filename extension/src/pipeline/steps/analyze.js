@@ -6,6 +6,7 @@ import {
   SEVERITY_IDS,
 } from "../rubric/categories.js";
 import { resolveTitle } from "../rubric/labels.js";
+import { quoteMatchesCategoryKeywords } from "./category-guards.js";
 
 const SERVICE_TYPES = ["fintech", "social_media", "content", "marketplace", "general_tech"];
 
@@ -235,6 +236,7 @@ function parseAndValidate(raw, docText) {
   const serviceType = SERVICE_TYPES.includes(obj.serviceType) ? obj.serviceType : "general_tech";
   const docNormalized = normalizeForQuoteCheck(docText);
 
+  const seenFlagCats = new Set();
   const flags = Array.isArray(obj.flags)
     ? obj.flags
         .filter((f) => f && typeof f.category === "string" && typeof f.quote === "string")
@@ -245,6 +247,14 @@ function parseAndValidate(raw, docText) {
         }))
         .filter((f) => CATEGORIES[f.category]?.kind === "flag")
         .filter((f) => quoteAppearsInDocument(f.quote, docNormalized))
+        .filter((f) => quoteMatchesCategoryKeywords(f.quote, f.category, "flag"))
+        .filter((f) => {
+          if (seenFlagCats.has(f.category)) {
+            return false;
+          }
+          seenFlagCats.add(f.category);
+          return true;
+        })
         .map((f) => ({
           id: f.category,
           category: f.category,
@@ -255,6 +265,7 @@ function parseAndValidate(raw, docText) {
         .slice(0, 8)
     : [];
 
+  const seenCreditCats = new Set();
   const credits = Array.isArray(obj.credits)
     ? obj.credits
         .filter((c) => c && typeof c.category === "string" && typeof c.quote === "string")
@@ -264,6 +275,14 @@ function parseAndValidate(raw, docText) {
         }))
         .filter((c) => CATEGORIES[c.category]?.kind === "credit")
         .filter((c) => quoteAppearsInDocument(c.quote, docNormalized))
+        .filter((c) => quoteMatchesCategoryKeywords(c.quote, c.category, "credit"))
+        .filter((c) => {
+          if (seenCreditCats.has(c.category)) {
+            return false;
+          }
+          seenCreditCats.add(c.category);
+          return true;
+        })
         .map((c) => ({
           id: c.category,
           category: c.category,

@@ -318,17 +318,34 @@ function escAttr(s) {
 }
 
 let currentTabId = null;
+let currentTabUrl = null;
 let pollHandle = null;
+const lastDoneStatePerTab = new Map();
+
+function materialUrlEquals(a, b) {
+  if (!a || !b) {
+    return a === b;
+  }
+  try {
+    const ua = new URL(a);
+    const ub = new URL(b);
+    return ua.origin === ub.origin && ua.pathname === ub.pathname;
+  } catch {
+    return a === b;
+  }
+}
 
 async function loadStateForActiveTab() {
   const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
   if (!tab?.id) {
     currentTabId = null;
+    currentTabUrl = null;
     cancelPolling();
     renderIdle();
     return;
   }
   currentTabId = tab.id;
+  currentTabUrl = tab.url ?? null;
   const state = await chrome.runtime.sendMessage({ type: "GET_STATE", tabId: tab.id });
   dispatchState(tab.id, state);
 }
@@ -337,9 +354,20 @@ function dispatchState(tabId, state) {
   if (tabId !== currentTabId) {
     return;
   }
+
+  const incomingStatus = state?.status ?? "idle";
+
+  if (incomingStatus === "idle" && lastDoneStatePerTab.has(tabId)) {
+    const cached = lastDoneStatePerTab.get(tabId);
+    cancelPolling();
+    renderResult(cached);
+    return;
+  }
+
   cancelPolling();
-  switch (state?.status) {
+  switch (incomingStatus) {
     case "done":
+      lastDoneStatePerTab.set(tabId, state);
       renderResult(state);
       break;
     case "loading":
@@ -399,9 +427,18 @@ chrome.tabs.onActivated.addListener(() => {
 });
 
 chrome.tabs.onUpdated.addListener((tabId, changeInfo) => {
-  if (tabId === currentTabId && (changeInfo.status === "complete" || changeInfo.url)) {
+  if (tabId !== currentTabId) {
+    return;
+  }
+  if (changeInfo.url && !materialUrlEquals(changeInfo.url, currentTabUrl)) {
+    lastDoneStatePerTab.delete(tabId);
+    currentTabUrl = changeInfo.url;
     loadStateForActiveTab();
   }
+});
+
+chrome.tabs.onRemoved.addListener((tabId) => {
+  lastDoneStatePerTab.delete(tabId);
 });
 
 window.addEventListener("beforeunload", () => {
