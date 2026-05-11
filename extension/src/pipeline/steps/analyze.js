@@ -10,6 +10,7 @@ import {
   quoteMatchesCategoryKeywords,
   quoteContainsNegation,
   quoteLooksSpliced,
+  creditQuoteIsInverted,
 } from "./category-guards.js";
 
 const SERVICE_TYPES = ["fintech", "social_media", "content", "marketplace", "general_tech"];
@@ -146,6 +147,21 @@ DISAMBIGUATION GUIDE - common near-miss patterns. If a passage looks like the NO
 - services_as_is:
   MATCH: a short "Service is provided on an 'as is' basis" without a full ALL-CAPS warranty disclaimer.
   NOT MATCH: If a full ALL-CAPS warranty disclaimer is present, prefer broad_warranty_disclaimer instead and omit services_as_is.
+
+CREDIT DISAMBIGUATION - the SUBJECT of the clause must be the user, not the service. Read every credit twice and check who owns/retains/decides.
+
+- user_retains_content_ownership (credit):
+  MATCH: "You retain all rights to the content you submit." "User content remains your property."
+  NOT MATCH: "We are the sole owners of all rights to the Service or the content." This is service-side ownership; omit, do not flip into a credit.
+- easy_account_deletion (credit):
+  MATCH: "You may close your account at any time from settings."
+  NOT MATCH: "We may terminate or delete your account at any time." That is account_termination_no_notice, not a credit.
+- explicit_optin_data_sharing (credit):
+  MATCH: "We will share your data with third parties only with your explicit consent." (real opt-in)
+  NOT MATCH: "By using the Service you consent to our data processing." (deemed consent, not a credit)
+- no_automatic_renewal (credit):
+  MATCH: "Subscriptions do not auto-renew."
+  NOT MATCH: "Your subscription will automatically renew." That is the opposite; if anything it is auto_renewal_no_clear_optout, not a credit.
 
 EXAMPLE 1 - friendly Terms (privacy-focused service):
 Input excerpt:
@@ -350,6 +366,7 @@ export function parseAndValidate(raw, docText) {
         .filter((c) => !quoteLooksSpliced(c.quote))
         .filter((c) => quoteAppearsInDocument(c.quote, docNormalized))
         .filter((c) => quoteMatchesCategoryKeywords(c.quote, c.category, "credit"))
+        .filter((c) => !creditQuoteIsInverted(c.quote, c.category))
         .filter((c) => {
           if (seenCreditCats.has(c.category)) {
             return false;
