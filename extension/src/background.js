@@ -24,14 +24,27 @@ const PIPELINE = [
 ];
 
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  if (!isTrustedSender(sender)) {
+    return false;
+  }
+
   if (message?.type === "TOS_DETECTED") {
-    handleTosDetected(sender.tab?.id, message.payload).catch((err) => {
+    const tabId = sender.tab?.id;
+    if (typeof tabId !== "number" || !isValidTosPayload(message.payload)) {
+      sendResponse({ ok: false, error: "invalid_payload" });
+      return true;
+    }
+    handleTosDetected(tabId, message.payload).catch((err) => {
       console.error("[Assent]", err);
     });
     sendResponse({ ok: true });
     return true;
   }
   if (message?.type === "GET_STATE") {
+    if (!Number.isInteger(message.tabId)) {
+      sendResponse({ status: "idle" });
+      return true;
+    }
     chrome.storage.session.get(TAB_KEY(message.tabId)).then((stored) => {
       sendResponse(stored[TAB_KEY(message.tabId)] ?? { status: "idle" });
     });
@@ -39,7 +52,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   }
   if (message?.type === "OPEN_SIDE_PANEL") {
     const tabId = sender.tab?.id;
-    if (tabId) {
+    if (typeof tabId === "number") {
       chrome.sidePanel.open({ tabId }).catch(() => {});
     }
     sendResponse({ ok: true });
@@ -51,6 +64,32 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   }
   return false;
 });
+
+function isTrustedSender(sender) {
+  if (!sender) {
+    return false;
+  }
+  if (sender.id && sender.id !== chrome.runtime.id) {
+    return false;
+  }
+  return true;
+}
+
+function isValidTosPayload(payload) {
+  if (!payload || typeof payload !== "object") {
+    return false;
+  }
+  if (typeof payload.tosUrl !== "string" || payload.tosUrl.length === 0) {
+    return false;
+  }
+  if (payload.tosText !== undefined && typeof payload.tosText !== "string") {
+    return false;
+  }
+  if (payload.domain !== undefined && typeof payload.domain !== "string") {
+    return false;
+  }
+  return true;
+}
 
 chrome.tabs.onRemoved.addListener((tabId) => {
   chrome.storage.session.remove(TAB_KEY(tabId)).catch(() => {});
@@ -209,7 +248,7 @@ function updateBadge(tabId, status, score) {
     done: {
       text: safe !== null ? String(Math.round(safe)) : "?",
       color:
-        safe === null ? "#71717a" : safe <= 25 ? "#22c55e" : safe <= 70 ? "#f59e0b" : "#ef4444",
+        safe === null ? "#71717a" : safe <= 22 ? "#22c55e" : safe <= 65 ? "#f59e0b" : "#ef4444",
     },
   };
   const badge = badges[status] ?? badges.idle;

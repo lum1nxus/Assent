@@ -21,29 +21,29 @@ headerTitle.textContent = t("extName", "Assent");
 renderPersistentFooter();
 
 function scoreColor(score) {
-  if (score <= 12) {
+  if (score <= 8) {
     return "var(--green)";
   }
-  if (score <= 25) {
+  if (score <= 22) {
     return "#d9f99d";
   }
-  if (score <= 45) {
+  if (score <= 44) {
     return "var(--yellow)";
   }
-  if (score <= 70) {
+  if (score <= 65) {
     return "var(--orange)";
   }
   return "var(--red)";
 }
 
 function scoreLabel(score) {
-  if (score <= 12) {
+  if (score <= 8) {
     return t("scoreLabelLow", "Low risk");
   }
-  if (score <= 45) {
+  if (score <= 44) {
     return t("scoreLabelMedium", "Moderate risk");
   }
-  if (score <= 70) {
+  if (score <= 65) {
     return t("scoreLabelHigh", "High risk");
   }
   return t("scoreLabelExtreme", "Extreme risk");

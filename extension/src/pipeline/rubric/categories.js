@@ -5,11 +5,11 @@ export const SEVERITY_MULTIPLIER = Object.freeze({
 });
 
 export const CATEGORIES = Object.freeze({
-  mandatory_arbitration: { kind: "flag", weight: 18, msg: "catFlagMandatoryArbitration" },
-  class_action_waiver: { kind: "flag", weight: 16, msg: "catFlagClassActionWaiver" },
+  mandatory_arbitration: { kind: "flag", weight: 15, msg: "catFlagMandatoryArbitration" },
+  class_action_waiver: { kind: "flag", weight: 14, msg: "catFlagClassActionWaiver" },
   broad_content_license_irrevocable: {
     kind: "flag",
-    weight: 16,
+    weight: 18,
     msg: "catFlagBroadLicenseIrrevocable",
   },
   unilateral_terms_change_no_notice: {
@@ -17,7 +17,7 @@ export const CATEGORIES = Object.freeze({
     weight: 14,
     msg: "catFlagUnilateralChange",
   },
-  data_resale_undisclosed_parties: { kind: "flag", weight: 14, msg: "catFlagDataResale" },
+  data_resale_undisclosed_parties: { kind: "flag", weight: 16, msg: "catFlagDataResale" },
   broad_indemnity_from_user: { kind: "flag", weight: 12, msg: "catFlagBroadIndemnity" },
   broad_limitation_of_liability: {
     kind: "flag",
