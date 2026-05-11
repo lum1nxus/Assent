@@ -1,6 +1,9 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { quoteMatchesCategoryKeywords } from "../extension/src/pipeline/steps/category-guards.js";
+import {
+  quoteMatchesCategoryKeywords,
+  creditQuoteIsInverted,
+} from "../extension/src/pipeline/steps/category-guards.js";
 
 const pass = (quote, category, kind = "flag") =>
   assert.equal(
@@ -109,6 +112,54 @@ test("user_retains_content_ownership accepts an ownership statement", () => {
     "You retain ownership of any content you post on the platform.",
     "user_retains_content_ownership",
     "credit",
+  );
+});
+
+test("user_retains_content_ownership rejects a service-side ownership statement", () => {
+  reject(
+    "The Service or the Service's licensors are the sole owners of all rights to the Service or the content.",
+    "user_retains_content_ownership",
+    "credit",
+  );
+});
+
+test("creditQuoteIsInverted catches service-side ownership masquerading as user retention", () => {
+  assert.equal(
+    creditQuoteIsInverted(
+      "The Service or the Service's licensors are the sole owners of all rights to the Service or the content.",
+      "user_retains_content_ownership",
+    ),
+    true,
+  );
+});
+
+test("creditQuoteIsInverted catches service-initiated account deletion", () => {
+  assert.equal(
+    creditQuoteIsInverted(
+      "We may terminate or delete your account at any time at our sole discretion.",
+      "easy_account_deletion",
+    ),
+    true,
+  );
+});
+
+test("creditQuoteIsInverted lets a genuine user-side deletion clause through", () => {
+  assert.equal(
+    creditQuoteIsInverted(
+      "You can delete your account at any time from Settings.",
+      "easy_account_deletion",
+    ),
+    false,
+  );
+});
+
+test("creditQuoteIsInverted catches deemed consent disguised as opt-in", () => {
+  assert.equal(
+    creditQuoteIsInverted(
+      "By using the Service you consent to our processing of your personal data.",
+      "explicit_optin_data_sharing",
+    ),
+    true,
   );
 });
 

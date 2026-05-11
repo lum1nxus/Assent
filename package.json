@@ -1,7 +1,7 @@
 {
   "name": "assent",
   "private": true,
-  "version": "0.2.0",
+  "version": "0.2.1",
   "type": "module",
   "description": "Reads the Terms of Service so you don't have to. Shows a risk score before you click 'I Agree'.",
   "homepage": "https://github.com/lum1nxus/Assent",

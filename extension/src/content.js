@@ -59,11 +59,20 @@ function isToSPage() {
 function extractPageText() {
   const clone = document.body.cloneNode(true);
   for (const el of clone.querySelectorAll(
-    "nav, header, footer, script, style, [role='navigation'], aside",
+    "nav, header, footer, script, style, noscript, iframe, form, template, [role='navigation'], aside",
   )) {
     el.remove();
   }
-  return clone.innerText?.replace(/\s{2,}/g, " ").trim() ?? "";
+  for (const details of clone.querySelectorAll("details")) {
+    details.setAttribute("open", "");
+  }
+  for (const hidden of clone.querySelectorAll("[hidden]")) {
+    hidden.removeAttribute("hidden");
+  }
+  for (const ariaHidden of clone.querySelectorAll("[aria-hidden='true']")) {
+    ariaHidden.removeAttribute("aria-hidden");
+  }
+  return (clone.textContent ?? "").replace(/\s+/g, " ").trim();
 }
 
 function findTosLink() {

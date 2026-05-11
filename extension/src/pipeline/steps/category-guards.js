@@ -46,8 +46,43 @@ export const CREDIT_KEYWORD_GUARDS = {
   ],
   free_data_export: [/(export|download|portable|takeout)/i, /(data|information)/i],
   arbitration_optout_window: [/arbitrat/i, /(opt[\s-]?out|decline|reject)/i],
-  user_retains_content_ownership: [/(own|owner|retain)/i, /(content|material|work|post)/i],
+  user_retains_content_ownership: [
+    /(own|owner|ownership|retain|retention|remains|stays)/i,
+    /(content|material|work|post|submission|upload)/i,
+    /\b(you|users?|your|users')\b/i,
+  ],
 };
+
+const CREDIT_INVERSE_PATTERNS = {
+  user_retains_content_ownership: [
+    /\b(?:we|our (?:company|service|platform)|the\s+(?:service|platform|provider|company|application))\s+(?:and\/or\s+(?:its|our)\s+licensors?\s+)?(?:are|is)\s+the\s+(?:sole\s+)?owners?\b/i,
+    /\bsole\s+owners?\s+of\s+all\s+rights?\s+(?:to|in)\b/i,
+    /\b(?:we|the\s+(?:service|company|provider|platform))\s+(?:own|owns|reserve|retain)\s+(?:all|the)\s+(?:right|title|intellectual\s+property|content)\b/i,
+    /\b(?:provider|service|platform|company|application)['\u2019]s\s+licensors?\b/i,
+  ],
+  easy_account_deletion: [
+    /\b(?:we|the\s+(?:service|provider|platform|company))\s+(?:may|can|reserve\s+the\s+right\s+to|will|shall)\s+(?:terminat|delet|disabl|deactivat|suspend|close|remov)/i,
+  ],
+  explicit_optin_data_sharing: [
+    /\bby\s+(?:using|accessing|signing\s+up|registering|continuing\s+to\s+use)\s+(?:the\s+)?(?:service|site|platform|application)/i,
+    /\bdeemed\s+(?:to\s+have\s+)?(?:consent|agreed)/i,
+    /\b(?:we|the\s+(?:service|provider))\s+(?:may|will|shall|can)\s+(?:sell|share|disclose|trade)/i,
+  ],
+  no_automatic_renewal: [
+    /\b(?:will|shall|do|does)\s+(?:automatically\s+)?renew/i,
+  ],
+};
+
+export function creditQuoteIsInverted(quote, category) {
+  if (typeof quote !== "string" || quote.length === 0) {
+    return false;
+  }
+  const patterns = CREDIT_INVERSE_PATTERNS[category];
+  if (!patterns) {
+    return false;
+  }
+  return patterns.some((p) => p.test(quote));
+}
 
 const FLAG_NEGATION_PATTERNS = [
   /\bdoes not apply\b/i,
