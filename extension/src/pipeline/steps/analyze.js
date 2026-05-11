@@ -6,7 +6,11 @@ import {
   SEVERITY_IDS,
 } from "../rubric/categories.js";
 import { resolveTitle } from "../rubric/labels.js";
-import { quoteMatchesCategoryKeywords } from "./category-guards.js";
+import {
+  quoteMatchesCategoryKeywords,
+  quoteContainsNegation,
+  quoteLooksSpliced,
+} from "./category-guards.js";
 
 const SERVICE_TYPES = ["fintech", "social_media", "content", "marketplace", "general_tech"];
 
@@ -244,6 +248,10 @@ export async function analyze(input, ctx) {
       flags: parsed.flags,
       credits: parsed.credits,
       analyzedAt: new Date().toISOString(),
+      _debug: {
+        rawAiResponse: raw,
+        documentText: input.textForAnalysis ?? "",
+      },
     },
   };
 }
@@ -259,21 +267,32 @@ function normalizeForQuoteCheck(text) {
 }
 
 function quoteAppearsInDocument(quote, docNormalized) {
-  if (typeof quote !== "string" || quote.length < 8) {
+  if (typeof quote !== "string" || quote.length < 12) {
     return false;
   }
   const probe = normalizeForQuoteCheck(quote);
-  if (probe.length < 8) {
+  if (probe.length < 12) {
     return false;
   }
   if (docNormalized.includes(probe)) {
     return true;
   }
-  const prefixes = [probe.slice(0, 120), probe.slice(0, 60), probe.slice(0, 32)];
-  return prefixes.some((p) => p.length >= 24 && docNormalized.includes(p));
+  if (probe.length > 60) {
+    const tail = probe.slice(-60);
+    const head = probe.slice(0, 60);
+    if (docNormalized.includes(head) && docNormalized.includes(tail)) {
+      const headIdx = docNormalized.indexOf(head);
+      const tailIdx = docNormalized.lastIndexOf(tail);
+      if (tailIdx > headIdx && tailIdx - headIdx <= probe.length + 24) {
+        return true;
+      }
+    }
+    return false;
+  }
+  return false;
 }
 
-function parseAndValidate(raw, docText) {
+export function parseAndValidate(raw, docText) {
   let obj;
   try {
     obj = parseLooseJson(raw);
@@ -298,8 +317,10 @@ function parseAndValidate(raw, docText) {
           quote: f.quote.slice(0, 400),
         }))
         .filter((f) => CATEGORIES[f.category]?.kind === "flag")
+        .filter((f) => !quoteLooksSpliced(f.quote))
         .filter((f) => quoteAppearsInDocument(f.quote, docNormalized))
         .filter((f) => quoteMatchesCategoryKeywords(f.quote, f.category, "flag"))
+        .filter((f) => !quoteContainsNegation(f.quote))
         .filter((f) => {
           if (seenFlagCats.has(f.category)) {
             return false;
@@ -326,6 +347,7 @@ function parseAndValidate(raw, docText) {
           quote: c.quote.slice(0, 400),
         }))
         .filter((c) => CATEGORIES[c.category]?.kind === "credit")
+        .filter((c) => !quoteLooksSpliced(c.quote))
         .filter((c) => quoteAppearsInDocument(c.quote, docNormalized))
         .filter((c) => quoteMatchesCategoryKeywords(c.quote, c.category, "credit"))
         .filter((c) => {

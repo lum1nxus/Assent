@@ -1,0 +1,9 @@
+{
+  "name": "regression-keyword-guard-mismatch",
+  "description": "AI assigns an acceptable-use quote to mandatory_arbitration. The keyword guard catches the mismatch because the quote contains no arbitration keyword.",
+  "documentText": "You agree that you will not under any circumstances attempt to disrupt or tamper with the servers, run automated scrapers, or upload malicious code.",
+  "rawAiResponse": "{\"serviceType\":\"general_tech\",\"flags\":[{\"category\":\"mandatory_arbitration\",\"severity\":\"high\",\"quote\":\"You agree that you will not under any circumstances attempt to disrupt or tamper with the servers\"}],\"credits\":[]}",
+  "expectedFlags": [],
+  "expectedCredits": [],
+  "expectedReason": "keyword guard rejects an arbitration classification whose quote contains no arbitration keyword"
+}

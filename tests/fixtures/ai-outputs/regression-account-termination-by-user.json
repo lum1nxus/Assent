@@ -1,0 +1,9 @@
+{
+  "name": "regression-account-termination-by-user",
+  "description": "AI mis-classifies a user-initiated account closure (a credit) as service-initiated termination (a flag).",
+  "documentText": "You may close your account at any time from settings. We will retain anonymised analytics data for 24 months after closure.",
+  "rawAiResponse": "{\"serviceType\":\"general_tech\",\"flags\":[{\"category\":\"account_termination_no_notice\",\"severity\":\"full\",\"quote\":\"You may close your account at any time from settings\"}],\"credits\":[]}",
+  "expectedFlags": [],
+  "expectedCredits": [],
+  "expectedReason": "negation guard rejects 'You may close your account' classified as service-initiated termination"
+}

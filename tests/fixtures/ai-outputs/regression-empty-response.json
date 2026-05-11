@@ -1,0 +1,9 @@
+{
+  "name": "regression-empty-response",
+  "description": "AI returns an empty flags and credits set on a passage that genuinely contains nothing classifiable.",
+  "documentText": "Welcome. This document describes how we will work together. We retain all intellectual property rights in our Services, but we make the source code available under open-source licenses. SOME JURISDICTIONS DO NOT ALLOW THE EXCLUSION OF IMPLIED WARRANTIES.",
+  "rawAiResponse": "{\"serviceType\":\"general_tech\",\"flags\":[],\"credits\":[]}",
+  "expectedFlags": [],
+  "expectedCredits": [],
+  "expectedReason": "empty arrays are legitimate output and must round-trip without error"
+}

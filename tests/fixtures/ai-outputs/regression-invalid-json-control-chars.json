@@ -1,0 +1,9 @@
+{
+  "name": "regression-invalid-json-control-chars",
+  "description": "AI returns JSON with raw newline characters inside a string literal, which strict JSON.parse rejects. Our sanitiser must repair it before validation.",
+  "documentText": "The provider does not store personal data beyond what is strictly necessary to operate the Service.",
+  "rawAiResponse": "{\n  \"serviceType\": \"general_tech\",\n  \"flags\": [],\n  \"credits\": [\n    {\n      \"category\": \"transparent_retention_period\",\n      \"quote\": \"The provider does not store personal data\\nbeyond what is strictly necessary to operate the Service\"\n    }\n  ]\n}",
+  "expectedFlags": [],
+  "expectedCredits": [],
+  "expectedReason": "sanitiser repairs the JSON; the credit then fails its keyword guard because the quote lacks a numeric retention period"
+}

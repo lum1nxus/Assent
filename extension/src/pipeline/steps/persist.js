@@ -36,6 +36,7 @@ export async function persist(input, ctx) {
       analyzed_at: input.analyzedAt,
       text: DISCLAIMER_TEXT,
     },
+    _debug: input._debug,
   };
 
   await chrome.storage.session.set({

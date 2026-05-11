@@ -1,0 +1,9 @@
+{
+  "name": "regression-hallucinated-category",
+  "description": "AI invents a category id that does not exist in the closed taxonomy.",
+  "documentText": "The provider may suspend or terminate your account at any time, with or without notice.",
+  "rawAiResponse": "{\"serviceType\":\"general_tech\",\"flags\":[{\"category\":\"draconian_terms\",\"severity\":\"high\",\"quote\":\"The provider may suspend or terminate your account at any time, with or without notice\"},{\"category\":\"account_termination_no_notice\",\"severity\":\"full\",\"quote\":\"The provider may suspend or terminate your account at any time, with or without notice\"}],\"credits\":[]}",
+  "expectedFlags": [{ "category": "account_termination_no_notice", "severity": "full" }],
+  "expectedCredits": [],
+  "expectedReason": "unknown category ids must be dropped while valid ones survive"
+}

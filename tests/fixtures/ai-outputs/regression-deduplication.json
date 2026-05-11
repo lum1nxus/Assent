@@ -1,0 +1,9 @@
+{
+  "name": "regression-deduplication",
+  "description": "AI returns the same category twice for two different quotes. Only the first survives.",
+  "documentText": "Any dispute shall be resolved by binding individual arbitration. The arbitrator may award only individual relief and not class-wide relief. We may amend these Terms at our discretion.",
+  "rawAiResponse": "{\"serviceType\":\"general_tech\",\"flags\":[{\"category\":\"mandatory_arbitration\",\"severity\":\"high\",\"quote\":\"Any dispute shall be resolved by binding individual arbitration\"},{\"category\":\"mandatory_arbitration\",\"severity\":\"full\",\"quote\":\"The arbitrator may award only individual relief and not class-wide relief\"}],\"credits\":[]}",
+  "expectedFlags": [{ "category": "mandatory_arbitration", "severity": "high" }],
+  "expectedCredits": [],
+  "expectedReason": "only one entry per category survives; the first valid one wins"
+}

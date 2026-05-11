@@ -1,0 +1,9 @@
+{
+  "name": "regression-quote-not-in-document",
+  "description": "AI hallucinates a quote that does not appear in the document at all.",
+  "documentText": "The provider may modify these Terms at any time. You agree to indemnify the provider against any claim arising from your use of the Service.",
+  "rawAiResponse": "{\"serviceType\":\"general_tech\",\"flags\":[{\"category\":\"mandatory_arbitration\",\"severity\":\"high\",\"quote\":\"All disputes shall be resolved by binding individual arbitration in our home jurisdiction\"}],\"credits\":[]}",
+  "expectedFlags": [],
+  "expectedCredits": [],
+  "expectedReason": "the quote-must-appear-in-document guard rejects fabricated quotes"
+}

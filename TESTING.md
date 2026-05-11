@@ -1,32 +1,65 @@
 # Testing Assent locally
 
-Assent has two test layers.
+Assent has three test layers. Layers 1 and 2 run in pure Node without any
+browser; layer 3 needs a real Chrome with the on-device model.
 
-- **Layer 1 - unit tests** (fast, deterministic, no AI). The rubric, label
-  resolver, and summary builder are covered by Node `--test`. CI safe.
-- **Layer 2 - end-to-end in a real browser** (slow, requires Chrome 148+ and
-  an on-device model bundle). You drive a real Chrome session against real
-  agreement pages and read the side panel and the in-page floating pill.
+- **Layer 1 - unit tests** (fast, deterministic, no AI). Pure functions
+  in `extension/src/pipeline/rubric/`, the JSON sanitiser, the keyword
+  guards, and label resolution are exercised by `node --test`.
+- **Layer 2 - AI-output replays** (fast, deterministic, no AI). Each
+  JSON file under `tests/fixtures/ai-outputs/` is a captured or
+  hand-authored `(documentText, rawAiResponse)` pair plus the
+  `expectedFlags` and `expectedCredits` the pipeline should produce
+  after every guard runs. The replay test loads all of them and asserts
+  that `parseAndValidate` produces the expected output. This is where
+  regressions captured from Chrome live forever.
+- **Layer 3 - end-to-end in a real browser** (slow, requires Chrome
+  148+ and an on-device model bundle). You drive a real Chrome session
+  against real agreement pages and read the side panel.
 
-## 0. Run the unit tests
+## 0. Run the deterministic suites
 
 ```sh
-npm test
+npm test          # node --test on every tests/*.test.js
+npm run eval      # human-readable summary of replays + corpus
+npm run eval:verbose
 ```
 
-This runs `node --test tests/*.test.js`. The suite has 21 tests across the
-scoring rubric (`computeScore`, `gradeOf`), label resolution, and the
-deterministic summary template. It does not start a browser and does not call
-the language model. Run it before every commit.
+`npm test` runs all 100+ assertions: rubric, sanitiser, keyword guards,
+synthetic-corpus calibration, and AI-output replays.
 
-Linting:
+`npm run eval` is a friendlier CLI that prints `pass / fail / total` per
+suite and the score and grade for every fixture. Pass `--only=<substring>`
+to filter, for example `npm run eval -- --only=negation`.
+
+Linting and formatting:
 
 ```sh
 npm run lint
 npm run format:check
 ```
 
-## 1. Browser requirements
+## 0a. Adding a new AI-output regression test
+
+When the side panel shows a wrong classification on a real page in Chrome
+and you want it to never come back:
+
+1. Capture it from the real session - see `scripts/capture.md`. The
+   service-worker DevTools snippet there prints a fixture-shaped JSON.
+2. Save the captured object as
+   `tests/fixtures/ai-outputs/captured-<short-id>.json`.
+3. Edit `expectedFlags`, `expectedCredits` and `expectedReason` to the
+   output you want the pipeline to produce after the fix. If the
+   captured behaviour is wrong, that is fine - the test will fail until
+   the guard or prompt is updated, then it will lock the fix in place.
+4. `npm test` and `npm run eval` should both report the new fixture.
+
+This means every reported bug ships with its own regression test before
+the fix lands.
+
+## 1. Layer 3 - real Chrome end-to-end test
+
+### Browser requirements
 
 - **Chrome 148 or newer** on desktop (regular Chrome, Canary, or Dev all
   work). Mobile Chrome does not expose the Prompt API.
