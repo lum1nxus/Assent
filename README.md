@@ -63,6 +63,66 @@ For a step-by-step local test guide, including how to provision the on-device mo
 
 ## Architecture
 
+```mermaid
+flowchart TB
+    subgraph PAGE["Web page (untrusted DOM)"]
+        DOM["document.body"]
+        CS["content.js<br/>- detects agreement-like pages<br/>- in-page floating pill (shadow DOM)<br/>- CSS Custom Highlight API"]
+    end
+
+    subgraph SW["Service worker (background.js)"]
+        MSG["onMessage<br/>validates sender.id + payload"]
+        ORCH["pipeline runner<br/>chain of pure steps"]
+        BADGE["toolbar badge + icon"]
+        KA["keep-alive ticker<br/>during pipeline run"]
+    end
+
+    subgraph PIPE["pipeline/steps"]
+        EX["extract<br/>keyword scoring + structural sampling<br/>cap ~2500 words"]
+        DL["detect-lang"]
+        TI["translate-in to English"]
+        JU["extract-jurisdiction<br/>governing law + operator entity"]
+        AN["analyze<br/>JSON classifier prompt<br/>+ keyword guards<br/>+ negation + splice filters<br/>+ verbatim quote verifier"]
+        RU["rubric.computeScore + gradeOf<br/>deterministic, in-code"]
+        TO["translate-out to UI locale<br/>(quotes are NOT translated)"]
+        PE["persist"]
+    end
+
+    subgraph AI["Chrome on-device AI"]
+        LD["LanguageDetector"]
+        TR["Translator"]
+        LM["LanguageModel (Prompt API)<br/>Gemini Nano"]
+    end
+
+    subgraph STORE["chrome.storage"]
+        SES["session<br/>tab_id -> result"]
+        LOC["local<br/>donation state + region override"]
+    end
+
+    subgraph SP["Side panel (sidepanel/)"]
+        UI["sidepanel.js<br/>grade + summary + flags + top-three"]
+    end
+
+    DOM --> CS
+    CS -- TOS_DETECTED --> MSG
+    MSG --> ORCH
+    ORCH --> EX --> DL --> TI --> JU --> AN --> TO --> PE
+    AN --> RU --> PE
+
+    DL -. uses .-> LD
+    TI -. uses .-> TR
+    TO -. uses .-> TR
+    AN -. uses .-> LM
+
+    PE --> SES
+    ORCH -. starts/stops .-> KA
+    ORCH --> BADGE
+
+    SES -- read + subscribe --> UI
+    UI -- HIGHLIGHT_QUOTE --> CS
+    UI <--> LOC
+```
+
 | Path                                       | Purpose                                                                        |
 | ------------------------------------------ | ------------------------------------------------------------------------------ |
 | `extension/manifest.json`                  | Manifest V3 with i18n placeholders, service worker, content script, side panel |
