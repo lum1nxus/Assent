@@ -1,4 +1,5 @@
-import { scoreToGrade } from "../../features/grade.js";
+import { computeScore } from "../rubric/score.js";
+import { buildSummary } from "../rubric/summary.js";
 import { topThree } from "../../features/top-three.js";
 
 const KEY_PREFIX = "tab_";
@@ -11,17 +12,20 @@ const DISCLAIMER_TEXT =
   "Always read the original document before agreeing to any terms.";
 
 export async function persist(input, ctx) {
-  const grade = input.grade ?? scoreToGrade(input.score);
-  const highlights = topThree(input.flags ?? []);
+  const flags = input.flags ?? [];
+  const credits = input.credits ?? [];
+  const { score, grade } = computeScore(flags, credits);
+  const summary = buildSummary(flags);
+  const highlights = topThree(flags);
 
   const result = {
     domain: input.domain,
-    score: input.score,
+    score,
     grade,
     serviceType: input.serviceType,
-    summary: input.summary,
-    flags: input.flags ?? [],
-    credits: input.credits ?? [],
+    summary,
+    flags,
+    credits,
     highlights,
     analyzedAt: input.analyzedAt,
     source: input.source,

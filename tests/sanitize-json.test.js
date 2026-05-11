@@ -48,7 +48,7 @@ test("sanitizeJson does not escape control chars outside strings", () => {
 });
 
 test("parseLooseJson strips a markdown fence", () => {
-  const src = "```json\n{\"a\": 1}\n```";
+  const src = '```json\n{"a": 1}\n```';
   assert.deepEqual(parseLooseJson(src), { a: 1 });
 });
 

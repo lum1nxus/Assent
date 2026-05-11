@@ -1,51 +1,192 @@
 {
-  "extName": { "message": "Assent" },
+  "extName": {
+    "message": "Assent"
+  },
   "extDescription": {
     "message": "Reads agreement documents so you don't have to. Highlights potentially unfavourable clauses before you accept."
   },
-
-  "scoreLabelLow": { "message": "Low risk" },
-  "scoreLabelMedium": { "message": "Moderate risk" },
-  "scoreLabelHigh": { "message": "High risk" },
-  "scoreLabelExtreme": { "message": "Extreme risk" },
-  "scoreSublabel": { "message": "Pattern detection only - not legal advice." },
-
-  "stateIdle": { "message": "No document detected on this page." },
-  "stateLoading": { "message": "Scanning document…" },
-  "stateError": { "message": "Analysis unavailable" },
-  "errorNoDeviceAI": { "message": "On-device language model is not ready on this device." },
-
-  "sectionTopThree": { "message": "Top points to know" },
-  "sectionFlags": { "message": "Flagged clauses" },
-  "sectionCredits": { "message": "Notable provisions" },
-
-  "btnShowInDocument": { "message": "Show in document" },
-  "btnViewMethodology": { "message": "How this works" },
-
-  "labelGrade": { "message": "Grade" },
-  "labelEvidence": { "message": "Evidence:" },
-  "labelDate": { "message": "Analysed" },
-
-  "disclaimerTitle": { "message": "About this output" },
+  "scoreLabelLow": {
+    "message": "Low risk"
+  },
+  "scoreLabelMedium": {
+    "message": "Moderate risk"
+  },
+  "scoreLabelHigh": {
+    "message": "High risk"
+  },
+  "scoreLabelExtreme": {
+    "message": "Extreme risk"
+  },
+  "scoreSublabel": {
+    "message": "Pattern detection only - not legal advice."
+  },
+  "stateIdle": {
+    "message": "No document detected on this page."
+  },
+  "stateLoading": {
+    "message": "Scanning document…"
+  },
+  "stateError": {
+    "message": "Analysis unavailable"
+  },
+  "errorNoDeviceAI": {
+    "message": "On-device language model is not ready on this device."
+  },
+  "sectionTopThree": {
+    "message": "Top points to know"
+  },
+  "sectionFlags": {
+    "message": "Flagged clauses"
+  },
+  "sectionCredits": {
+    "message": "Notable provisions"
+  },
+  "btnShowInDocument": {
+    "message": "Show in document"
+  },
+  "btnViewMethodology": {
+    "message": "How this works"
+  },
+  "labelGrade": {
+    "message": "Grade"
+  },
+  "labelEvidence": {
+    "message": "Evidence:"
+  },
+  "labelDate": {
+    "message": "Analysed"
+  },
+  "disclaimerTitle": {
+    "message": "About this output"
+  },
   "disclaimerBody": {
     "message": "Output produced by automated pattern detection on the user's device. Each flag references a verbatim excerpt so it can be verified independently. This is not a legal opinion, not legal advice, and is not affiliated with the publisher of the analysed document. The score reflects language patterns only and may be incomplete or wrong. Always read the original document before agreeing."
   },
-
-  "donationTitle": { "message": "This extension is independent and free" },
+  "donationTitle": {
+    "message": "This extension is independent and free"
+  },
   "donationBody": {
     "message": "No ads. No tracking. No data sold. If it has been useful, a small contribution helps keep development going."
   },
-  "donationBtnTen": { "message": "Support · €10" },
-  "donationBtnCustom": { "message": "Choose amount" },
-  "donationBtnLater": { "message": "Maybe later" },
-  "donationBtnNever": { "message": "No thanks" },
-
+  "donationBtnTen": {
+    "message": "Support · €10"
+  },
+  "donationBtnCustom": {
+    "message": "Choose amount"
+  },
+  "donationBtnLater": {
+    "message": "Maybe later"
+  },
+  "donationBtnNever": {
+    "message": "No thanks"
+  },
   "footerAttribution": {
     "message": "Open source · independent · not affiliated with any third party"
   },
-  "footerSupport": { "message": "Support development" },
-
-  "overlayScanning": { "message": "Scanning…" },
-  "overlayDone": { "message": "Open details" },
-  "overlayError": { "message": "Analysis unavailable" }
+  "footerSupport": {
+    "message": "Support development"
+  },
+  "overlayScanning": {
+    "message": "Scanning…"
+  },
+  "overlayDone": {
+    "message": "Open details"
+  },
+  "overlayError": {
+    "message": "Analysis unavailable"
+  },
+  "catFlagMandatoryArbitration": {
+    "message": "Mandatory arbitration"
+  },
+  "catFlagClassActionWaiver": {
+    "message": "Class action waiver"
+  },
+  "catFlagBroadLicenseIrrevocable": {
+    "message": "Irrevocable broad content licence"
+  },
+  "catFlagUnilateralChange": {
+    "message": "Unilateral terms change without notice"
+  },
+  "catFlagDataResale": {
+    "message": "Personal data resale to undisclosed parties"
+  },
+  "catFlagBroadIndemnity": {
+    "message": "Broad user indemnity"
+  },
+  "catFlagBroadLiabilityCap": {
+    "message": "Broad limitation of liability"
+  },
+  "catFlagBroadWarrantyDisclaimer": {
+    "message": "Broad warranty disclaimer"
+  },
+  "catFlagBroadDataSharing": {
+    "message": "Broad data sharing with third parties"
+  },
+  "catFlagAccountTermination": {
+    "message": "Account termination without notice"
+  },
+  "catFlagContentRemoval": {
+    "message": "Content removal at sole discretion"
+  },
+  "catFlagAutoRenewal": {
+    "message": "Auto-renewal without a clear opt-out"
+  },
+  "catFlagRetentionUndefined": {
+    "message": "Undefined data retention period"
+  },
+  "catFlagDistantVenue": {
+    "message": "Distant dispute venue"
+  },
+  "catFlagServicesAsIs": {
+    "message": "Service provided \"as is\""
+  },
+  "catFlagOtherUnfavourable": {
+    "message": "Other unfavourable clause"
+  },
+  "catCreditRefundWindow": {
+    "message": "Explicit refund window"
+  },
+  "catCreditEasyDeletion": {
+    "message": "Easy account deletion"
+  },
+  "catCreditOptinDataSharing": {
+    "message": "Opt-in required for data sharing"
+  },
+  "catCreditNoAutoRenewal": {
+    "message": "No automatic renewal"
+  },
+  "catCreditTransparentRetention": {
+    "message": "Transparent data retention period"
+  },
+  "catCreditDataExport": {
+    "message": "Free data export"
+  },
+  "catCreditArbitrationOptout": {
+    "message": "Arbitration opt-out window"
+  },
+  "catCreditUserOwnsContent": {
+    "message": "User retains content ownership"
+  },
+  "summaryTemplateOne": {
+    "message": "Document contains: $1$.",
+    "placeholders": {
+      "1": {
+        "content": "$1",
+        "example": "Mandatory arbitration"
+      }
+    }
+  },
+  "summaryTemplateTwo": {
+    "message": "Document contains: $1$ and $2$.",
+    "placeholders": {
+      "1": {
+        "content": "$1",
+        "example": "Mandatory arbitration"
+      },
+      "2": {
+        "content": "$2",
+        "example": "Class action waiver"
+      }
+    }
+  }
 }

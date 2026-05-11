@@ -21,26 +21,29 @@ headerTitle.textContent = t("extName", "Assent");
 renderPersistentFooter();
 
 function scoreColor(score) {
-  if (score <= 3.0) {
+  if (score <= 12) {
     return "var(--green)";
   }
-  if (score <= 5.5) {
+  if (score <= 25) {
+    return "#d9f99d";
+  }
+  if (score <= 45) {
     return "var(--yellow)";
   }
-  if (score <= 7.5) {
+  if (score <= 70) {
     return "var(--orange)";
   }
   return "var(--red)";
 }
 
 function scoreLabel(score) {
-  if (score <= 3.0) {
+  if (score <= 12) {
     return t("scoreLabelLow", "Low risk");
   }
-  if (score <= 5.5) {
+  if (score <= 45) {
     return t("scoreLabelMedium", "Moderate risk");
   }
-  if (score <= 7.5) {
+  if (score <= 70) {
     return t("scoreLabelHigh", "High risk");
   }
   return t("scoreLabelExtreme", "Extreme risk");
@@ -49,7 +52,7 @@ function scoreLabel(score) {
 function renderRing(score) {
   const r = 26;
   const circ = 2 * Math.PI * r;
-  const fraction = Math.min(Math.max(score / 10, 0), 1);
+  const fraction = Math.min(Math.max(Number(score) / 100, 0), 1);
   const offset = circ * (1 - fraction);
   const color = scoreColor(score);
   return `
@@ -59,7 +62,7 @@ function renderRing(score) {
         <circle class="fill" cx="32" cy="32" r="${r}" stroke="${color}"
                 stroke-dasharray="${circ}" stroke-dashoffset="${offset}" />
       </svg>
-      <div class="score-number" style="color:${color}">${score.toFixed(1)}</div>
+      <div class="score-number" style="color:${color}">${Math.round(Number(score))}</div>
     </div>`;
 }
 

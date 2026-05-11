@@ -1,49 +1,192 @@
 {
-  "extName": { "message": "Assent" },
+  "extName": {
+    "message": "Assent"
+  },
   "extDescription": {
     "message": "Čita ugovorne dokumente umjesto vas. Ističe potencijalno nepovoljne klauzule prije nego što prihvatite."
   },
-
-  "scoreLabelLow": { "message": "Nizak rizik" },
-  "scoreLabelMedium": { "message": "Umjeren rizik" },
-  "scoreLabelHigh": { "message": "Visok rizik" },
-  "scoreLabelExtreme": { "message": "Ekstreman rizik" },
-  "scoreSublabel": { "message": "Samo otkrivanje uzoraka - nije pravni savjet." },
-
-  "stateIdle": { "message": "Na ovoj stranici nije otkriven dokument." },
-  "stateLoading": { "message": "Skeniranje dokumenta…" },
-  "stateError": { "message": "Analiza nije dostupna" },
-  "errorNoDeviceAI": { "message": "Jezični model na uređaju nije spreman." },
-
-  "sectionTopThree": { "message": "Glavne točke" },
-  "sectionFlags": { "message": "Označene klauzule" },
-  "sectionCredits": { "message": "Značajne odredbe" },
-
-  "btnShowInDocument": { "message": "Prikaži u dokumentu" },
-  "btnViewMethodology": { "message": "Kako ovo radi" },
-
-  "labelGrade": { "message": "Ocjena" },
-  "labelEvidence": { "message": "Dokaz:" },
-  "labelDate": { "message": "Analizirano" },
-
-  "disclaimerTitle": { "message": "O ovom rezultatu" },
+  "scoreLabelLow": {
+    "message": "Nizak rizik"
+  },
+  "scoreLabelMedium": {
+    "message": "Umjeren rizik"
+  },
+  "scoreLabelHigh": {
+    "message": "Visok rizik"
+  },
+  "scoreLabelExtreme": {
+    "message": "Ekstreman rizik"
+  },
+  "scoreSublabel": {
+    "message": "Samo otkrivanje uzoraka - nije pravni savjet."
+  },
+  "stateIdle": {
+    "message": "Na ovoj stranici nije otkriven dokument."
+  },
+  "stateLoading": {
+    "message": "Skeniranje dokumenta…"
+  },
+  "stateError": {
+    "message": "Analiza nije dostupna"
+  },
+  "errorNoDeviceAI": {
+    "message": "Jezični model na uređaju nije spreman."
+  },
+  "sectionTopThree": {
+    "message": "Glavne točke"
+  },
+  "sectionFlags": {
+    "message": "Označene klauzule"
+  },
+  "sectionCredits": {
+    "message": "Značajne odredbe"
+  },
+  "btnShowInDocument": {
+    "message": "Prikaži u dokumentu"
+  },
+  "btnViewMethodology": {
+    "message": "Kako ovo radi"
+  },
+  "labelGrade": {
+    "message": "Ocjena"
+  },
+  "labelEvidence": {
+    "message": "Dokaz:"
+  },
+  "labelDate": {
+    "message": "Analizirano"
+  },
+  "disclaimerTitle": {
+    "message": "O ovom rezultatu"
+  },
   "disclaimerBody": {
     "message": "Rezultat proizveden automatskim otkrivanjem uzoraka koje se izvodi na uređaju korisnika. Svaka oznaka upućuje na doslovni citat koji se može neovisno provjeriti. Ovo nije pravno mišljenje, nije pravni savjet i nije povezano s izdavačem analiziranog dokumenta. Ocjena odražava samo jezične uzorke i može biti nepotpuna ili pogrešna. Uvijek pročitajte izvorni dokument prije nego što prihvatite."
   },
-
-  "donationTitle": { "message": "Ovo proširenje je neovisno i besplatno" },
+  "donationTitle": {
+    "message": "Ovo proširenje je neovisno i besplatno"
+  },
   "donationBody": {
     "message": "Bez oglasa. Bez praćenja. Bez prodaje podataka. Ako vam je bilo korisno, mali doprinos pomaže nastaviti razvoj."
   },
-  "donationBtnTen": { "message": "Podrži · 10 €" },
-  "donationBtnCustom": { "message": "Odaberi iznos" },
-  "donationBtnLater": { "message": "Možda kasnije" },
-  "donationBtnNever": { "message": "Ne, hvala" },
-
-  "footerAttribution": { "message": "Open source · neovisno · bez povezanosti s trećim stranama" },
-  "footerSupport": { "message": "Podrži razvoj" },
-
-  "overlayScanning": { "message": "Skeniranje…" },
-  "overlayDone": { "message": "Otvori detalje" },
-  "overlayError": { "message": "Analiza nije dostupna" }
+  "donationBtnTen": {
+    "message": "Podrži · 10 €"
+  },
+  "donationBtnCustom": {
+    "message": "Odaberi iznos"
+  },
+  "donationBtnLater": {
+    "message": "Možda kasnije"
+  },
+  "donationBtnNever": {
+    "message": "Ne, hvala"
+  },
+  "footerAttribution": {
+    "message": "Open source · neovisno · bez povezanosti s trećim stranama"
+  },
+  "footerSupport": {
+    "message": "Podrži razvoj"
+  },
+  "overlayScanning": {
+    "message": "Skeniranje…"
+  },
+  "overlayDone": {
+    "message": "Otvori detalje"
+  },
+  "overlayError": {
+    "message": "Analiza nije dostupna"
+  },
+  "catFlagMandatoryArbitration": {
+    "message": "Mandatory arbitration"
+  },
+  "catFlagClassActionWaiver": {
+    "message": "Class action waiver"
+  },
+  "catFlagBroadLicenseIrrevocable": {
+    "message": "Irrevocable broad content licence"
+  },
+  "catFlagUnilateralChange": {
+    "message": "Unilateral terms change without notice"
+  },
+  "catFlagDataResale": {
+    "message": "Personal data resale to undisclosed parties"
+  },
+  "catFlagBroadIndemnity": {
+    "message": "Broad user indemnity"
+  },
+  "catFlagBroadLiabilityCap": {
+    "message": "Broad limitation of liability"
+  },
+  "catFlagBroadWarrantyDisclaimer": {
+    "message": "Broad warranty disclaimer"
+  },
+  "catFlagBroadDataSharing": {
+    "message": "Broad data sharing with third parties"
+  },
+  "catFlagAccountTermination": {
+    "message": "Account termination without notice"
+  },
+  "catFlagContentRemoval": {
+    "message": "Content removal at sole discretion"
+  },
+  "catFlagAutoRenewal": {
+    "message": "Auto-renewal without a clear opt-out"
+  },
+  "catFlagRetentionUndefined": {
+    "message": "Undefined data retention period"
+  },
+  "catFlagDistantVenue": {
+    "message": "Distant dispute venue"
+  },
+  "catFlagServicesAsIs": {
+    "message": "Service provided \"as is\""
+  },
+  "catFlagOtherUnfavourable": {
+    "message": "Other unfavourable clause"
+  },
+  "catCreditRefundWindow": {
+    "message": "Explicit refund window"
+  },
+  "catCreditEasyDeletion": {
+    "message": "Easy account deletion"
+  },
+  "catCreditOptinDataSharing": {
+    "message": "Opt-in required for data sharing"
+  },
+  "catCreditNoAutoRenewal": {
+    "message": "No automatic renewal"
+  },
+  "catCreditTransparentRetention": {
+    "message": "Transparent data retention period"
+  },
+  "catCreditDataExport": {
+    "message": "Free data export"
+  },
+  "catCreditArbitrationOptout": {
+    "message": "Arbitration opt-out window"
+  },
+  "catCreditUserOwnsContent": {
+    "message": "User retains content ownership"
+  },
+  "summaryTemplateOne": {
+    "message": "Document contains: $1$.",
+    "placeholders": {
+      "1": {
+        "content": "$1",
+        "example": "Mandatory arbitration"
+      }
+    }
+  },
+  "summaryTemplateTwo": {
+    "message": "Document contains: $1$ and $2$.",
+    "placeholders": {
+      "1": {
+        "content": "$1",
+        "example": "Mandatory arbitration"
+      },
+      "2": {
+        "content": "$2",
+        "example": "Class action waiver"
+      }
+    }
+  }
 }

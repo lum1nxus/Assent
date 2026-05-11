@@ -1,51 +1,192 @@
 {
-  "extName": { "message": "Assent" },
+  "extName": {
+    "message": "Assent"
+  },
   "extDescription": {
     "message": "Lukee sopimusasiakirjat puolestasi. Korostaa mahdollisesti epäedullisia ehtoja ennen kuin hyväksyt."
   },
-
-  "scoreLabelLow": { "message": "Matala riski" },
-  "scoreLabelMedium": { "message": "Kohtalainen riski" },
-  "scoreLabelHigh": { "message": "Korkea riski" },
-  "scoreLabelExtreme": { "message": "Äärimmäinen riski" },
-  "scoreSublabel": { "message": "Vain kuvioiden tunnistus - ei oikeudellinen neuvonta." },
-
-  "stateIdle": { "message": "Tällä sivulla ei havaittu asiakirjaa." },
-  "stateLoading": { "message": "Skannataan asiakirjaa…" },
-  "stateError": { "message": "Analyysi ei käytettävissä" },
-  "errorNoDeviceAI": { "message": "Laitteen kielimalli ei ole valmis." },
-
-  "sectionTopThree": { "message": "Tärkeimmät kohdat" },
-  "sectionFlags": { "message": "Merkityt ehdot" },
-  "sectionCredits": { "message": "Huomionarvoiset säännökset" },
-
-  "btnShowInDocument": { "message": "Näytä asiakirjassa" },
-  "btnViewMethodology": { "message": "Miten tämä toimii" },
-
-  "labelGrade": { "message": "Arvosana" },
-  "labelEvidence": { "message": "Todiste:" },
-  "labelDate": { "message": "Analysoitu" },
-
-  "disclaimerTitle": { "message": "Tästä tuloksesta" },
+  "scoreLabelLow": {
+    "message": "Matala riski"
+  },
+  "scoreLabelMedium": {
+    "message": "Kohtalainen riski"
+  },
+  "scoreLabelHigh": {
+    "message": "Korkea riski"
+  },
+  "scoreLabelExtreme": {
+    "message": "Äärimmäinen riski"
+  },
+  "scoreSublabel": {
+    "message": "Vain kuvioiden tunnistus - ei oikeudellinen neuvonta."
+  },
+  "stateIdle": {
+    "message": "Tällä sivulla ei havaittu asiakirjaa."
+  },
+  "stateLoading": {
+    "message": "Skannataan asiakirjaa…"
+  },
+  "stateError": {
+    "message": "Analyysi ei käytettävissä"
+  },
+  "errorNoDeviceAI": {
+    "message": "Laitteen kielimalli ei ole valmis."
+  },
+  "sectionTopThree": {
+    "message": "Tärkeimmät kohdat"
+  },
+  "sectionFlags": {
+    "message": "Merkityt ehdot"
+  },
+  "sectionCredits": {
+    "message": "Huomionarvoiset säännökset"
+  },
+  "btnShowInDocument": {
+    "message": "Näytä asiakirjassa"
+  },
+  "btnViewMethodology": {
+    "message": "Miten tämä toimii"
+  },
+  "labelGrade": {
+    "message": "Arvosana"
+  },
+  "labelEvidence": {
+    "message": "Todiste:"
+  },
+  "labelDate": {
+    "message": "Analysoitu"
+  },
+  "disclaimerTitle": {
+    "message": "Tästä tuloksesta"
+  },
   "disclaimerBody": {
     "message": "Tulos tuotettu käyttäjän laitteella suoritettavalla automaattisella kuvioiden tunnistuksella. Jokainen merkintä viittaa sanatarkkaan lainaukseen, joka voidaan vahvistaa itsenäisesti. Tämä ei ole oikeudellinen lausunto, ei oikeudellinen neuvonta eikä se ole sidoksissa analysoidun asiakirjan julkaisijaan. Pisteet heijastavat vain kielellisiä kuvioita ja voivat olla puutteellisia tai virheellisiä. Lue aina alkuperäinen asiakirja ennen hyväksymistä."
   },
-
-  "donationTitle": { "message": "Tämä laajennus on riippumaton ja ilmainen" },
+  "donationTitle": {
+    "message": "Tämä laajennus on riippumaton ja ilmainen"
+  },
   "donationBody": {
     "message": "Ei mainoksia. Ei seurantaa. Ei tietojen myyntiä. Jos siitä on ollut hyötyä, pieni lahjoitus auttaa kehityksen jatkamisessa."
   },
-  "donationBtnTen": { "message": "Tue · 10 €" },
-  "donationBtnCustom": { "message": "Valitse summa" },
-  "donationBtnLater": { "message": "Ehkä myöhemmin" },
-  "donationBtnNever": { "message": "Ei kiitos" },
-
+  "donationBtnTen": {
+    "message": "Tue · 10 €"
+  },
+  "donationBtnCustom": {
+    "message": "Valitse summa"
+  },
+  "donationBtnLater": {
+    "message": "Ehkä myöhemmin"
+  },
+  "donationBtnNever": {
+    "message": "Ei kiitos"
+  },
   "footerAttribution": {
     "message": "Open source · riippumaton · ei sidoksissa kolmansiin osapuoliin"
   },
-  "footerSupport": { "message": "Tue kehitystä" },
-
-  "overlayScanning": { "message": "Skannataan…" },
-  "overlayDone": { "message": "Avaa tiedot" },
-  "overlayError": { "message": "Analyysi ei käytettävissä" }
+  "footerSupport": {
+    "message": "Tue kehitystä"
+  },
+  "overlayScanning": {
+    "message": "Skannataan…"
+  },
+  "overlayDone": {
+    "message": "Avaa tiedot"
+  },
+  "overlayError": {
+    "message": "Analyysi ei käytettävissä"
+  },
+  "catFlagMandatoryArbitration": {
+    "message": "Mandatory arbitration"
+  },
+  "catFlagClassActionWaiver": {
+    "message": "Class action waiver"
+  },
+  "catFlagBroadLicenseIrrevocable": {
+    "message": "Irrevocable broad content licence"
+  },
+  "catFlagUnilateralChange": {
+    "message": "Unilateral terms change without notice"
+  },
+  "catFlagDataResale": {
+    "message": "Personal data resale to undisclosed parties"
+  },
+  "catFlagBroadIndemnity": {
+    "message": "Broad user indemnity"
+  },
+  "catFlagBroadLiabilityCap": {
+    "message": "Broad limitation of liability"
+  },
+  "catFlagBroadWarrantyDisclaimer": {
+    "message": "Broad warranty disclaimer"
+  },
+  "catFlagBroadDataSharing": {
+    "message": "Broad data sharing with third parties"
+  },
+  "catFlagAccountTermination": {
+    "message": "Account termination without notice"
+  },
+  "catFlagContentRemoval": {
+    "message": "Content removal at sole discretion"
+  },
+  "catFlagAutoRenewal": {
+    "message": "Auto-renewal without a clear opt-out"
+  },
+  "catFlagRetentionUndefined": {
+    "message": "Undefined data retention period"
+  },
+  "catFlagDistantVenue": {
+    "message": "Distant dispute venue"
+  },
+  "catFlagServicesAsIs": {
+    "message": "Service provided \"as is\""
+  },
+  "catFlagOtherUnfavourable": {
+    "message": "Other unfavourable clause"
+  },
+  "catCreditRefundWindow": {
+    "message": "Explicit refund window"
+  },
+  "catCreditEasyDeletion": {
+    "message": "Easy account deletion"
+  },
+  "catCreditOptinDataSharing": {
+    "message": "Opt-in required for data sharing"
+  },
+  "catCreditNoAutoRenewal": {
+    "message": "No automatic renewal"
+  },
+  "catCreditTransparentRetention": {
+    "message": "Transparent data retention period"
+  },
+  "catCreditDataExport": {
+    "message": "Free data export"
+  },
+  "catCreditArbitrationOptout": {
+    "message": "Arbitration opt-out window"
+  },
+  "catCreditUserOwnsContent": {
+    "message": "User retains content ownership"
+  },
+  "summaryTemplateOne": {
+    "message": "Document contains: $1$.",
+    "placeholders": {
+      "1": {
+        "content": "$1",
+        "example": "Mandatory arbitration"
+      }
+    }
+  },
+  "summaryTemplateTwo": {
+    "message": "Document contains: $1$ and $2$.",
+    "placeholders": {
+      "1": {
+        "content": "$1",
+        "example": "Mandatory arbitration"
+      },
+      "2": {
+        "content": "$2",
+        "example": "Class action waiver"
+      }
+    }
+  }
 }

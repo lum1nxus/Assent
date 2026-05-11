@@ -1,49 +1,192 @@
 {
-  "extName": { "message": "Assent" },
+  "extName": {
+    "message": "Assent"
+  },
   "extDescription": {
     "message": "Číta zmluvné dokumenty za vás. Zvýrazňuje potenciálne nevýhodné ustanovenia skôr, než ich prijmete."
   },
-
-  "scoreLabelLow": { "message": "Nízke riziko" },
-  "scoreLabelMedium": { "message": "Mierne riziko" },
-  "scoreLabelHigh": { "message": "Vysoké riziko" },
-  "scoreLabelExtreme": { "message": "Extrémne riziko" },
-  "scoreSublabel": { "message": "Iba detekcia vzorov - nejde o právne poradenstvo." },
-
-  "stateIdle": { "message": "Na tejto stránke nebol zistený žiadny dokument." },
-  "stateLoading": { "message": "Skenovanie dokumentu…" },
-  "stateError": { "message": "Analýza nie je k dispozícii" },
-  "errorNoDeviceAI": { "message": "Jazykový model v zariadení nie je pripravený." },
-
-  "sectionTopThree": { "message": "Hlavné body" },
-  "sectionFlags": { "message": "Označené ustanovenia" },
-  "sectionCredits": { "message": "Pozoruhodné ustanovenia" },
-
-  "btnShowInDocument": { "message": "Zobraziť v dokumente" },
-  "btnViewMethodology": { "message": "Ako to funguje" },
-
-  "labelGrade": { "message": "Známka" },
-  "labelEvidence": { "message": "Dôkaz:" },
-  "labelDate": { "message": "Analyzované" },
-
-  "disclaimerTitle": { "message": "O tomto výstupe" },
+  "scoreLabelLow": {
+    "message": "Nízke riziko"
+  },
+  "scoreLabelMedium": {
+    "message": "Mierne riziko"
+  },
+  "scoreLabelHigh": {
+    "message": "Vysoké riziko"
+  },
+  "scoreLabelExtreme": {
+    "message": "Extrémne riziko"
+  },
+  "scoreSublabel": {
+    "message": "Iba detekcia vzorov - nejde o právne poradenstvo."
+  },
+  "stateIdle": {
+    "message": "Na tejto stránke nebol zistený žiadny dokument."
+  },
+  "stateLoading": {
+    "message": "Skenovanie dokumentu…"
+  },
+  "stateError": {
+    "message": "Analýza nie je k dispozícii"
+  },
+  "errorNoDeviceAI": {
+    "message": "Jazykový model v zariadení nie je pripravený."
+  },
+  "sectionTopThree": {
+    "message": "Hlavné body"
+  },
+  "sectionFlags": {
+    "message": "Označené ustanovenia"
+  },
+  "sectionCredits": {
+    "message": "Pozoruhodné ustanovenia"
+  },
+  "btnShowInDocument": {
+    "message": "Zobraziť v dokumente"
+  },
+  "btnViewMethodology": {
+    "message": "Ako to funguje"
+  },
+  "labelGrade": {
+    "message": "Známka"
+  },
+  "labelEvidence": {
+    "message": "Dôkaz:"
+  },
+  "labelDate": {
+    "message": "Analyzované"
+  },
+  "disclaimerTitle": {
+    "message": "O tomto výstupe"
+  },
   "disclaimerBody": {
     "message": "Výstup vznikol automatickou detekciou vzorov, ktorá beží v zariadení používateľa. Každé označenie odkazuje na doslovný citát, ktorý sa dá nezávisle overiť. Nejde o právne stanovisko ani právne poradenstvo a nie je to spojené s vydavateľom analyzovaného dokumentu. Skóre odráža iba jazykové vzory a môže byť neúplné alebo chybné. Pred súhlasom si vždy prečítajte pôvodný dokument."
   },
-
-  "donationTitle": { "message": "Toto rozšírenie je nezávislé a zadarmo" },
+  "donationTitle": {
+    "message": "Toto rozšírenie je nezávislé a zadarmo"
+  },
   "donationBody": {
     "message": "Bez reklám. Bez sledovania. Žiadny predaj údajov. Ak bolo užitočné, malý príspevok pomáha pokračovať vo vývoji."
   },
-  "donationBtnTen": { "message": "Podporiť · 10 €" },
-  "donationBtnCustom": { "message": "Zvoliť sumu" },
-  "donationBtnLater": { "message": "Možno neskôr" },
-  "donationBtnNever": { "message": "Nie, ďakujem" },
-
-  "footerAttribution": { "message": "Open source · nezávislé · bez väzby na tretie strany" },
-  "footerSupport": { "message": "Podporiť vývoj" },
-
-  "overlayScanning": { "message": "Skenovanie…" },
-  "overlayDone": { "message": "Otvoriť podrobnosti" },
-  "overlayError": { "message": "Analýza nie je k dispozícii" }
+  "donationBtnTen": {
+    "message": "Podporiť · 10 €"
+  },
+  "donationBtnCustom": {
+    "message": "Zvoliť sumu"
+  },
+  "donationBtnLater": {
+    "message": "Možno neskôr"
+  },
+  "donationBtnNever": {
+    "message": "Nie, ďakujem"
+  },
+  "footerAttribution": {
+    "message": "Open source · nezávislé · bez väzby na tretie strany"
+  },
+  "footerSupport": {
+    "message": "Podporiť vývoj"
+  },
+  "overlayScanning": {
+    "message": "Skenovanie…"
+  },
+  "overlayDone": {
+    "message": "Otvoriť podrobnosti"
+  },
+  "overlayError": {
+    "message": "Analýza nie je k dispozícii"
+  },
+  "catFlagMandatoryArbitration": {
+    "message": "Mandatory arbitration"
+  },
+  "catFlagClassActionWaiver": {
+    "message": "Class action waiver"
+  },
+  "catFlagBroadLicenseIrrevocable": {
+    "message": "Irrevocable broad content licence"
+  },
+  "catFlagUnilateralChange": {
+    "message": "Unilateral terms change without notice"
+  },
+  "catFlagDataResale": {
+    "message": "Personal data resale to undisclosed parties"
+  },
+  "catFlagBroadIndemnity": {
+    "message": "Broad user indemnity"
+  },
+  "catFlagBroadLiabilityCap": {
+    "message": "Broad limitation of liability"
+  },
+  "catFlagBroadWarrantyDisclaimer": {
+    "message": "Broad warranty disclaimer"
+  },
+  "catFlagBroadDataSharing": {
+    "message": "Broad data sharing with third parties"
+  },
+  "catFlagAccountTermination": {
+    "message": "Account termination without notice"
+  },
+  "catFlagContentRemoval": {
+    "message": "Content removal at sole discretion"
+  },
+  "catFlagAutoRenewal": {
+    "message": "Auto-renewal without a clear opt-out"
+  },
+  "catFlagRetentionUndefined": {
+    "message": "Undefined data retention period"
+  },
+  "catFlagDistantVenue": {
+    "message": "Distant dispute venue"
+  },
+  "catFlagServicesAsIs": {
+    "message": "Service provided \"as is\""
+  },
+  "catFlagOtherUnfavourable": {
+    "message": "Other unfavourable clause"
+  },
+  "catCreditRefundWindow": {
+    "message": "Explicit refund window"
+  },
+  "catCreditEasyDeletion": {
+    "message": "Easy account deletion"
+  },
+  "catCreditOptinDataSharing": {
+    "message": "Opt-in required for data sharing"
+  },
+  "catCreditNoAutoRenewal": {
+    "message": "No automatic renewal"
+  },
+  "catCreditTransparentRetention": {
+    "message": "Transparent data retention period"
+  },
+  "catCreditDataExport": {
+    "message": "Free data export"
+  },
+  "catCreditArbitrationOptout": {
+    "message": "Arbitration opt-out window"
+  },
+  "catCreditUserOwnsContent": {
+    "message": "User retains content ownership"
+  },
+  "summaryTemplateOne": {
+    "message": "Document contains: $1$.",
+    "placeholders": {
+      "1": {
+        "content": "$1",
+        "example": "Mandatory arbitration"
+      }
+    }
+  },
+  "summaryTemplateTwo": {
+    "message": "Document contains: $1$ and $2$.",
+    "placeholders": {
+      "1": {
+        "content": "$1",
+        "example": "Mandatory arbitration"
+      },
+      "2": {
+        "content": "$2",
+        "example": "Class action waiver"
+      }
+    }
+  }
 }
