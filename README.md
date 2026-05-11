@@ -22,7 +22,9 @@ content.js          detects an agreement document on the current page, or
    ▼
 background.js       runs the pipeline:
    │
-   ├─ extract               keyword-weighted section extraction, capped at ~1200 words
+   ├─ extract               keyword-weighted section extraction, capped at ~2500 words,
+   │                        with structural sampling across four document zones so a
+   │                        risky tail clause is not lost in a long document
    ├─ detect-lang           Chrome LanguageDetector
    ├─ translate-in          Chrome Translator → English for analysis
    ├─ extract-jurisdiction  regex finds governing law and operator entity,
@@ -87,7 +89,7 @@ Assent performs **automated text-pattern detection only**. The on-device model c
 
 ### Pipeline
 
-1. The page text is reduced to its most risk-relevant sections by a deterministic keyword filter, capped at roughly 1200 words.
+1. The page text is reduced to its most risk-relevant sections by a deterministic keyword filter, capped at roughly 2500 words. The extractor reserves part of the budget for structural sampling, so a risky clause near the document tail is not dropped in favour of a denser head.
 2. The reduced text is normalised to English using Chrome's on-device translator.
 3. Declared governing law and operator entity are extracted by regex to provide neutral, internal jurisdiction context (`eu` / `non-eu` / `unknown`).
 4. The text is passed to Chrome's on-device language model. The model identifies clauses, assigns each one a category from the published taxonomy, and returns a verbatim quote and a severity tag (`high` / `full` / `partial`).
