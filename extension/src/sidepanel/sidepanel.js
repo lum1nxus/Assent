@@ -13,12 +13,14 @@ const headerTitle = document.getElementById("header-title");
 const persistentFooter = document.getElementById("persistent-footer");
 
 const METHODOLOGY_URL = "https://github.com/lum1nxus/Assent#methodology";
+const EXTENSION_VERSION = chrome.runtime.getManifest().version;
 
 const t = (key, fallback = "") => chrome.i18n.getMessage(key) || fallback;
 
 document.title = t("extName", "Assent");
 headerTitle.textContent = t("extName", "Assent");
 renderPersistentFooter();
+wireDebugDialog();
 
 function scoreColor(score) {
   if (score <= 8) {
@@ -272,11 +274,137 @@ function renderPersistentFooter() {
   persistentFooter.innerHTML = `
     <div>${esc(t("footerAttribution", ""))}</div>
     <div class="footer-support"><a id="footer-support-link" href="#">${esc(t("footerSupport", "Support development"))}</a></div>
+    <div class="footer-version-row">
+      <span class="footer-version">Assent v${esc(EXTENSION_VERSION)}</span>
+      <button class="btn-debug" id="footer-debug-btn" type="button">Debug</button>
+    </div>
   `;
   document.getElementById("footer-support-link")?.addEventListener("click", (e) => {
     e.preventDefault();
     chrome.tabs.create({ url: PAYPAL_LINK_CHOOSE_AMOUNT });
   });
+  document.getElementById("footer-debug-btn")?.addEventListener("click", openDebugDialog);
+}
+
+let lastSeenState = null;
+let lastSeenUrl = null;
+
+function captureStateForDebug(state) {
+  lastSeenState = state ?? null;
+  lastSeenUrl = currentTabUrl ?? null;
+}
+
+function buildDebugBundle() {
+  const state = lastSeenState;
+  const url = lastSeenUrl;
+  const base = {
+    name: buildBundleName(state),
+    version: EXTENSION_VERSION,
+    capturedAt: new Date().toISOString(),
+    tabUrl: url,
+    status: state?.status ?? "idle",
+  };
+  if (!state || state.status !== "done" || !state.result) {
+    return {
+      ...base,
+      note: "no completed analysis to capture",
+      error: state?.error ?? null,
+    };
+  }
+  const r = state.result;
+  const dbg = r._debug ?? {};
+  return {
+    ...base,
+    domain: r.domain ?? null,
+    analyzedAt: r.analyzedAt ?? null,
+    serviceType: r.serviceType ?? null,
+    score: r.score ?? null,
+    grade: r.grade ?? null,
+    flags: (r.flags ?? []).map((f) => ({
+      category: f.category ?? f.id ?? null,
+      severity: f.severity ?? null,
+      quote: f.quote ?? null,
+    })),
+    credits: (r.credits ?? []).map((c) => ({
+      category: c.category ?? c.id ?? null,
+      quote: c.quote ?? null,
+    })),
+    extractedWords: dbg.extractedWords ?? null,
+    tosLanguage: dbg.tosLanguage ?? null,
+    jurisdictionContext: dbg.jurisdictionContext ?? null,
+    rawAiResponse: dbg.rawAiResponse ?? "",
+    documentText: dbg.documentText ?? "",
+  };
+}
+
+function buildBundleName(state) {
+  const domain = state?.result?.domain ?? "unknown";
+  const safe = String(domain).replace(/[^a-z0-9.-]/gi, "-");
+  const stamp = new Date().toISOString().replace(/[:.]/g, "-").slice(0, 19);
+  return `debug-${safe}-${stamp}`;
+}
+
+function wireDebugDialog() {
+  const dialog = document.getElementById("debug-dialog");
+  if (!dialog) {
+    return;
+  }
+  document.getElementById("debug-close")?.addEventListener("click", () => dialog.close());
+  document.getElementById("debug-copy")?.addEventListener("click", async () => {
+    const textarea = document.getElementById("debug-textarea");
+    const btn = document.getElementById("debug-copy");
+    if (!textarea || !btn) {
+      return;
+    }
+    try {
+      await navigator.clipboard.writeText(textarea.value);
+      const prev = btn.textContent;
+      btn.textContent = "Copied";
+      setTimeout(() => {
+        btn.textContent = prev;
+      }, 1500);
+    } catch {
+      textarea.select();
+    }
+  });
+  document.getElementById("debug-download")?.addEventListener("click", () => {
+    const textarea = document.getElementById("debug-textarea");
+    if (!textarea) {
+      return;
+    }
+    const bundle = JSON.parse(textarea.value);
+    const blob = new Blob([textarea.value], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `${bundle.name ?? "assent-debug"}.json`;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 0);
+  });
+  dialog.addEventListener("click", (e) => {
+    if (e.target === dialog) {
+      dialog.close();
+    }
+  });
+}
+
+function openDebugDialog() {
+  const dialog = document.getElementById("debug-dialog");
+  const textarea = document.getElementById("debug-textarea");
+  const meta = document.getElementById("debug-meta");
+  if (!dialog || !textarea || !meta) {
+    return;
+  }
+  const bundle = buildDebugBundle();
+  textarea.value = JSON.stringify(bundle, null, 2);
+  const docLen = (bundle.documentText ?? "").length;
+  const rawLen = (bundle.rawAiResponse ?? "").length;
+  meta.textContent = `v${EXTENSION_VERSION} - status: ${bundle.status} - doc: ${docLen}b - raw: ${rawLen}b`;
+  if (!dialog.open) {
+    dialog.showModal();
+  }
 }
 
 function renderLoading(domain) {
@@ -360,6 +488,7 @@ function dispatchState(tabId, state) {
   if (incomingStatus === "idle" && lastDoneStatePerTab.has(tabId)) {
     const cached = lastDoneStatePerTab.get(tabId);
     cancelPolling();
+    captureStateForDebug(cached);
     renderResult(cached);
     return;
   }
@@ -368,16 +497,20 @@ function dispatchState(tabId, state) {
   switch (incomingStatus) {
     case "done":
       lastDoneStatePerTab.set(tabId, state);
+      captureStateForDebug(state);
       renderResult(state);
       break;
     case "loading":
+      captureStateForDebug(state);
       renderLoading(state.domain);
       pollForResult(tabId);
       break;
     case "error":
+      captureStateForDebug(state);
       renderError(state.error, state.domain);
       break;
     default:
+      captureStateForDebug(state);
       renderIdle();
   }
 }

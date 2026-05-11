@@ -36,7 +36,12 @@ export async function persist(input, ctx) {
       analyzed_at: input.analyzedAt,
       text: DISCLAIMER_TEXT,
     },
-    _debug: input._debug,
+    _debug: {
+      ...input._debug,
+      extractedWords: input.extractedWords ?? null,
+      tosLanguage: input.tosLanguage ?? null,
+      jurisdictionContext: input.jurisdictionContext ?? null,
+    },
   };
 
   await chrome.storage.session.set({
