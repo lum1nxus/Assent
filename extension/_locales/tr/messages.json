@@ -1,0 +1,49 @@
+{
+  "extName": { "message": "Assent" },
+  "extDescription": {
+    "message": "Sözleşme belgelerini sizin yerinize okur. Kabul etmeden önce potansiyel olarak elverişsiz maddeleri vurgular."
+  },
+
+  "scoreLabelLow": { "message": "Düşük risk" },
+  "scoreLabelMedium": { "message": "Orta risk" },
+  "scoreLabelHigh": { "message": "Yüksek risk" },
+  "scoreLabelExtreme": { "message": "Aşırı risk" },
+  "scoreSublabel": { "message": "Yalnızca örüntü tespiti - hukuki tavsiye değildir." },
+
+  "stateIdle": { "message": "Bu sayfada belge tespit edilmedi." },
+  "stateLoading": { "message": "Belge taranıyor…" },
+  "stateError": { "message": "Analiz mevcut değil" },
+  "errorNoDeviceAI": { "message": "Cihaz üzerindeki dil modeli hazır değil." },
+
+  "sectionTopThree": { "message": "Ana maddeler" },
+  "sectionFlags": { "message": "İşaretlenmiş maddeler" },
+  "sectionCredits": { "message": "Dikkate değer hükümler" },
+
+  "btnShowInDocument": { "message": "Belgede göster" },
+  "btnViewMethodology": { "message": "Nasıl çalışır" },
+
+  "labelGrade": { "message": "Not" },
+  "labelEvidence": { "message": "Kanıt:" },
+  "labelDate": { "message": "Analiz edildi" },
+
+  "disclaimerTitle": { "message": "Bu sonuç hakkında" },
+  "disclaimerBody": {
+    "message": "Sonuç, kullanıcının cihazında çalışan otomatik örüntü tespiti tarafından üretildi. Her işaret, bağımsız olarak doğrulanabilen birebir bir alıntıya atıfta bulunur. Bu hukuki bir görüş değildir, hukuki tavsiye değildir ve analiz edilen belgenin yayıncısıyla ilişkili değildir. Puan yalnızca dil örüntülerini yansıtır ve eksik veya yanlış olabilir. Kabul etmeden önce her zaman orijinal belgeyi okuyun."
+  },
+
+  "donationTitle": { "message": "Bu uzantı bağımsız ve ücretsizdir" },
+  "donationBody": {
+    "message": "Reklam yok. Takip yok. Veri satışı yok. Faydalı olduysa, küçük bir katkı geliştirmenin devam etmesine yardımcı olur."
+  },
+  "donationBtnTen": { "message": "Destek ol · 10 €" },
+  "donationBtnCustom": { "message": "Tutar seç" },
+  "donationBtnLater": { "message": "Belki sonra" },
+  "donationBtnNever": { "message": "Hayır, teşekkürler" },
+
+  "footerAttribution": { "message": "Open source · bağımsız · üçüncü taraflarla bağlantısız" },
+  "footerSupport": { "message": "Geliştirmeyi destekle" },
+
+  "overlayScanning": { "message": "Taranıyor…" },
+  "overlayDone": { "message": "Ayrıntıları aç" },
+  "overlayError": { "message": "Analiz mevcut değil" }
+}

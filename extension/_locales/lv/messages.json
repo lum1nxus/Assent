@@ -1,0 +1,49 @@
+{
+  "extName": { "message": "Assent" },
+  "extDescription": {
+    "message": "Lasa līgumu dokumentus jūsu vietā. Izceļ potenciāli neizdevīgus noteikumus pirms piekrītat."
+  },
+
+  "scoreLabelLow": { "message": "Zems risks" },
+  "scoreLabelMedium": { "message": "Mērens risks" },
+  "scoreLabelHigh": { "message": "Augsts risks" },
+  "scoreLabelExtreme": { "message": "Galēji augsts risks" },
+  "scoreSublabel": { "message": "Tikai modeļu noteikšana - nav juridiska konsultācija." },
+
+  "stateIdle": { "message": "Šajā lapā dokuments nav atklāts." },
+  "stateLoading": { "message": "Dokumenta skenēšana…" },
+  "stateError": { "message": "Analīze nav pieejama" },
+  "errorNoDeviceAI": { "message": "Ierīces valodas modelis nav gatavs." },
+
+  "sectionTopThree": { "message": "Galvenie punkti" },
+  "sectionFlags": { "message": "Atzīmētie noteikumi" },
+  "sectionCredits": { "message": "Nozīmīgi noteikumi" },
+
+  "btnShowInDocument": { "message": "Rādīt dokumentā" },
+  "btnViewMethodology": { "message": "Kā tas darbojas" },
+
+  "labelGrade": { "message": "Vērtējums" },
+  "labelEvidence": { "message": "Pierādījums:" },
+  "labelDate": { "message": "Analizēts" },
+
+  "disclaimerTitle": { "message": "Par šo rezultātu" },
+  "disclaimerBody": {
+    "message": "Rezultātu radījusi automātiska modeļu noteikšana, kas darbojas lietotāja ierīcē. Katra atzīme atsaucas uz burtisku citātu, ko var pārbaudīt neatkarīgi. Tas nav juridisks atzinums, nav juridiska konsultācija un nav saistīts ar analizētā dokumenta izdevēju. Punktu skaits atspoguļo tikai valodas modeļus un var būt nepilnīgs vai nepareizs. Vienmēr izlasiet oriģinālo dokumentu, pirms piekrītat."
+  },
+
+  "donationTitle": { "message": "Šis paplašinājums ir neatkarīgs un bezmaksas" },
+  "donationBody": {
+    "message": "Bez reklāmām. Bez izsekošanas. Datus nepārdod. Ja tas ir bijis noderīgs, neliels ieguldījums palīdz turpināt izstrādi."
+  },
+  "donationBtnTen": { "message": "Atbalstīt · 10 €" },
+  "donationBtnCustom": { "message": "Izvēlēties summu" },
+  "donationBtnLater": { "message": "Varbūt vēlāk" },
+  "donationBtnNever": { "message": "Nē, paldies" },
+
+  "footerAttribution": { "message": "Open source · neatkarīgs · nav saistīts ar trešajām pusēm" },
+  "footerSupport": { "message": "Atbalstīt izstrādi" },
+
+  "overlayScanning": { "message": "Skenēšana…" },
+  "overlayDone": { "message": "Atvērt detaļas" },
+  "overlayError": { "message": "Analīze nav pieejama" }
+}

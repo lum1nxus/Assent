@@ -1,0 +1,49 @@
+{
+  "extName": { "message": "Assent" },
+  "extDescription": {
+    "message": "Čita ugovorne dokumente umjesto vas. Ističe potencijalno nepovoljne klauzule prije nego što prihvatite."
+  },
+
+  "scoreLabelLow": { "message": "Nizak rizik" },
+  "scoreLabelMedium": { "message": "Umjeren rizik" },
+  "scoreLabelHigh": { "message": "Visok rizik" },
+  "scoreLabelExtreme": { "message": "Ekstreman rizik" },
+  "scoreSublabel": { "message": "Samo otkrivanje uzoraka - nije pravni savjet." },
+
+  "stateIdle": { "message": "Na ovoj stranici nije otkriven dokument." },
+  "stateLoading": { "message": "Skeniranje dokumenta…" },
+  "stateError": { "message": "Analiza nije dostupna" },
+  "errorNoDeviceAI": { "message": "Jezični model na uređaju nije spreman." },
+
+  "sectionTopThree": { "message": "Glavne točke" },
+  "sectionFlags": { "message": "Označene klauzule" },
+  "sectionCredits": { "message": "Značajne odredbe" },
+
+  "btnShowInDocument": { "message": "Prikaži u dokumentu" },
+  "btnViewMethodology": { "message": "Kako ovo radi" },
+
+  "labelGrade": { "message": "Ocjena" },
+  "labelEvidence": { "message": "Dokaz:" },
+  "labelDate": { "message": "Analizirano" },
+
+  "disclaimerTitle": { "message": "O ovom rezultatu" },
+  "disclaimerBody": {
+    "message": "Rezultat proizveden automatskim otkrivanjem uzoraka koje se izvodi na uređaju korisnika. Svaka oznaka upućuje na doslovni citat koji se može neovisno provjeriti. Ovo nije pravno mišljenje, nije pravni savjet i nije povezano s izdavačem analiziranog dokumenta. Ocjena odražava samo jezične uzorke i može biti nepotpuna ili pogrešna. Uvijek pročitajte izvorni dokument prije nego što prihvatite."
+  },
+
+  "donationTitle": { "message": "Ovo proširenje je neovisno i besplatno" },
+  "donationBody": {
+    "message": "Bez oglasa. Bez praćenja. Bez prodaje podataka. Ako vam je bilo korisno, mali doprinos pomaže nastaviti razvoj."
+  },
+  "donationBtnTen": { "message": "Podrži · 10 €" },
+  "donationBtnCustom": { "message": "Odaberi iznos" },
+  "donationBtnLater": { "message": "Možda kasnije" },
+  "donationBtnNever": { "message": "Ne, hvala" },
+
+  "footerAttribution": { "message": "Open source · neovisno · bez povezanosti s trećim stranama" },
+  "footerSupport": { "message": "Podrži razvoj" },
+
+  "overlayScanning": { "message": "Skeniranje…" },
+  "overlayDone": { "message": "Otvori detalje" },
+  "overlayError": { "message": "Analiza nije dostupna" }
+}

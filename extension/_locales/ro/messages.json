@@ -1,0 +1,49 @@
+{
+  "extName": { "message": "Assent" },
+  "extDescription": {
+    "message": "Citește documentele contractuale pentru tine. Evidențiază clauze potențial defavorabile înainte să accepți."
+  },
+
+  "scoreLabelLow": { "message": "Risc scăzut" },
+  "scoreLabelMedium": { "message": "Risc moderat" },
+  "scoreLabelHigh": { "message": "Risc ridicat" },
+  "scoreLabelExtreme": { "message": "Risc extrem" },
+  "scoreSublabel": { "message": "Doar detectare de tipare - nu este consiliere juridică." },
+
+  "stateIdle": { "message": "Niciun document detectat pe această pagină." },
+  "stateLoading": { "message": "Se scanează documentul…" },
+  "stateError": { "message": "Analiză indisponibilă" },
+  "errorNoDeviceAI": { "message": "Modelul de limbaj de pe dispozitiv nu este pregătit." },
+
+  "sectionTopThree": { "message": "Puncte principale" },
+  "sectionFlags": { "message": "Clauze semnalate" },
+  "sectionCredits": { "message": "Prevederi notabile" },
+
+  "btnShowInDocument": { "message": "Afișează în document" },
+  "btnViewMethodology": { "message": "Cum funcționează" },
+
+  "labelGrade": { "message": "Calificativ" },
+  "labelEvidence": { "message": "Dovadă:" },
+  "labelDate": { "message": "Analizat" },
+
+  "disclaimerTitle": { "message": "Despre acest rezultat" },
+  "disclaimerBody": {
+    "message": "Rezultat produs prin detectare automată de tipare care rulează pe dispozitivul utilizatorului. Fiecare marcaj face referire la un citat textual care poate fi verificat independent. Acesta nu este o opinie juridică, nu este consiliere juridică și nu este afiliat editorului documentului analizat. Punctajul reflectă doar tipare lingvistice și poate fi incomplet sau greșit. Citiți întotdeauna documentul original înainte de a accepta."
+  },
+
+  "donationTitle": { "message": "Această extensie este independentă și gratuită" },
+  "donationBody": {
+    "message": "Fără reclame. Fără urmărire. Fără vânzare de date. Dacă a fost utilă, o mică contribuție ajută la continuarea dezvoltării."
+  },
+  "donationBtnTen": { "message": "Susține · 10 €" },
+  "donationBtnCustom": { "message": "Alege suma" },
+  "donationBtnLater": { "message": "Poate mai târziu" },
+  "donationBtnNever": { "message": "Nu, mulțumesc" },
+
+  "footerAttribution": { "message": "Open source · independent · fără afiliere cu terți" },
+  "footerSupport": { "message": "Susține dezvoltarea" },
+
+  "overlayScanning": { "message": "Se scanează…" },
+  "overlayDone": { "message": "Deschide detalii" },
+  "overlayError": { "message": "Analiză indisponibilă" }
+}

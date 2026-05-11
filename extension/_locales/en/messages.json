@@ -1,0 +1,51 @@
+{
+  "extName": { "message": "Assent" },
+  "extDescription": {
+    "message": "Reads agreement documents so you don't have to. Highlights potentially unfavourable clauses before you accept."
+  },
+
+  "scoreLabelLow": { "message": "Low risk" },
+  "scoreLabelMedium": { "message": "Moderate risk" },
+  "scoreLabelHigh": { "message": "High risk" },
+  "scoreLabelExtreme": { "message": "Extreme risk" },
+  "scoreSublabel": { "message": "Pattern detection only - not legal advice." },
+
+  "stateIdle": { "message": "No document detected on this page." },
+  "stateLoading": { "message": "Scanning document…" },
+  "stateError": { "message": "Analysis unavailable" },
+  "errorNoDeviceAI": { "message": "On-device language model is not ready on this device." },
+
+  "sectionTopThree": { "message": "Top points to know" },
+  "sectionFlags": { "message": "Flagged clauses" },
+  "sectionCredits": { "message": "Notable provisions" },
+
+  "btnShowInDocument": { "message": "Show in document" },
+  "btnViewMethodology": { "message": "How this works" },
+
+  "labelGrade": { "message": "Grade" },
+  "labelEvidence": { "message": "Evidence:" },
+  "labelDate": { "message": "Analysed" },
+
+  "disclaimerTitle": { "message": "About this output" },
+  "disclaimerBody": {
+    "message": "Output produced by automated pattern detection on the user's device. Each flag references a verbatim excerpt so it can be verified independently. This is not a legal opinion, not legal advice, and is not affiliated with the publisher of the analysed document. The score reflects language patterns only and may be incomplete or wrong. Always read the original document before agreeing."
+  },
+
+  "donationTitle": { "message": "This extension is independent and free" },
+  "donationBody": {
+    "message": "No ads. No tracking. No data sold. If it has been useful, a small contribution helps keep development going."
+  },
+  "donationBtnTen": { "message": "Support · €10" },
+  "donationBtnCustom": { "message": "Choose amount" },
+  "donationBtnLater": { "message": "Maybe later" },
+  "donationBtnNever": { "message": "No thanks" },
+
+  "footerAttribution": {
+    "message": "Open source · independent · not affiliated with any third party"
+  },
+  "footerSupport": { "message": "Support development" },
+
+  "overlayScanning": { "message": "Scanning…" },
+  "overlayDone": { "message": "Open details" },
+  "overlayError": { "message": "Analysis unavailable" }
+}

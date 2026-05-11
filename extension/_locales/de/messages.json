@@ -1,0 +1,49 @@
+{
+  "extName": { "message": "Assent" },
+  "extDescription": {
+    "message": "Liest Nutzungsbedingungen, damit du es nicht musst. Hebt potenziell ungünstige Klauseln hervor, bevor du zustimmst."
+  },
+
+  "scoreLabelLow": { "message": "Geringes Risiko" },
+  "scoreLabelMedium": { "message": "Mittleres Risiko" },
+  "scoreLabelHigh": { "message": "Hohes Risiko" },
+  "scoreLabelExtreme": { "message": "Extremes Risiko" },
+  "scoreSublabel": { "message": "Reine Mustererkennung - keine Rechtsberatung." },
+
+  "stateIdle": { "message": "Kein Dokument auf dieser Seite erkannt." },
+  "stateLoading": { "message": "Dokument wird gescannt…" },
+  "stateError": { "message": "Analyse nicht verfügbar" },
+  "errorNoDeviceAI": { "message": "Sprachmodell auf dem Gerät ist nicht einsatzbereit." },
+
+  "sectionTopThree": { "message": "Wichtigste Punkte" },
+  "sectionFlags": { "message": "Markierte Klauseln" },
+  "sectionCredits": { "message": "Bemerkenswerte Bestimmungen" },
+
+  "btnShowInDocument": { "message": "Im Dokument zeigen" },
+  "btnViewMethodology": { "message": "Wie das funktioniert" },
+
+  "labelGrade": { "message": "Note" },
+  "labelEvidence": { "message": "Beleg:" },
+  "labelDate": { "message": "Analysiert" },
+
+  "disclaimerTitle": { "message": "Über diese Ausgabe" },
+  "disclaimerBody": {
+    "message": "Ausgabe einer automatisierten Mustererkennung, die auf dem Gerät des Nutzers läuft. Jede Markierung verweist auf ein wörtliches Zitat, das unabhängig überprüft werden kann. Dies ist keine Rechtsmeinung, keine Rechtsberatung und steht in keinerlei Verbindung zum Herausgeber des analysierten Dokuments. Die Bewertung spiegelt ausschließlich Sprachmuster wider und kann unvollständig oder falsch sein. Lies stets das Originaldokument, bevor du zustimmst."
+  },
+
+  "donationTitle": { "message": "Diese Erweiterung ist unabhängig und kostenlos" },
+  "donationBody": {
+    "message": "Keine Werbung. Kein Tracking. Kein Datenverkauf. Wenn sie nützlich war, hilft eine kleine Spende, die Entwicklung fortzusetzen."
+  },
+  "donationBtnTen": { "message": "Unterstützen · 10 €" },
+  "donationBtnCustom": { "message": "Betrag wählen" },
+  "donationBtnLater": { "message": "Vielleicht später" },
+  "donationBtnNever": { "message": "Nein danke" },
+
+  "footerAttribution": { "message": "Open Source · unabhängig · nicht mit Dritten verbunden" },
+  "footerSupport": { "message": "Entwicklung unterstützen" },
+
+  "overlayScanning": { "message": "Wird gescannt…" },
+  "overlayDone": { "message": "Details öffnen" },
+  "overlayError": { "message": "Analyse nicht verfügbar" }
+}

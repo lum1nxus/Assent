@@ -1,0 +1,49 @@
+{
+  "extName": { "message": "Assent" },
+  "extDescription": {
+    "message": "Читает соглашения за вас. Выделяет потенциально невыгодные условия до того, как вы примете."
+  },
+
+  "scoreLabelLow": { "message": "Низкий риск" },
+  "scoreLabelMedium": { "message": "Умеренный риск" },
+  "scoreLabelHigh": { "message": "Высокий риск" },
+  "scoreLabelExtreme": { "message": "Крайний риск" },
+  "scoreSublabel": { "message": "Только обнаружение паттернов - не юридическая консультация." },
+
+  "stateIdle": { "message": "На этой странице документ не обнаружен." },
+  "stateLoading": { "message": "Сканирование документа…" },
+  "stateError": { "message": "Анализ недоступен" },
+  "errorNoDeviceAI": { "message": "Локальная языковая модель не готова на этом устройстве." },
+
+  "sectionTopThree": { "message": "Главные пункты" },
+  "sectionFlags": { "message": "Отмеченные пункты" },
+  "sectionCredits": { "message": "Положительные положения" },
+
+  "btnShowInDocument": { "message": "Показать в документе" },
+  "btnViewMethodology": { "message": "Как это работает" },
+
+  "labelGrade": { "message": "Оценка" },
+  "labelEvidence": { "message": "Доказательство:" },
+  "labelDate": { "message": "Проанализировано" },
+
+  "disclaimerTitle": { "message": "Об этом результате" },
+  "disclaimerBody": {
+    "message": "Результат получен автоматическим обнаружением паттернов, работающим на устройстве пользователя. Каждая метка ссылается на дословную цитату, которую можно проверить независимо. Это не юридическое мнение, не юридическая консультация и не связано с издателем анализируемого документа. Оценка отражает только языковые паттерны и может быть неполной или ошибочной. Всегда читайте оригинальный документ перед согласием."
+  },
+
+  "donationTitle": { "message": "Это расширение независимое и бесплатное" },
+  "donationBody": {
+    "message": "Без рекламы. Без отслеживания. Данные не продаются. Если оно было полезно, небольшой взнос поможет продолжить разработку."
+  },
+  "donationBtnTen": { "message": "Поддержать · 10 €" },
+  "donationBtnCustom": { "message": "Выбрать сумму" },
+  "donationBtnLater": { "message": "Может позже" },
+  "donationBtnNever": { "message": "Нет, спасибо" },
+
+  "footerAttribution": { "message": "Open source · независимо · без связи с третьими лицами" },
+  "footerSupport": { "message": "Поддержать разработку" },
+
+  "overlayScanning": { "message": "Сканирование…" },
+  "overlayDone": { "message": "Открыть детали" },
+  "overlayError": { "message": "Анализ недоступен" }
+}

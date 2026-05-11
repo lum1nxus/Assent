@@ -1,0 +1,51 @@
+{
+  "extName": { "message": "Assent" },
+  "extDescription": {
+    "message": "Skaito sutarčių dokumentus už jus. Pažymi potencialiai nepalankias sąlygas, prieš jums sutinkant."
+  },
+
+  "scoreLabelLow": { "message": "Maža rizika" },
+  "scoreLabelMedium": { "message": "Vidutinė rizika" },
+  "scoreLabelHigh": { "message": "Didelė rizika" },
+  "scoreLabelExtreme": { "message": "Itin didelė rizika" },
+  "scoreSublabel": { "message": "Tik šablonų aptikimas - ne teisinė konsultacija." },
+
+  "stateIdle": { "message": "Šiame puslapyje dokumentas neaptiktas." },
+  "stateLoading": { "message": "Dokumentas skaitomas…" },
+  "stateError": { "message": "Analizė negalima" },
+  "errorNoDeviceAI": { "message": "Įrenginio kalbos modelis neparuoštas." },
+
+  "sectionTopThree": { "message": "Pagrindiniai punktai" },
+  "sectionFlags": { "message": "Pažymėtos sąlygos" },
+  "sectionCredits": { "message": "Reikšmingos nuostatos" },
+
+  "btnShowInDocument": { "message": "Rodyti dokumente" },
+  "btnViewMethodology": { "message": "Kaip tai veikia" },
+
+  "labelGrade": { "message": "Įvertinimas" },
+  "labelEvidence": { "message": "Įrodymas:" },
+  "labelDate": { "message": "Analizuota" },
+
+  "disclaimerTitle": { "message": "Apie šį rezultatą" },
+  "disclaimerBody": {
+    "message": "Rezultatą sukūrė automatinis šablonų aptikimas, veikiantis vartotojo įrenginyje. Kiekvienas žymėjimas nurodo pažodinę citatą, kurią galima nepriklausomai patikrinti. Tai nėra teisinė nuomonė, nėra teisinė konsultacija ir nesusiję su analizuoto dokumento leidėju. Įvertinimas atspindi tik kalbinius šablonus ir gali būti neišsamus arba neteisingas. Visada perskaitykite originalų dokumentą prieš sutikdami."
+  },
+
+  "donationTitle": { "message": "Šis plėtinys yra nepriklausomas ir nemokamas" },
+  "donationBody": {
+    "message": "Be reklamų. Be sekimo. Duomenys neparduodami. Jei buvo naudingas, nedidelis indėlis padeda tęsti kūrimą."
+  },
+  "donationBtnTen": { "message": "Paremti · 10 €" },
+  "donationBtnCustom": { "message": "Pasirinkti sumą" },
+  "donationBtnLater": { "message": "Galbūt vėliau" },
+  "donationBtnNever": { "message": "Ne, ačiū" },
+
+  "footerAttribution": {
+    "message": "Open source · nepriklausomas · nesusijęs su trečiosiomis šalimis"
+  },
+  "footerSupport": { "message": "Paremti kūrimą" },
+
+  "overlayScanning": { "message": "Skaitoma…" },
+  "overlayDone": { "message": "Atidaryti detales" },
+  "overlayError": { "message": "Analizė negalima" }
+}

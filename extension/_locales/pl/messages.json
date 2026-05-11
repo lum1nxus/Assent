@@ -1,0 +1,49 @@
+{
+  "extName": { "message": "Assent" },
+  "extDescription": {
+    "message": "Czyta dokumenty umowne za Ciebie. Wyróżnia potencjalnie niekorzystne klauzule, zanim je zaakceptujesz."
+  },
+
+  "scoreLabelLow": { "message": "Niskie ryzyko" },
+  "scoreLabelMedium": { "message": "Umiarkowane ryzyko" },
+  "scoreLabelHigh": { "message": "Wysokie ryzyko" },
+  "scoreLabelExtreme": { "message": "Ekstremalne ryzyko" },
+  "scoreSublabel": { "message": "Wyłącznie wykrywanie wzorców - nie jest to porada prawna." },
+
+  "stateIdle": { "message": "Nie wykryto dokumentu na tej stronie." },
+  "stateLoading": { "message": "Skanowanie dokumentu…" },
+  "stateError": { "message": "Analiza niedostępna" },
+  "errorNoDeviceAI": { "message": "Model językowy na urządzeniu nie jest gotowy." },
+
+  "sectionTopThree": { "message": "Najważniejsze punkty" },
+  "sectionFlags": { "message": "Oflagowane klauzule" },
+  "sectionCredits": { "message": "Istotne postanowienia" },
+
+  "btnShowInDocument": { "message": "Pokaż w dokumencie" },
+  "btnViewMethodology": { "message": "Jak to działa" },
+
+  "labelGrade": { "message": "Ocena" },
+  "labelEvidence": { "message": "Dowód:" },
+  "labelDate": { "message": "Analiza" },
+
+  "disclaimerTitle": { "message": "O tym wyniku" },
+  "disclaimerBody": {
+    "message": "Wynik wytworzony przez automatyczne wykrywanie wzorców działające na urządzeniu użytkownika. Każde oflagowanie odwołuje się do dosłownego cytatu, który można niezależnie zweryfikować. To nie jest opinia prawna ani porada prawna i nie jest powiązane z wydawcą analizowanego dokumentu. Wynik odzwierciedla wyłącznie wzorce językowe i może być niepełny lub błędny. Przed wyrażeniem zgody zawsze przeczytaj oryginalny dokument."
+  },
+
+  "donationTitle": { "message": "To rozszerzenie jest niezależne i darmowe" },
+  "donationBody": {
+    "message": "Bez reklam. Bez śledzenia. Bez sprzedaży danych. Jeśli okazało się przydatne, drobny wkład pomaga kontynuować rozwój."
+  },
+  "donationBtnTen": { "message": "Wesprzyj · 10 €" },
+  "donationBtnCustom": { "message": "Wybierz kwotę" },
+  "donationBtnLater": { "message": "Może później" },
+  "donationBtnNever": { "message": "Nie, dziękuję" },
+
+  "footerAttribution": { "message": "Open source · niezależne · bez powiązań z osobami trzecimi" },
+  "footerSupport": { "message": "Wesprzyj rozwój" },
+
+  "overlayScanning": { "message": "Skanowanie…" },
+  "overlayDone": { "message": "Otwórz szczegóły" },
+  "overlayError": { "message": "Analiza niedostępna" }
+}

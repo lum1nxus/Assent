@@ -1,0 +1,49 @@
+{
+  "extName": { "message": "Assent" },
+  "extDescription": {
+    "message": "Leser avtaledokumenter for deg. Fremhever potensielt ufordelaktige klausuler før du godtar."
+  },
+
+  "scoreLabelLow": { "message": "Lav risiko" },
+  "scoreLabelMedium": { "message": "Moderat risiko" },
+  "scoreLabelHigh": { "message": "Høy risiko" },
+  "scoreLabelExtreme": { "message": "Ekstrem risiko" },
+  "scoreSublabel": { "message": "Kun mønstergjenkjenning - ikke juridisk rådgivning." },
+
+  "stateIdle": { "message": "Ingen dokument oppdaget på denne siden." },
+  "stateLoading": { "message": "Skanner dokumentet…" },
+  "stateError": { "message": "Analyse ikke tilgjengelig" },
+  "errorNoDeviceAI": { "message": "Språkmodellen på enheten er ikke klar." },
+
+  "sectionTopThree": { "message": "Viktigste punktene" },
+  "sectionFlags": { "message": "Merkede klausuler" },
+  "sectionCredits": { "message": "Bemerkelsesverdige bestemmelser" },
+
+  "btnShowInDocument": { "message": "Vis i dokumentet" },
+  "btnViewMethodology": { "message": "Slik fungerer det" },
+
+  "labelGrade": { "message": "Karakter" },
+  "labelEvidence": { "message": "Bevis:" },
+  "labelDate": { "message": "Analysert" },
+
+  "disclaimerTitle": { "message": "Om dette resultatet" },
+  "disclaimerBody": {
+    "message": "Resultat produsert av automatisk mønstergjenkjenning som kjører på brukerens enhet. Hver merking refererer til et ordrett sitat som kan verifiseres uavhengig. Dette er ikke en juridisk uttalelse, ikke juridisk rådgivning og er ikke tilknyttet utgiveren av det analyserte dokumentet. Skåren reflekterer kun språkmønstre og kan være ufullstendig eller feil. Les alltid originaldokumentet før du godtar."
+  },
+
+  "donationTitle": { "message": "Denne utvidelsen er uavhengig og gratis" },
+  "donationBody": {
+    "message": "Ingen annonser. Ingen sporing. Ingen salg av data. Hvis den har vært nyttig, hjelper et lite bidrag utviklingen videre."
+  },
+  "donationBtnTen": { "message": "Støtt · 10 €" },
+  "donationBtnCustom": { "message": "Velg beløp" },
+  "donationBtnLater": { "message": "Kanskje senere" },
+  "donationBtnNever": { "message": "Nei takk" },
+
+  "footerAttribution": { "message": "Open source · uavhengig · ikke tilknyttet tredjepart" },
+  "footerSupport": { "message": "Støtt utviklingen" },
+
+  "overlayScanning": { "message": "Skanner…" },
+  "overlayDone": { "message": "Åpne detaljer" },
+  "overlayError": { "message": "Analyse ikke tilgjengelig" }
+}

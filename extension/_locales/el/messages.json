@@ -1,0 +1,49 @@
+{
+  "extName": { "message": "Assent" },
+  "extDescription": {
+    "message": "Διαβάζει συμβατικά έγγραφα για εσάς. Επισημαίνει πιθανώς δυσμενείς ρήτρες πριν αποδεχτείτε."
+  },
+
+  "scoreLabelLow": { "message": "Χαμηλός κίνδυνος" },
+  "scoreLabelMedium": { "message": "Μέτριος κίνδυνος" },
+  "scoreLabelHigh": { "message": "Υψηλός κίνδυνος" },
+  "scoreLabelExtreme": { "message": "Ακραίος κίνδυνος" },
+  "scoreSublabel": { "message": "Μόνο ανίχνευση μοτίβων - δεν είναι νομική συμβουλή." },
+
+  "stateIdle": { "message": "Δεν εντοπίστηκε έγγραφο σε αυτή τη σελίδα." },
+  "stateLoading": { "message": "Σάρωση εγγράφου…" },
+  "stateError": { "message": "Η ανάλυση δεν είναι διαθέσιμη" },
+  "errorNoDeviceAI": { "message": "Το γλωσσικό μοντέλο στη συσκευή δεν είναι έτοιμο." },
+
+  "sectionTopThree": { "message": "Βασικά σημεία" },
+  "sectionFlags": { "message": "Επισημασμένες ρήτρες" },
+  "sectionCredits": { "message": "Αξιοσημείωτες διατάξεις" },
+
+  "btnShowInDocument": { "message": "Εμφάνιση στο έγγραφο" },
+  "btnViewMethodology": { "message": "Πώς λειτουργεί" },
+
+  "labelGrade": { "message": "Βαθμός" },
+  "labelEvidence": { "message": "Στοιχείο:" },
+  "labelDate": { "message": "Αναλύθηκε" },
+
+  "disclaimerTitle": { "message": "Σχετικά με αυτό το αποτέλεσμα" },
+  "disclaimerBody": {
+    "message": "Το αποτέλεσμα παράγεται από αυτόματη ανίχνευση μοτίβων που εκτελείται στη συσκευή του χρήστη. Κάθε επισήμανση παραπέμπει σε αυτολεξεί απόσπασμα που μπορεί να επαληθευτεί ανεξάρτητα. Αυτό δεν είναι νομική γνώμη, δεν είναι νομική συμβουλή και δεν συνδέεται με τον εκδότη του αναλυόμενου εγγράφου. Η βαθμολογία αντικατοπτρίζει μόνο γλωσσικά μοτίβα και μπορεί να είναι ελλιπής ή λανθασμένη. Διαβάζετε πάντα το πρωτότυπο έγγραφο πριν αποδεχτείτε."
+  },
+
+  "donationTitle": { "message": "Αυτή η επέκταση είναι ανεξάρτητη και δωρεάν" },
+  "donationBody": {
+    "message": "Χωρίς διαφημίσεις. Χωρίς παρακολούθηση. Χωρίς πώληση δεδομένων. Αν υπήρξε χρήσιμη, μια μικρή συνεισφορά βοηθά τη συνέχιση της ανάπτυξης."
+  },
+  "donationBtnTen": { "message": "Υποστήριξη · 10 €" },
+  "donationBtnCustom": { "message": "Επιλογή ποσού" },
+  "donationBtnLater": { "message": "Ίσως αργότερα" },
+  "donationBtnNever": { "message": "Όχι, ευχαριστώ" },
+
+  "footerAttribution": { "message": "Open source · ανεξάρτητο · χωρίς σύνδεση με τρίτους" },
+  "footerSupport": { "message": "Υποστήριξη ανάπτυξης" },
+
+  "overlayScanning": { "message": "Σάρωση…" },
+  "overlayDone": { "message": "Άνοιγμα λεπτομερειών" },
+  "overlayError": { "message": "Η ανάλυση δεν είναι διαθέσιμη" }
+}

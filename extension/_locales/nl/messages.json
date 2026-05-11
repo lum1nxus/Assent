@@ -1,0 +1,49 @@
+{
+  "extName": { "message": "Assent" },
+  "extDescription": {
+    "message": "Leest overeenkomstdocumenten zodat jij dat niet hoeft. Markeert mogelijk ongunstige clausules voordat je akkoord gaat."
+  },
+
+  "scoreLabelLow": { "message": "Laag risico" },
+  "scoreLabelMedium": { "message": "Matig risico" },
+  "scoreLabelHigh": { "message": "Hoog risico" },
+  "scoreLabelExtreme": { "message": "Extreem risico" },
+  "scoreSublabel": { "message": "Alleen patroondetectie - geen juridisch advies." },
+
+  "stateIdle": { "message": "Geen document gevonden op deze pagina." },
+  "stateLoading": { "message": "Document wordt gescand…" },
+  "stateError": { "message": "Analyse niet beschikbaar" },
+  "errorNoDeviceAI": { "message": "Taalmodel op het apparaat is niet gereed." },
+
+  "sectionTopThree": { "message": "Belangrijkste punten" },
+  "sectionFlags": { "message": "Gemarkeerde clausules" },
+  "sectionCredits": { "message": "Opvallende bepalingen" },
+
+  "btnShowInDocument": { "message": "Toon in document" },
+  "btnViewMethodology": { "message": "Hoe dit werkt" },
+
+  "labelGrade": { "message": "Cijfer" },
+  "labelEvidence": { "message": "Bewijs:" },
+  "labelDate": { "message": "Geanalyseerd" },
+
+  "disclaimerTitle": { "message": "Over deze uitvoer" },
+  "disclaimerBody": {
+    "message": "Uitvoer geproduceerd door geautomatiseerde patroondetectie die op het apparaat van de gebruiker draait. Elke markering verwijst naar een letterlijk citaat dat onafhankelijk te verifiëren is. Dit is geen juridisch oordeel, geen juridisch advies en niet gelieerd aan de uitgever van het geanalyseerde document. De score weerspiegelt uitsluitend taalpatronen en kan onvolledig of onjuist zijn. Lees altijd het oorspronkelijke document voordat je akkoord gaat."
+  },
+
+  "donationTitle": { "message": "Deze extensie is onafhankelijk en gratis" },
+  "donationBody": {
+    "message": "Geen advertenties. Geen tracking. Geen verkoop van gegevens. Als het nuttig was, helpt een kleine bijdrage de ontwikkeling voort te zetten."
+  },
+  "donationBtnTen": { "message": "Ondersteunen · € 10" },
+  "donationBtnCustom": { "message": "Bedrag kiezen" },
+  "donationBtnLater": { "message": "Misschien later" },
+  "donationBtnNever": { "message": "Nee, bedankt" },
+
+  "footerAttribution": { "message": "Open source · onafhankelijk · niet gelieerd aan derden" },
+  "footerSupport": { "message": "Ontwikkeling steunen" },
+
+  "overlayScanning": { "message": "Scannen…" },
+  "overlayDone": { "message": "Details openen" },
+  "overlayError": { "message": "Analyse niet beschikbaar" }
+}
