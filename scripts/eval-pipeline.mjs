@@ -3,6 +3,7 @@ import { readFileSync, readdirSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, join, relative } from "node:path";
 import { parseAndValidate } from "../extension/src/pipeline/steps/analyze.js";
+import { verify } from "../extension/src/pipeline/steps/verify.js";
 import { computeScore } from "../extension/src/pipeline/rubric/score.js";
 
 const here = dirname(fileURLToPath(import.meta.url));
@@ -21,7 +22,41 @@ const red = (s) => colour("31", s);
 const yellow = (s) => colour("33", s);
 const dim = (s) => colour("90", s);
 
-function runAiOutputs() {
+function normaliseQuoteKey(q) {
+  return String(q).replace(/\s+/g, " ").trim();
+}
+
+function buildFixtureVerifier(fixture) {
+  const verdicts = fixture.verifierVerdicts ?? {};
+  const normalised = {};
+  for (const [cat, byQuote] of Object.entries(verdicts)) {
+    normalised[cat] = {};
+    for (const [q, decision] of Object.entries(byQuote)) {
+      normalised[cat][normaliseQuoteKey(q)] = decision;
+    }
+  }
+  return async function fixtureVerifier(category, quotes) {
+    return {
+      verdicts: quotes.map((q) => {
+        const byCategory = normalised[category] ?? {};
+        const decision = byCategory[normaliseQuoteKey(q)];
+        if (typeof decision === "boolean") {
+          return { match: decision, reason: "fixture verdict" };
+        }
+        if (decision && typeof decision === "object") {
+          return {
+            match: !!decision.match,
+            reason: decision.reason ?? "fixture verdict",
+          };
+        }
+        return { match: true, reason: "fixture default pass" };
+      }),
+      raw: "",
+    };
+  };
+}
+
+async function runAiOutputs() {
   const files = readdirSync(fixturesDir).filter((f) => f.endsWith(".json"));
   const results = [];
   for (const file of files) {
@@ -32,9 +67,15 @@ function runAiOutputs() {
     const r = { file, name: fixture.name, status: "pass", details: "" };
     try {
       const parsed = parseAndValidate(fixture.rawAiResponse, fixture.documentText);
-      const actualFlags = parsed.flags.map((f) => f.category);
+      const verified = await verify(
+        { flags: parsed.flags, credits: parsed.credits },
+        { verifier: buildFixtureVerifier(fixture) },
+      );
+      const flags = verified.value.flags;
+      const credits = verified.value.credits;
+      const actualFlags = flags.map((f) => f.category);
       const expectedFlags = fixture.expectedFlags.map((f) => f.category);
-      const actualCredits = parsed.credits.map((c) => c.category);
+      const actualCredits = credits.map((c) => c.category);
       const expectedCredits = fixture.expectedCredits.map((c) => c.category);
       if (JSON.stringify(actualFlags) !== JSON.stringify(expectedFlags)) {
         r.status = "fail";
@@ -43,8 +84,7 @@ function runAiOutputs() {
         r.status = "fail";
         r.details = `credits differ: expected ${JSON.stringify(expectedCredits)}, got ${JSON.stringify(actualCredits)}`;
       } else {
-        r.parsed = parsed;
-        const { score, grade } = computeScore(parsed.flags, parsed.credits);
+        const { score, grade } = computeScore(flags, credits);
         r.score = score;
         r.grade = grade;
       }
@@ -102,7 +142,7 @@ function summarise(title, results) {
 }
 
 console.log(yellow(`Pipeline eval against ${relative(repoRoot, fixturesDir)}`));
-const aiFail = summarise("AI-output replays", runAiOutputs());
+const aiFail = summarise("AI-output replays", await runAiOutputs());
 console.log();
 console.log(yellow(`Rubric eval against ${relative(repoRoot, corpusPath)}`));
 const corpusFail = summarise("Synthetic ToS corpus", runCorpus());

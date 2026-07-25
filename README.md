@@ -6,7 +6,7 @@ Assent is a Chrome extension that scans Terms of Service, EULAs, privacy policie
 
 The extension runs **entirely on the user's device** using Chrome's built-in Gemini Nano. There are no servers, no API keys, no telemetry, no logins, no costs.
 
-The user interface is localised into 29 European locales.
+The MVP scope is **English-language documents only**. Documents in other languages are detected and the side panel shows an "English-only for now" state. Multilingual support is on the roadmap.
 
 ## Why
 
@@ -22,15 +22,17 @@ content.js          detects an agreement document on the current page, or
    ▼
 background.js       runs the pipeline:
    │
-   ├─ extract               keyword-weighted section extraction, capped at ~2500 words,
+   ├─ detect-lang           Chrome LanguageDetector; if the document is not English
+   │                        the pipeline halts with unsupportedLanguage
+   ├─ extract               keyword-weighted section extraction, capped at ~2000 words,
    │                        with structural sampling across four document zones so a
    │                        risky tail clause is not lost in a long document
-   ├─ detect-lang           Chrome LanguageDetector
-   ├─ translate-in          Chrome Translator → English for analysis
    ├─ extract-jurisdiction  regex finds governing law and operator entity,
    │                        classified as eu / non-eu / unknown
-   ├─ analyze               Chrome Prompt API (Gemini Nano) returns structured JSON
-   ├─ translate-out         Chrome Translator → user UI language; quotes are not translated
+   ├─ analyze               Chrome Prompt API (Gemini Nano) classifies clauses into a
+   │                        closed taxonomy and returns verbatim quotes; high recall by design
+   ├─ verify                second Prompt-API pass per category, compared against
+   │                        curated match / not-match reference examples; rejects misclassifications
    └─ persist               chrome.storage.session, keyed by tab id
    │
    ▼
@@ -39,7 +41,7 @@ clicking a flag in the side panel highlights the verbatim quote in the
 original page.
 ```
 
-The first call to a given language pair downloads a small Chrome model bundle; every subsequent call is offline.
+The first call to the on-device model downloads a small Chrome model bundle; every subsequent call is offline.
 
 ## Requirements
 
@@ -50,6 +52,14 @@ The first call to a given language pair downloads a small Chrome model bundle; e
   - approximately 22 GB of free disk space for the model bundle
 
 If the model is unavailable on the current device, the extension reports an "analysis unavailable" state instead of producing a result.
+
+## Roadmap
+
+The MVP focuses on English-language documents and a single audit-hardened pipeline. Items on the roadmap that are deliberately not shipped in the MVP:
+
+- Multilingual analysis. Non-English detection is kept as a first-class pipeline signal (`unsupportedLanguage`) so support can be added later by re-introducing translate-in / translate-out steps and expanding `_locales/`.
+- Region-aware phrasing. The user-region helper (`extension/src/features/user-region.js`) still detects reader region from timezone and locale, but the analyze prompt currently only uses it as neutral context. A future release may adjust tone based on this signal.
+- Regulator-aware badges. The extension deliberately never names a regulation or law; a post-MVP feature could offer an optional user-controlled overlay that surfaces general information about applicable consumer-rights frameworks.
 
 ## Install (development)
 
@@ -78,41 +88,48 @@ flowchart TB
     end
 
     subgraph PIPE["pipeline/steps"]
-        EX["extract<br/>keyword scoring + structural sampling<br/>cap ~2500 words"]
-        DL["detect-lang"]
-        TI["translate-in to English"]
+        DL["detect-lang<br/>halts on non-English"]
+        EX["extract<br/>keyword scoring + structural sampling<br/>cap ~2000 words"]
         JU["extract-jurisdiction<br/>governing law + operator entity"]
-        AN["analyze<br/>JSON classifier prompt<br/>+ keyword guards<br/>+ negation + splice filters<br/>+ verbatim quote verifier"]
+        AN["analyze (Stage A)<br/>JSON classifier prompt<br/>+ verbatim quote check<br/>+ splice/ellipsis filter"]
+        VE["verify (Stage B)<br/>per-category batched prompt<br/>vs match / not-match<br/>reference examples"]
         RU["rubric.computeScore + gradeOf<br/>deterministic, in-code"]
-        TO["translate-out to UI locale<br/>(quotes are NOT translated)"]
-        PE["persist"]
+        PE["persist<br/>+ debug bundle"]
     end
 
     subgraph AI["Chrome on-device AI"]
         LD["LanguageDetector"]
-        TR["Translator"]
         LM["LanguageModel (Prompt API)<br/>Gemini Nano"]
+    end
+
+    subgraph REF["pipeline/rubric"]
+        REFEX["reference-examples.js<br/>match + not-match<br/>quotes per category"]
+        CATS["categories.js<br/>closed taxonomy + weights"]
+        STRIP["strip-sensitive-tokens.js<br/>replaces brand tokens<br/>with 'the service'"]
     end
 
     subgraph STORE["chrome.storage"]
         SES["session<br/>tab_id -> result"]
-        LOC["local<br/>donation state + region override"]
+        LOC["local<br/>donation state"]
     end
 
     subgraph SP["Side panel (sidepanel/)"]
-        UI["sidepanel.js<br/>grade + summary + flags + top-three"]
+        UI["sidepanel.js<br/>grade + summary + flags + top-three<br/>+ verifier reason + debug export"]
     end
 
     DOM --> CS
     CS -- TOS_DETECTED --> MSG
     MSG --> ORCH
-    ORCH --> EX --> DL --> TI --> JU --> AN --> TO --> PE
-    AN --> RU --> PE
+    ORCH --> DL --> EX --> JU --> AN --> VE --> PE
+    VE --> RU --> PE
 
     DL -. uses .-> LD
-    TI -. uses .-> TR
-    TO -. uses .-> TR
     AN -. uses .-> LM
+    VE -. uses .-> LM
+    VE -. reads .-> REFEX
+    VE -. filters through .-> STRIP
+    AN -. reads .-> CATS
+    RU -. reads .-> CATS
 
     PE --> SES
     ORCH -. starts/stops .-> KA
@@ -123,23 +140,23 @@ flowchart TB
     UI <--> LOC
 ```
 
-| Path                                       | Purpose                                                                        |
-| ------------------------------------------ | ------------------------------------------------------------------------------ |
-| `extension/manifest.json`                  | Manifest V3 with i18n placeholders, service worker, content script, side panel |
-| `extension/_locales/<bcp47>/messages.json` | UI string catalogues (29 European locales)                                     |
-| `extension/icons/`                         | Toolbar and store icons (16/32/48/128 px PNG)                                  |
-| `extension/src/background.js`              | Service worker; pipeline orchestrator, badge, overlay, keep-alive              |
-| `extension/src/content.js`                 | DOM detection, in-page floating pill (shadow DOM), click-to-highlight          |
-| `extension/src/pipeline/index.js`          | Generic chain-of-responsibility runner                                         |
-| `extension/src/pipeline/context.js`        | Builds the per-run context (user language, user region)                        |
-| `extension/src/pipeline/steps/`            | The seven pipeline steps                                                       |
-| `extension/src/pipeline/rubric/`           | Closed taxonomy of clause categories, deterministic scoring, and labels        |
-| `extension/src/features/grade.js`          | Maps a numeric score to a letter grade                                         |
-| `extension/src/features/top-three.js`      | Selects the most material flags for the summary header                         |
-| `extension/src/features/donation.js`       | Local-only donation prompt timing and PayPal link                              |
-| `extension/src/features/user-region.js`    | Passive detection of the reader's region from timezone and locale              |
-| `extension/src/sidepanel/`                 | Side panel HTML/CSS/JS                                                         |
-| `tests/`                                   | Node `--test` unit tests for the rubric and label resolution                   |
+| Path                                    | Purpose                                                                                            |
+| --------------------------------------- | -------------------------------------------------------------------------------------------------- |
+| `extension/manifest.json`               | Manifest V3 with i18n placeholders, service worker, content script, side panel                     |
+| `extension/_locales/en/messages.json`   | UI string catalogue (English only for MVP)                                                         |
+| `extension/icons/`                      | Toolbar and store icons (16/32/48/128 px PNG)                                                      |
+| `extension/src/background.js`           | Service worker; pipeline orchestrator, badge, overlay, keep-alive, fetch guard                     |
+| `extension/src/content.js`              | DOM detection, in-page floating pill (shadow DOM), click-to-highlight                              |
+| `extension/src/pipeline/index.js`       | Generic chain-of-responsibility runner                                                             |
+| `extension/src/pipeline/context.js`     | Builds the per-run context (user region, progress callback)                                        |
+| `extension/src/pipeline/steps/`         | The six pipeline steps (detect-lang → extract → extract-jurisdiction → analyze → verify → persist) |
+| `extension/src/pipeline/rubric/`        | Closed taxonomy, deterministic scoring, reference examples, sensitive-token strip                  |
+| `extension/src/features/top-three.js`   | Selects the most material flags for the summary header                                             |
+| `extension/src/features/donation.js`    | Local-only donation prompt timing and PayPal link                                                  |
+| `extension/src/features/user-region.js` | Passive detection of the reader's region from timezone and locale                                  |
+| `extension/src/shared/url-safety.js`    | SSRF-resistant URL sanitiser used by background fetch                                              |
+| `extension/src/sidepanel/`              | Side panel HTML/CSS/JS                                                                             |
+| `tests/`                                | Node `--test` unit tests for the rubric, url safety, verifier, and repair paths                    |
 
 Every pipeline step is a pure async function `(input, ctx) => { value, done? }`. Steps may short-circuit, throw (the orchestrator wraps the error with the step name), or pass through. Adding a new step does not require modifying existing ones.
 
@@ -149,13 +166,14 @@ Assent performs **automated text-pattern detection only**. The on-device model c
 
 ### Pipeline
 
-1. The page text is reduced to its most risk-relevant sections by a deterministic keyword filter, capped at roughly 2500 words. The extractor reserves part of the budget for structural sampling, so a risky clause near the document tail is not dropped in favour of a denser head.
-2. The reduced text is normalised to English using Chrome's on-device translator.
+1. Chrome's on-device LanguageDetector reads the raw document. If it is confidently non-English the pipeline halts and the side panel shows the "English-only for now" state. This keeps English-tuned keyword extraction from silently mangling foreign-language documents.
+2. The page text is reduced to its most risk-relevant sections by a deterministic keyword filter, capped at roughly 2000 words. The extractor reserves part of the budget for structural sampling, so a risky clause near the document tail is not dropped in favour of a denser head.
 3. Declared governing law and operator entity are extracted by regex to provide neutral, internal jurisdiction context (`eu` / `non-eu` / `unknown`).
-4. The text is passed to Chrome's on-device language model. The model identifies clauses, assigns each one a category from the published taxonomy, and returns a verbatim quote and a severity tag (`high` / `full` / `partial`).
-5. Each returned quote is verified to be a verbatim substring of the input text after Unicode normalisation. Flags whose quote cannot be verified are dropped.
-6. A numeric score is computed from the verified classifications using the rubric. The score is mapped to a letter grade by fixed thresholds.
-7. Titles and the short summary are rendered from internal i18n strings keyed off the category id. Verbatim quotes are never translated.
+4. **Stage A - analyze.** The text is passed to Chrome's on-device language model with `temperature: 0`, `topK: 1`, and a JSON-Schema `responseConstraint` that pins service type, category, severity, and quote fields to their closed enums. The model identifies clauses, assigns each one a category from the published taxonomy, and returns a verbatim quote and a severity tag (`high` / `full` / `partial`). The system prompt uses strictly negative disambiguation and forbids quoting any phrasing that did not appear in the user input, to discourage the model from echoing canonical legal boilerplate.
+5. Each returned quote is verified to be a verbatim substring of the input text after Unicode normalisation, and quotes that contain ellipsis or omission markers are rejected. These are hallucination defences, not classification rules. If at least three flag candidates came back but none survived this check, the result is marked `lowRecall=true` and the side panel surfaces a confidence notice instead of presenting a clean grade.
+6. **Stage B - verify.** Candidates are grouped by category. A single verifier session is created and reused across categories. For each category the model gets a second, narrower prompt that contains the category definition and match / not-match reference quotes from `pipeline/rubric/reference-examples.js`. The model returns `{ match, reason }` for every candidate. Non-matches are dropped. Every kept reason is passed through `strip-sensitive-tokens.js`, which replaces any occurrence of the analysed site's brand-shaped tokens with "the service". Verbatim quotes are deliberately not touched. The verifier fails open: if the second pass throws or returns malformed JSON the candidate is kept and tagged `verifierFailed` so the bug is visible in the debug bundle.
+7. A numeric score is computed from the verified classifications using the rubric. The score is mapped to a letter grade by fixed thresholds.
+8. Titles and the short summary are rendered from internal i18n strings keyed off the category id. Verbatim quotes and reference examples are never translated.
 
 ### Rubric
 
@@ -218,7 +236,9 @@ npm run zip        # builds assent-<version>.zip ready for the Chrome Web Store
 
 ## Privacy
 
-Assent does not phone home. It does not collect or transmit any analytics, telemetry, identifiers, or document content. Results are stored only in `chrome.storage.session` (the analysed tab) and `chrome.storage.local` (donation state and an optional region override). Both are local to the user's browser profile.
+Assent does not phone home. It does not collect or transmit any analytics, telemetry, identifiers, or document content. Results are stored only in `chrome.storage.session` (the analysed tab) and `chrome.storage.local` (donation state only). Both are local to the user's browser profile.
+
+The service worker's `fetch` for a linked ToS URL sends `referrer-policy: no-referrer`, disables the cache, resolves each redirect manually, caps the response at 1.5 MB, and refuses any content type other than `text/html`, `text/plain`, and `application/xhtml+xml`. The URL sanitiser rejects `file://`, `javascript:`, `data:`, RFC 1918 / CGNAT / loopback / link-local addresses in every notation (decimal, hex, octal, dotted, IPv4-mapped IPv6, cloud-metadata hostnames).
 
 ## Important legal notice
 

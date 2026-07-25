@@ -4,6 +4,7 @@ import { readFileSync, readdirSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
 import { parseAndValidate } from "../extension/src/pipeline/steps/analyze.js";
+import { verify } from "../extension/src/pipeline/steps/verify.js";
 import { computeScore } from "../extension/src/pipeline/rubric/score.js";
 
 const here = dirname(fileURLToPath(import.meta.url));
@@ -16,6 +17,49 @@ const fixtures = readdirSync(fixturesDir)
     const data = JSON.parse(readFileSync(path, "utf8"));
     return { file: f, ...data };
   });
+
+function normaliseQuoteKey(q) {
+  return String(q).replace(/\s+/g, " ").trim();
+}
+
+function buildFixtureVerifier(fixture) {
+  const verdicts = fixture.verifierVerdicts ?? {};
+  const normalised = {};
+  for (const [cat, byQuote] of Object.entries(verdicts)) {
+    normalised[cat] = {};
+    for (const [q, decision] of Object.entries(byQuote)) {
+      normalised[cat][normaliseQuoteKey(q)] = decision;
+    }
+  }
+  return async function fixtureVerifier(category, quotes) {
+    return {
+      verdicts: quotes.map((q) => {
+        const byCategory = normalised[category] ?? {};
+        const decision = byCategory[normaliseQuoteKey(q)];
+        if (typeof decision === "boolean") {
+          return { match: decision, reason: "fixture verdict" };
+        }
+        if (decision && typeof decision === "object") {
+          return {
+            match: !!decision.match,
+            reason: decision.reason ?? "fixture verdict",
+          };
+        }
+        return { match: true, reason: "fixture default pass" };
+      }),
+      raw: "",
+    };
+  };
+}
+
+async function runStageAplusVerify(fixture) {
+  const stageA = parseAndValidate(fixture.rawAiResponse, fixture.documentText);
+  const { value } = await verify(
+    { flags: stageA.flags, credits: stageA.credits },
+    { verifier: buildFixtureVerifier(fixture) },
+  );
+  return { ...stageA, flags: value.flags, credits: value.credits };
+}
 
 test("ai-outputs fixture set is populated", () => {
   assert.ok(fixtures.length >= 10, `expected >= 10 fixtures, got ${fixtures.length}`);
@@ -36,15 +80,15 @@ test("every ai-output fixture is well-formed", () => {
 });
 
 for (const fixture of fixtures) {
-  test(`ai-output replay: ${fixture.name}`, () => {
-    let parsed;
+  test(`ai-output replay: ${fixture.name}`, async () => {
+    let result;
     try {
-      parsed = parseAndValidate(fixture.rawAiResponse, fixture.documentText);
+      result = await runStageAplusVerify(fixture);
     } catch (err) {
-      assert.fail(`${fixture.name}: parseAndValidate threw - ${err.message}`);
+      assert.fail(`${fixture.name}: pipeline threw - ${err.message}`);
     }
 
-    const actualFlagCats = parsed.flags.map((f) => f.category);
+    const actualFlagCats = result.flags.map((f) => f.category);
     const expectedFlagCats = fixture.expectedFlags.map((f) => f.category);
     assert.deepEqual(
       actualFlagCats,
@@ -55,14 +99,14 @@ for (const fixture of fixtures) {
     for (let i = 0; i < fixture.expectedFlags.length; i += 1) {
       if (fixture.expectedFlags[i].severity) {
         assert.equal(
-          parsed.flags[i].severity,
+          result.flags[i].severity,
           fixture.expectedFlags[i].severity,
           `${fixture.name}: flag ${i} severity mismatch`,
         );
       }
     }
 
-    const actualCreditCats = parsed.credits.map((c) => c.category);
+    const actualCreditCats = result.credits.map((c) => c.category);
     const expectedCreditCats = fixture.expectedCredits.map((c) => c.category);
     assert.deepEqual(
       actualCreditCats,
@@ -72,18 +116,30 @@ for (const fixture of fixtures) {
   });
 }
 
-test("happy-friendly-tos lands in grade A after scoring", () => {
+test("happy-friendly-tos lands in grade A after Stage A + verifier", async () => {
   const fixture = fixtures.find((f) => f.name === "happy-friendly-tos");
   assert.ok(fixture, "happy-friendly-tos fixture is required");
-  const parsed = parseAndValidate(fixture.rawAiResponse, fixture.documentText);
-  const { grade } = computeScore(parsed.flags, parsed.credits);
+  const result = await runStageAplusVerify(fixture);
+  const { grade } = computeScore(result.flags, result.credits);
   assert.equal(grade, "A");
 });
 
-test("happy-aggressive-tos lands in grade F after scoring", () => {
+test("happy-aggressive-tos lands in grade F after Stage A + verifier", async () => {
   const fixture = fixtures.find((f) => f.name === "happy-aggressive-tos");
   assert.ok(fixture, "happy-aggressive-tos fixture is required");
-  const parsed = parseAndValidate(fixture.rawAiResponse, fixture.documentText);
-  const { grade } = computeScore(parsed.flags, parsed.credits);
+  const result = await runStageAplusVerify(fixture);
+  const { grade } = computeScore(result.flags, result.credits);
   assert.equal(grade, "F");
+});
+
+test("hallucinated template quotes set lowRecall=true at Stage A", () => {
+  const fixture = fixtures.find((f) => f.name === "regression-hallucinated-template-quotes");
+  assert.ok(fixture, "regression-hallucinated-template-quotes fixture is required");
+  const parsed = parseAndValidate(fixture.rawAiResponse, fixture.documentText);
+  assert.equal(parsed.flags.length, 0);
+  assert.equal(parsed._stageAStats.lowRecall, true);
+  assert.ok(
+    parsed._stageAStats.rawFlagCount >= 3,
+    "Stage A must have produced enough raw candidates to consider this lowRecall",
+  );
 });

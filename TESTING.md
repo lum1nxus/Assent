@@ -4,15 +4,17 @@ Assent has three test layers. Layers 1 and 2 run in pure Node without any
 browser; layer 3 needs a real Chrome with the on-device model.
 
 - **Layer 1 - unit tests** (fast, deterministic, no AI). Pure functions
-  in `extension/src/pipeline/rubric/`, the JSON sanitiser, the keyword
-  guards, and label resolution are exercised by `node --test`.
+  in `extension/src/pipeline/rubric/`, the JSON sanitiser, the splice
+  guard, the verifier (with a mocked verifier function) and label
+  resolution are exercised by `node --test`.
 - **Layer 2 - AI-output replays** (fast, deterministic, no AI). Each
   JSON file under `tests/fixtures/ai-outputs/` is a captured or
-  hand-authored `(documentText, rawAiResponse)` pair plus the
-  `expectedFlags` and `expectedCredits` the pipeline should produce
-  after every guard runs. The replay test loads all of them and asserts
-  that `parseAndValidate` produces the expected output. This is where
-  regressions captured from Chrome live forever.
+  hand-authored `(documentText, rawAiResponse)` pair plus an optional
+  `verifierVerdicts` map that tells the test runner what the
+  second-pass verifier should say for each Stage A candidate. The replay
+  test runs `parseAndValidate` and then `verify` with that mocked
+  verifier, and asserts the final `expectedFlags` / `expectedCredits`.
+  This is where regressions captured from Chrome live forever.
 - **Layer 3 - end-to-end in a real browser** (slow, requires Chrome
   148+ and an on-device model bundle). You drive a real Chrome session
   against real agreement pages and read the side panel.
@@ -25,8 +27,9 @@ npm run eval      # human-readable summary of replays + corpus
 npm run eval:verbose
 ```
 
-`npm test` runs all 100+ assertions: rubric, sanitiser, keyword guards,
-synthetic-corpus calibration, and AI-output replays.
+`npm test` runs the full deterministic suite: rubric, sanitiser,
+splice guard, verifier with a mocked verifier function, synthetic-corpus
+calibration, and AI-output replays.
 
 `npm run eval` is a friendlier CLI that prints `pass / fail / total` per
 suite and the score and grade for every fixture. Pass `--only=<substring>`
@@ -43,16 +46,19 @@ npm run format:check
 
 The side panel has a built-in capture tool so you never have to paste
 DevTools snippets again. The bottom of every side panel shows the
-extension version (for example `Assent v0.2.0`) next to a `Debug` button.
+extension version (for example `Assent v0.4.0`) next to a `Debug` button.
 
 1. Reproduce the bug in Chrome. Wait for analysis to finish.
 2. Open the side panel. Click `Debug` at the bottom.
 3. A dialog appears with a JSON bundle containing:
    - the version that produced the result
    - the URL and domain
-   - the persisted score, grade, flags, credits
+   - the persisted score, grade, flags, credits (each with the
+     `verifierReason` the second-pass model returned)
    - `documentText` - the exact text sent to the model
-   - `rawAiResponse` - the raw model output before any guard ran
+   - `rawAiResponse` - the raw Stage A model output before verification
+   - `verifierResponses` - the raw Stage B model output, keyed by
+     `<kind>:<category>:<batch-offset>`
    - extraction stats: word count, detected language, jurisdiction
 4. Click `Download .json` to save the bundle locally, or `Copy` to put
    it on the clipboard.
@@ -63,9 +69,12 @@ You can now replay that exact case in pure Node without a browser:
 npm run replay -- /path/to/assent-debug-<...>.json
 ```
 
-The replay prints what `parseAndValidate` and the rubric produce now,
-compared to what was persisted in Chrome at capture time. Any difference
-is a guard or rubric change since the bundle was captured.
+The replay runs `parseAndValidate` and then `verify` with a
+passthrough verifier (no Stage B call - that needs Chrome). It prints
+what the deterministic side of the pipeline produces now, compared to
+what was persisted in Chrome at capture time. Any difference is either
+a Stage A change since the bundle was captured, or the result of
+Stage B being skipped locally.
 
 To lock the case in as a permanent regression test:
 
@@ -76,9 +85,10 @@ npm run replay -- /path/to/bundle.json --save-as captured-<short-id>
 This writes a fixture to `tests/fixtures/ai-outputs/captured-<short-id>.json`
 with the replay output already filled in as `expectedFlags` and
 `expectedCredits`. If the captured behaviour is the bug we want to fix,
-edit those fields to the output you want after the fix - the new test
-will fail until the guard or prompt is updated, then it locks the fix
-in place.
+edit those fields to the output you want after the fix and add the
+matching `verifierVerdicts` entries that describe what Stage B should
+say. The new test will fail until the prompt or the reference examples
+are updated, then it locks the fix in place.
 
 The bundle name also encodes the extension version, so you can always
 tell whether a screenshot or a captured file came from an old build.
@@ -145,10 +155,9 @@ The download is a few GB; first install takes a few minutes on a fast
 connection. After the bundle is unpacked, the model is shared with every
 page and extension running in the same Chrome profile.
 
-Confirm Translator and Language Detector are also ready:
+Confirm Language Detector is also ready:
 
 ```js
-await Translator.availability({ sourceLanguage: "de", targetLanguage: "en" });
 await LanguageDetector.availability();
 ```
 
@@ -199,20 +208,17 @@ BypassPerfRequirement** → relaunch Chrome → retry section 2.
 
 This is currently the only relevant flag.
 
-## 5. Verifying multilingual behaviour
+## 5. Verifying the English-only guard
 
-- Open a non-English terms page (German, Polish, Russian, Slovak, Turkish,
-  etc.). Detection should still trigger, the document is translated to
-  English for analysis, and the verdict is rendered in your Chrome UI
-  language. The extension ships strings for 29 European locales:
-  be, bg, ca, cs, da, de, el, en, es, et, fi, fr, hr, hu, it, lt, lv, nl,
-  no, pl, pt_PT, ro, ru, sk, sl, sr, sv, tr, uk.
-- Switch your Chrome UI language in Chrome settings, reload the Assent row
-  in `chrome://extensions/`, then reload the page to confirm the localized
-  side panel.
-
-Verbatim quotes are never translated - they remain in the document's
-original language so they can be matched against the page.
+- Open a non-English terms page (any language you like). The floating pill
+  should scan briefly, then the side panel should switch to the
+  "English-only for now" state. The toolbar badge should read `EN` in grey.
+- No pipeline steps beyond `detect-lang` should execute for a non-English
+  document. Confirm this in the service-worker console: `LanguageModel`
+  should not be created.
+- Reload the same page after changing the URL to an English document
+  (`.../en/...`). The pipeline should run to completion and produce a
+  grade.
 
 ## 6. Debugging
 

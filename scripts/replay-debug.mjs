@@ -3,6 +3,7 @@ import { readFileSync, writeFileSync, existsSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, join, basename } from "node:path";
 import { parseAndValidate } from "../extension/src/pipeline/steps/analyze.js";
+import { verify } from "../extension/src/pipeline/steps/verify.js";
 import { computeScore } from "../extension/src/pipeline/rubric/score.js";
 
 const here = dirname(fileURLToPath(import.meta.url));
@@ -69,6 +70,19 @@ try {
   console.error(red(`parseAndValidate threw: ${err.message}`));
   process.exit(1);
 }
+
+const passthroughVerifier = async (_category, quotes) => ({
+  verdicts: quotes.map(() => ({
+    match: true,
+    reason: "replay default: verifier not run locally (use live Chrome to verify)",
+  })),
+  raw: "",
+});
+const { value: verified } = await verify(
+  { flags: parsed.flags, credits: parsed.credits },
+  { verifier: passthroughVerifier },
+);
+parsed = { ...parsed, flags: verified.flags, credits: verified.credits };
 
 const { score, grade } = computeScore(parsed.flags, parsed.credits);
 

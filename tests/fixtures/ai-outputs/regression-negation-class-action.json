@@ -1,9 +1,17 @@
 {
   "name": "regression-negation-class-action",
-  "description": "AI flags class_action_waiver but the quote says the waiver does not apply. Reproduces the Stripe class-action screenshot bug.",
+  "description": "AI flags class_action_waiver but the quote says the waiver does not apply. The verifier rejects because the quote contains an explicit negation.",
   "documentText": "Most disputes are resolved between the parties without arbitration. The class action waiver in the preamble does not apply to disputes governed by jurisdictions that prohibit it.",
   "rawAiResponse": "{\"serviceType\":\"fintech\",\"flags\":[{\"category\":\"class_action_waiver\",\"severity\":\"full\",\"quote\":\"The class action waiver in the preamble does not apply\"}],\"credits\":[]}",
+  "verifierVerdicts": {
+    "class_action_waiver": {
+      "The class action waiver in the preamble does not apply": {
+        "match": false,
+        "reason": "the quote explicitly says the waiver does NOT apply, so it is not a class action waiver in force"
+      }
+    }
+  },
   "expectedFlags": [],
   "expectedCredits": [],
-  "expectedReason": "negation guard must reject a class-action quote that contains 'does not apply'"
+  "expectedReason": "Verifier rejects a class-action quote that contains 'does not apply'."
 }

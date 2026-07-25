@@ -18,17 +18,36 @@ alwaysApply: false
 - The grade letter (A..F) is computed by `gradeOf(score)` in the same file.
 - If you add a new category, update its `kind`, `weight`, and severity multipliers in `categories.js` and add a rubric test in `tests/rubric.test.js`.
 
-## Keyword guards
+## Classifier-Verifier pattern
 
-- Every flag or credit must pass `quoteMatchesCategoryKeywords()` in `pipeline/steps/category-guards.js` before being persisted.
-- Adding a new category implies adding its guard regex(es). A category without a guard silently passes - that is acceptable only for `other_unfavourable_clause` and similar escape hatches.
+- Stage A (`analyze.js`) is high recall. It emits candidate flags/credits with plain-English category descriptions and strictly negative disambiguation rules in the prompt.
+- Stage B (`verify.js`) is high precision. It groups candidates by category and asks the model, one category at a time, whether each candidate matches curated match / not-match examples in `pipeline/rubric/reference-examples.js`.
+- Adding a new category requires an entry in `categories.js` AND a `reference-examples.js` block with at least three `match` and three `notMatch` quotes.
+- Do not reintroduce keyword-regex guards for classification. The verifier plus reference examples is the extension point.
+- The only guard retained in `category-guards.js` is `quoteLooksSpliced`, and it is a hallucination defence, not a classification rule.
+
+## English-only for MVP
+
+- `detect-lang.js` halts the pipeline with `unsupportedLanguage: true` for any non-English document. Do not silently fall back to English extraction on a non-English document.
+- The keyword-scoring extractor in `extract.js` assumes English input.
 
 ## Quote integrity
 
-- AI must return `quote` as a verbatim substring of the document text. `parseAndValidate()` in `analyze.js` rejects anything else via `quoteAppearsInDocument()`.
+- AI must return `quote` as a verbatim substring of the document text. `parseAndValidate()` in `analyze.js` rejects anything else via `quoteAppearsInDocument()`, which uses only strict `docNormalised.includes(probe)` after normalisation. Do not reintroduce head-plus-tail fallbacks.
 - Highlighting in `content.js` relies on `normalizeChars()` to fold smart quotes, dashes and NBSP. Never compare raw strings.
+
+## Determinism
+
+- `LanguageModel.create` in `analyze.js` and `verify.js` sets `temperature: 0` and `topK: 1`.
+- `session.prompt` uses a JSON-Schema `responseConstraint` that pins service type, category and severity to their closed enums.
+- Do not introduce a `Math.random()` or a wall-clock reading anywhere in the scoring path. Deterministic same-in / same-out is a hard requirement.
 
 ## Pipeline is a chain of pure steps
 
-- Each step in `pipeline/steps/*.js` takes `(input, ctx)` and returns `{ value }` or `{ error }`. No global state.
-- Add new steps to the `PIPELINE` array in `pipeline/index.js`. Do not branch step order based on flags inside a step.
+- Each step in `pipeline/steps/*.js` takes `(input, ctx)` and returns `{ value }` or `{ value, done: true }` to halt. No global state.
+- Add new steps to the `PIPELINE` array in `background.js`. Do not branch step order based on flags inside a step.
+- Reuse expensive resources across steps by binding them to `ctx`; never store them at module scope.
+
+## Sensitive-token strip
+
+- Any AI-controlled string surfaced to the user (`verifierReason`, `note`, ...) must be passed through `strip-sensitive-tokens.js` before being persisted. The domain from `input.domain` seeds the token list. Quotes are exempt because they are verbatim by definition.

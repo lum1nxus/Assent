@@ -1,0 +1,35 @@
+{
+  "name": "regression-hallucinated-template-quotes",
+  "description": "Captured from a real session where Stage A returned nine flag candidates and five credit candidates, every single one with template legal phrasing that never appears in the actual document. quoteAppearsInDocument must drop all of them, leaving Stage A output empty and lowRecall=true so the side panel shows the confidence notice.",
+  "documentText": "Please also read our Privacy Policy, Cookies Policy and Community Guidelines. You enter a contract with us when you accept these Terms or otherwise use the Platform. We work with our Affiliates and use a mix of technology, human moderation, and reports from users to identify breaches of and enforce these Terms and our Community Guidelines. You can appeal our decision to terminate your account if you think we have made a mistake. We may restrict access to or remove any content, including yours, if we reasonably believe it is in breach of these Terms or our Community Guidelines. You are free to remove your content from the Platform at any time. We don't own your content. By creating, posting or otherwise making content available on the Platform, you grant to the Platform and our Affiliates a licence to use your content which is non-exclusive, royalty-free, transferable, sub-licensable, and worldwide. This licence to use your content allows us to reproduce, adapt or make derivative works of your content for the purposes of operating, developing and providing the Platform.",
+  "rawAiResponse": "```json\n{\n  \"serviceType\": \"social_media\",\n  \"flags\": [\n    { \"category\": \"class_action_waiver\", \"severity\": \"full\", \"quote\": \"You waive any right to participate in a class action or class-wide arbitration.\" },\n    { \"category\": \"broad_content_license_irrevocable\", \"severity\": \"high\", \"quote\": \"you grant us a perpetual, irrevocable, worldwide, royalty-free licence to use, modify, and sublicense it\" },\n    { \"category\": \"broad_indemnity_from_user\", \"severity\": \"full\", \"quote\": \"You agree to indemnify, defend and hold us harmless from any claim.\" },\n    { \"category\": \"broad_limitation_of_liability\", \"severity\": \"full\", \"quote\": \"Our aggregate liability is limited to the fees paid in the prior twelve months.\" },\n    { \"category\": \"mandatory_arbitration\", \"severity\": \"high\", \"quote\": \"Any dispute shall be resolved by binding individual arbitration.\" },\n    { \"category\": \"content_removal_sole_discretion\", \"severity\": \"full\", \"quote\": \"We may remove any content at our sole discretion.\" },\n    { \"category\": \"unilateral_terms_change_no_notice\", \"severity\": \"full\", \"quote\": \"We may modify these Terms at any time without prior notice.\" },\n    { \"category\": \"broad_data_sharing_third_party\", \"severity\": \"full\", \"quote\": \"We may share your information with our advertising and analytics partners.\" },\n    { \"category\": \"broad_warranty_disclaimer\", \"severity\": \"full\", \"quote\": \"THE SERVICE IS PROVIDED 'AS IS' WITHOUT WARRANTY OF ANY KIND.\" }\n  ],\n  \"credits\": [\n    { \"category\": \"explicit_refund_window\", \"quote\": \"If you use the Platform without an account, these Terms will still apply and we will still process your personal data in accordance with our Privacy Policy.\" },\n    { \"category\": \"easy_account_deletion\", \"quote\": \"You can appeal our decision to terminate your account if you think we have made a mistake.\" },\n    { \"category\": \"explicit_optin_data_sharing\", \"quote\": \"Information on how we use data we collect about you can be found in our Privacy Policy and Cookies Policy.\" },\n    { \"category\": \"no_automatic_renewal\", \"quote\": \"However, you don't have to use these features and any costs will be made clear to you before you are charged anything.\" },\n    { \"category\": \"transparent_retention_period\", \"quote\": \"You are free to remove your content from the Platform at any time.\" }\n  ]\n}\n```",
+  "verifierVerdicts": {
+    "easy_account_deletion": {
+      "You can appeal our decision to terminate your account if you think we have made a mistake.": {
+        "match": false,
+        "reason": "appeal of service-initiated termination, not user-initiated self-deletion"
+      }
+    },
+    "explicit_optin_data_sharing": {
+      "Information on how we use data we collect about you can be found in our Privacy Policy and Cookies Policy.": {
+        "match": false,
+        "reason": "pointer to policies, not an explicit opt-in requirement"
+      }
+    },
+    "no_automatic_renewal": {
+      "However, you don't have to use these features and any costs will be made clear to you before you are charged anything.": {
+        "match": false,
+        "reason": "describes optional features and price transparency, not a no-auto-renewal promise"
+      }
+    },
+    "transparent_retention_period": {
+      "You are free to remove your content from the Platform at any time.": {
+        "match": false,
+        "reason": "user content control, no concrete retention period"
+      }
+    }
+  },
+  "expectedFlags": [],
+  "expectedCredits": [],
+  "expectedReason": "Every Stage A flag quote is a verbatim copy of canonical legal phrasing that does NOT appear in the document. quoteAppearsInDocument drops all nine flags before verifier ever sees them. The five credits do appear in the document but the verifier rejects them as wrong-category. Final output: no flags, no credits, lowRecall flag is set so the UI can warn the user."
+}

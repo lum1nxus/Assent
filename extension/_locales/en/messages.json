@@ -29,8 +29,17 @@
   "stateError": {
     "message": "Analysis unavailable"
   },
+  "stateUnsupportedLanguage": {
+    "message": "English-only for now"
+  },
+  "stateUnsupportedLanguageBody": {
+    "message": "This document is not in English. Assent currently analyses English-language documents only. Support for other languages is planned."
+  },
   "errorNoDeviceAI": {
     "message": "On-device language model is not ready on this device."
+  },
+  "errorStuck": {
+    "message": "Analysis is taking too long. Please reload the page and try again."
   },
   "sectionTopThree": {
     "message": "Top points to know"
@@ -52,6 +61,15 @@
   },
   "labelEvidence": {
     "message": "Evidence:"
+  },
+  "labelWhyFlagged": {
+    "message": "Why this was flagged"
+  },
+  "noticeLowRecall": {
+    "message": "We could not find verifiable clauses in the visible page text. The actual document may be hidden behind a tab, accordion, or paywall. Try expanding each section before opening this analysis."
+  },
+  "noticeIncompleteContent": {
+    "message": "Only a small slice of the page was readable. The document may be lazy-loaded - expand each section before re-running analysis."
   },
   "labelDate": {
     "message": "Analysed"
@@ -186,6 +204,23 @@
       "2": {
         "content": "$2",
         "example": "Class action waiver"
+      }
+    }
+  },
+  "summaryTemplateThree": {
+    "message": "Document contains: $1$, $2$, and $3$.",
+    "placeholders": {
+      "1": {
+        "content": "$1",
+        "example": "Mandatory arbitration"
+      },
+      "2": {
+        "content": "$2",
+        "example": "Class action waiver"
+      },
+      "3": {
+        "content": "$3",
+        "example": "Broad limitation of liability"
       }
     }
   }

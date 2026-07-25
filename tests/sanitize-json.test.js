@@ -1,6 +1,10 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { sanitizeJson, parseLooseJson } from "../extension/src/pipeline/steps/sanitize-json.js";
+import {
+  sanitizeJson,
+  parseLooseJson,
+  repairTruncatedJson,
+} from "../extension/src/pipeline/steps/sanitize-json.js";
 
 test("sanitizeJson is a no-op for already valid JSON", () => {
   const src = '{"a": "b", "c": [1, 2, 3]}';
@@ -56,6 +60,59 @@ test("parseLooseJson succeeds where raw JSON.parse fails", () => {
   const src = '{"quote": "first line\nsecond line"}';
   assert.throws(() => JSON.parse(src), /control character/i);
   assert.deepEqual(parseLooseJson(src), { quote: "first line\nsecond line" });
+});
+
+test("repairTruncatedJson produces parseable JSON when input cuts mid-string", () => {
+  const truncated = '{"flags": [{"category": "x", "quote": "this clause is cut';
+  const repaired = repairTruncatedJson(truncated);
+  assert.doesNotThrow(() => JSON.parse(repaired));
+  const parsed = JSON.parse(repaired);
+  assert.equal(Array.isArray(parsed.flags), true);
+});
+
+test("repairTruncatedJson keeps the last complete entry when next entry is incomplete", () => {
+  const truncated =
+    '{"flags": [{"category": "a", "quote": "ok one"},{"category": "b", "quote": "ok ';
+  const repaired = repairTruncatedJson(truncated);
+  const parsed = JSON.parse(repaired);
+  const complete = parsed.flags.filter(
+    (f) => typeof f.category === "string" && typeof f.quote === "string",
+  );
+  assert.equal(complete.length, 1);
+  assert.equal(complete[0].category, "a");
+  assert.equal(complete[0].quote, "ok one");
+});
+
+test("parseLooseJson recovers a truncated AI response by repairing it", () => {
+  const truncated =
+    '{"serviceType": "general_tech", "flags": [{"category": "broad_warranty_disclaimer", "severity": "high", "quote": "THE SERVICE IS PROVIDED AS IS AND WITHOUT WARRANT';
+  const parsed = parseLooseJson(truncated);
+  assert.equal(parsed.serviceType, "general_tech");
+  assert.equal(Array.isArray(parsed.flags), true);
+});
+
+test("repairTruncatedJson survives a trailing lone backslash inside string", () => {
+  const raw = '{"a": "hello\\';
+  const repaired = repairTruncatedJson(raw);
+  assert.doesNotThrow(() => JSON.parse(repaired), "must be parseable after repair");
+});
+
+test("repairTruncatedJson survives an escaped-quote at the very end", () => {
+  const raw = '{"a": "hello\\"';
+  const repaired = repairTruncatedJson(raw);
+  assert.doesNotThrow(() => JSON.parse(repaired));
+});
+
+test("repairTruncatedJson survives truncation inside a \\u unicode escape", () => {
+  const raw = '{"a": "he\\u003';
+  const repaired = repairTruncatedJson(raw);
+  assert.doesNotThrow(() => JSON.parse(repaired));
+});
+
+test("repairTruncatedJson short-circuits on already-valid JSON", () => {
+  const raw = '{"a": 1, "b": [1, 2, 3]}';
+  const repaired = repairTruncatedJson(raw);
+  assert.equal(repaired, raw);
 });
 
 test("parseLooseJson regresses a control-character failure mode from production", () => {
