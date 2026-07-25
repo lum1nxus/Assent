@@ -12,7 +12,8 @@ test("extract throws when input has no document text", async () => {
 
 test("extract keeps a short document under MAX_WORDS in full", async () => {
   const para1 = "We may terminate your account at any time at our sole discretion without notice";
-  const para2 = "You agree to indemnify and hold us harmless from any claim arising out of your use";
+  const para2 =
+    "You agree to indemnify and hold us harmless from any claim arising out of your use";
   const para3 = "Refunds are available within thirty days of purchase for any reason";
   const tosText = [`${para1}.`, `${para2}.`, `${para3}.`].join("\n\n");
 
@@ -35,10 +36,7 @@ test("extract respects MAX_WORDS budget for large documents", async () => {
 
   const { value } = await extract({ tosText }, {});
   const words = wordCount(value.extractedText);
-  assert.ok(
-    words <= MAX_WORDS,
-    `extract should stay within MAX_WORDS=${MAX_WORDS}, got ${words}`,
-  );
+  assert.ok(words <= MAX_WORDS, `extract should stay within MAX_WORDS=${MAX_WORDS}, got ${words}`);
   assert.ok(words >= MAX_WORDS * 0.5, `extract should fill at least half of budget, got ${words}`);
 });
 
@@ -102,10 +100,23 @@ test("extract falls back gracefully when no paragraphs trip the keyword filter",
 });
 
 test("extract bumped MAX_WORDS to at least 2000 to give Gemini Nano more context", () => {
-  assert.ok(MAX_WORDS >= 2000, `MAX_WORDS should be >= 2000 for large ToS coverage, got ${MAX_WORDS}`);
+  assert.ok(
+    MAX_WORDS >= 2000,
+    `MAX_WORDS should be >= 2000 for large ToS coverage, got ${MAX_WORDS}`,
+  );
 });
 
 test("extract is robust against missing tosText", async () => {
   await assert.rejects(() => extract({}, {}), /no document text to analyse/);
   await assert.rejects(() => extract({ tosText: null }, {}), /no document text to analyse/);
+});
+
+test("extract does not fragment sentences ending in common abbreviations", async () => {
+  const para =
+    "This service is provided by Foo Inc. and its subsidiaries operate in multiple regions, including regulated markets, where compliance obligations apply according to applicable statutes.";
+  const { value } = await extract({ tosText: para }, {});
+  assert.ok(
+    value.extractedText.includes("Foo Inc. and its subsidiaries"),
+    "abbreviation Inc. must not trigger a sentence split",
+  );
 });

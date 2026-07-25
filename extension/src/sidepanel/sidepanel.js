@@ -91,6 +91,7 @@ function renderFlag(flag, idx) {
   const id = `flag-${idx}`;
   const sevClass = severityClass(flag.severity);
   const hasQuote = typeof flag.quote === "string" && flag.quote.length > 4;
+  const reason = typeof flag.verifierReason === "string" ? flag.verifierReason.trim() : "";
   return `
     <div class="flag" id="${id}">
       <div class="flag-header" data-flag="${id}">
@@ -100,6 +101,11 @@ function renderFlag(flag, idx) {
         <span class="flag-chevron">▾</span>
       </div>
       <div class="flag-body">
+        ${
+          reason
+            ? `<div class="flag-verifier-note">${esc(t("labelWhyFlagged", "Why this was flagged"))}: ${esc(reason)}</div>`
+            : ""
+        }
         ${
           hasQuote
             ? `<div class="flag-quote">
@@ -121,14 +127,16 @@ function renderCredits(credits = []) {
     <div class="section">
       <div class="section-title">${esc(t("sectionCredits", "Good practices detected"))}</div>
       ${credits
-        .map(
-          (c) => `
+        .map((c) => {
+          const reason = typeof c.verifierReason === "string" ? c.verifierReason.trim() : "";
+          return `
         <div class="credit-item">
           <span class="credit-check">✓</span>
           <span class="credit-title">${esc(c.title)}</span>
           ${c.note ? `<div class="credit-note">${esc(c.note)}</div>` : ""}
-        </div>`,
-        )
+          ${reason ? `<div class="credit-note">${esc(reason)}</div>` : ""}
+        </div>`;
+        })
         .join("")}
     </div>`;
 }
@@ -151,6 +159,24 @@ function renderDisclaimer(disclaimer, analyzedAt) {
     </div>`;
 }
 
+function renderConfidenceNotice(result) {
+  const lowRecall = result?.stageAStats?.lowRecall === true;
+  const incomplete = result?.contentMaybeIncomplete === true;
+  if (!lowRecall && !incomplete) {
+    return "";
+  }
+  const message = lowRecall
+    ? t(
+        "noticeLowRecall",
+        "We could not find verifiable clauses in the visible page text. The actual document may be hidden behind a tab, accordion, or paywall. Try expanding each section before opening this analysis.",
+      )
+    : t(
+        "noticeIncompleteContent",
+        "Only a small slice of the page was readable. The document may be lazy-loaded - expand each section before re-running analysis.",
+      );
+  return `<div class="confidence-notice">${esc(message)}</div>`;
+}
+
 function renderResult(state) {
   const result = state.result;
   domainLabel.textContent = result.domain ?? "-";
@@ -167,6 +193,8 @@ function renderResult(state) {
         <div class="score-summary">${esc(result.summary ?? "")}</div>
       </div>
     </div>
+
+    ${renderConfidenceNotice(result)}
 
     ${renderHighlights(result.highlights)}
 
@@ -324,15 +352,22 @@ function buildDebugBundle() {
       category: f.category ?? f.id ?? null,
       severity: f.severity ?? null,
       quote: f.quote ?? null,
+      verifierReason: f.verifierReason ?? null,
+      verifierFailed: f.verifierFailed ?? false,
     })),
     credits: (r.credits ?? []).map((c) => ({
       category: c.category ?? c.id ?? null,
       quote: c.quote ?? null,
+      verifierReason: c.verifierReason ?? null,
+      verifierFailed: c.verifierFailed ?? false,
     })),
     extractedWords: dbg.extractedWords ?? null,
     tosLanguage: dbg.tosLanguage ?? null,
     jurisdictionContext: dbg.jurisdictionContext ?? null,
+    stageAStats: r.stageAStats ?? dbg.stageAStats ?? null,
+    contentMaybeIncomplete: r.contentMaybeIncomplete ?? false,
     rawAiResponse: dbg.rawAiResponse ?? "",
+    verifierResponses: dbg.verifierResponses ?? {},
     documentText: dbg.documentText ?? "",
   };
 }
@@ -372,7 +407,12 @@ function wireDebugDialog() {
     if (!textarea) {
       return;
     }
-    const bundle = JSON.parse(textarea.value);
+    let bundle;
+    try {
+      bundle = JSON.parse(textarea.value);
+    } catch {
+      bundle = { name: "assent-debug" };
+    }
     const blob = new Blob([textarea.value], { type: "application/json" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
@@ -407,12 +447,16 @@ function openDebugDialog() {
   }
 }
 
-function renderLoading(domain) {
-  domainLabel.textContent = domain ?? "-";
+function renderLoading(state) {
+  const domain = state?.domain ?? "-";
+  const stage = state?.stage;
+  const stageLabel = stage && PIPELINE_STAGE_LABELS[stage] ? PIPELINE_STAGE_LABELS[stage] : null;
+  domainLabel.textContent = domain;
   app.innerHTML = `
     <div class="state-loading">
       <div class="spinner"></div>
       <div>${esc(t("stateLoading", "Scanning document…"))}</div>
+      ${stageLabel ? `<div class="loading-stage">${esc(stageLabel)}</div>` : ""}
     </div>`;
 }
 
@@ -433,6 +477,15 @@ function renderError(message, domain) {
     </div>`;
 }
 
+function renderUnsupportedLanguage(domain) {
+  domainLabel.textContent = domain ?? "-";
+  app.innerHTML = `
+    <div class="state-unsupported">
+      <div class="unsupported-label">${esc(t("stateUnsupportedLanguage", "English-only for now"))}</div>
+      <div>${esc(t("stateUnsupportedLanguageBody", ""))}</div>
+    </div>`;
+}
+
 function esc(s) {
   return String(s ?? "")
     .replace(/&/g, "&amp;")
@@ -447,8 +500,31 @@ function escAttr(s) {
 
 let currentTabId = null;
 let currentTabUrl = null;
-let pollHandle = null;
+let stuckLoadingTimer = null;
 const lastDoneStatePerTab = new Map();
+const MAX_CACHED_TABS = 32;
+const STUCK_LOADING_TIMEOUT_MS = 5 * 60 * 1000;
+
+function cacheDoneState(tabId, state) {
+  if (lastDoneStatePerTab.has(tabId)) {
+    lastDoneStatePerTab.delete(tabId);
+  } else if (lastDoneStatePerTab.size >= MAX_CACHED_TABS) {
+    const oldest = lastDoneStatePerTab.keys().next().value;
+    if (oldest !== undefined) {
+      lastDoneStatePerTab.delete(oldest);
+    }
+  }
+  lastDoneStatePerTab.set(tabId, state);
+}
+
+const PIPELINE_STAGE_LABELS = {
+  "detect-lang": "Detecting language",
+  extract: "Reading document",
+  "extract-jurisdiction": "Reading jurisdiction",
+  analyze: "Classifying clauses",
+  verify: "Verifying findings",
+  persist: "Finalising",
+};
 
 function materialUrlEquals(a, b) {
   if (!a || !b) {
@@ -468,7 +544,7 @@ async function loadStateForActiveTab() {
   if (!tab?.id) {
     currentTabId = null;
     currentTabUrl = null;
-    cancelPolling();
+    clearStuckLoadingTimer();
     renderIdle();
     return;
   }
@@ -487,27 +563,34 @@ function dispatchState(tabId, state) {
 
   if (incomingStatus === "idle" && lastDoneStatePerTab.has(tabId)) {
     const cached = lastDoneStatePerTab.get(tabId);
-    cancelPolling();
+    clearStuckLoadingTimer();
     captureStateForDebug(cached);
     renderResult(cached);
     return;
   }
 
-  cancelPolling();
+  if (incomingStatus !== "loading") {
+    clearStuckLoadingTimer();
+  }
+
   switch (incomingStatus) {
     case "done":
-      lastDoneStatePerTab.set(tabId, state);
+      cacheDoneState(tabId, state);
       captureStateForDebug(state);
       renderResult(state);
       break;
     case "loading":
       captureStateForDebug(state);
-      renderLoading(state.domain);
-      pollForResult(tabId);
+      renderLoading(state);
+      armStuckLoadingTimer(tabId);
       break;
     case "error":
       captureStateForDebug(state);
       renderError(state.error, state.domain);
+      break;
+    case "unsupported_language":
+      captureStateForDebug(state);
+      renderUnsupportedLanguage(state.domain);
       break;
     default:
       captureStateForDebug(state);
@@ -515,34 +598,21 @@ function dispatchState(tabId, state) {
   }
 }
 
-function cancelPolling() {
-  if (pollHandle !== null) {
-    clearTimeout(pollHandle);
-    pollHandle = null;
+function clearStuckLoadingTimer() {
+  if (stuckLoadingTimer !== null) {
+    clearTimeout(stuckLoadingTimer);
+    stuckLoadingTimer = null;
   }
 }
 
-function pollForResult(tabId, attempts = 0) {
-  if (attempts > 240 || tabId !== currentTabId) {
-    pollHandle = null;
-    return;
-  }
-  pollHandle = setTimeout(async () => {
+function armStuckLoadingTimer(tabId) {
+  clearStuckLoadingTimer();
+  stuckLoadingTimer = setTimeout(() => {
     if (tabId !== currentTabId) {
-      pollHandle = null;
       return;
     }
-    const state = await chrome.runtime.sendMessage({ type: "GET_STATE", tabId });
-    if (tabId !== currentTabId) {
-      pollHandle = null;
-      return;
-    }
-    if (state?.status === "done" || state?.status === "error") {
-      dispatchState(tabId, state);
-    } else {
-      pollForResult(tabId, attempts + 1);
-    }
-  }, 1000);
+    renderError(t("errorStuck", "Analysis is taking too long. Please reload the page."), null);
+  }, STUCK_LOADING_TIMEOUT_MS);
 }
 
 chrome.storage.session.onChanged.addListener((changes) => {

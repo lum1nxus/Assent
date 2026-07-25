@@ -6,62 +6,101 @@ import {
   SEVERITY_IDS,
 } from "../rubric/categories.js";
 import { resolveTitle } from "../rubric/labels.js";
-import {
-  quoteMatchesCategoryKeywords,
-  quoteContainsNegation,
-  quoteLooksSpliced,
-  creditQuoteIsInverted,
-} from "./category-guards.js";
+import { quoteLooksSpliced } from "./category-guards.js";
 
 const SERVICE_TYPES = ["fintech", "social_media", "content", "marketplace", "general_tech"];
 
+const MAX_ITEMS = 6;
+const MIN_QUOTE_LENGTH = 20;
+const MAX_QUOTE_LENGTH = 400;
+
+const ANALYZE_SCHEMA = {
+  type: "object",
+  required: ["serviceType", "flags", "credits"],
+  additionalProperties: false,
+  properties: {
+    serviceType: { type: "string", enum: [...SERVICE_TYPES] },
+    flags: {
+      type: "array",
+      maxItems: MAX_ITEMS,
+      items: {
+        type: "object",
+        required: ["category", "severity", "quote"],
+        additionalProperties: false,
+        properties: {
+          category: { type: "string", enum: [...FLAG_CATEGORY_IDS] },
+          severity: { type: "string", enum: [...SEVERITY_IDS] },
+          quote: {
+            type: "string",
+            minLength: MIN_QUOTE_LENGTH,
+            maxLength: MAX_QUOTE_LENGTH,
+          },
+        },
+      },
+    },
+    credits: {
+      type: "array",
+      maxItems: MAX_ITEMS,
+      items: {
+        type: "object",
+        required: ["category", "quote"],
+        additionalProperties: false,
+        properties: {
+          category: { type: "string", enum: [...CREDIT_CATEGORY_IDS] },
+          quote: {
+            type: "string",
+            minLength: MIN_QUOTE_LENGTH,
+            maxLength: MAX_QUOTE_LENGTH,
+          },
+        },
+      },
+    },
+  },
+};
+
 const FLAG_DESCRIPTIONS = {
-  mandatory_arbitration: "requires arbitration instead of court litigation",
-  class_action_waiver: "waives the right to participate in a class action or class arbitration",
+  mandatory_arbitration: "disputes must go through arbitration, not a public court",
+  class_action_waiver: "the reader cannot join a group lawsuit",
   broad_content_license_irrevocable:
-    "grants the service an irrevocable, perpetual, or worldwide license to user content",
+    "the reader gives the service very wide rights over content the reader submits",
   unilateral_terms_change_no_notice:
-    "allows the service to change the terms unilaterally without prior notice to the user",
+    "the service can change the deal on its own, without warning the reader first",
   data_resale_undisclosed_parties:
-    "permits selling or sharing personal data with unnamed third parties or 'partners'",
+    "the service can pass personal data to outside groups it does not name",
   broad_indemnity_from_user:
-    "requires the user to indemnify the service against broad categories of claims",
+    "the reader promises to pay the service's legal costs in broad situations",
   broad_limitation_of_liability:
-    "limits the service's liability to a token amount or excludes broad categories of damages",
+    "the service is not on the hook for most damage its actions might cause",
   broad_warranty_disclaimer:
-    "disclaims warranties broadly, including merchantability and fitness for purpose, in ALL-CAPS legal language",
+    "the service makes no promises the product will work correctly, usually in all-caps",
   broad_data_sharing_third_party:
-    "permits sharing personal data with broad classes of third parties (advertisers, affiliates)",
+    "personal data is shared with wide classes of outside groups such as advertisers",
   account_termination_no_notice:
-    "allows the service to terminate the account at any time, at sole discretion, with no notice",
+    "the service can shut down the reader's account whenever it chooses, without warning",
   content_removal_sole_discretion:
-    "allows content removal at the service's sole discretion without an appeal path",
+    "the service can take down the reader's content whenever it chooses, without appeal",
   auto_renewal_no_clear_optout:
-    "subscription automatically renews and the opt-out mechanism is not clearly stated",
+    "the subscription renews itself and the way to stop it is not made obvious",
   retention_period_undefined:
-    "retention period for personal data is unspecified, 'as long as necessary', or open-ended",
+    "there is no clear time limit for how long the service keeps personal data",
   governing_law_distant_venue:
-    "forces dispute resolution in a distant or inconvenient venue, far from the typical reader",
-  services_as_is:
-    "service is provided 'AS IS' or 'AS AVAILABLE' with no commitments to function correctly",
-  other_unfavourable_clause:
-    "use sparingly; only for clear unfavourable clauses that do not fit any category above",
+    "any legal fight must happen somewhere far from where the typical reader lives",
+  services_as_is: "the service is offered 'as is' with no promises about what it will do",
+  other_unfavourable_clause: "a clearly unfavourable clause that does not fit any of the ids above",
 };
 
 const CREDIT_DESCRIPTIONS = {
-  explicit_refund_window: "a clear refund window of N days is stated",
+  explicit_refund_window: "a specific number of days during which the reader can get a refund",
   easy_account_deletion:
-    "the user can self-delete the account from settings with no friction or waiting period",
+    "the reader can close the account from settings without contacting support",
   explicit_optin_data_sharing:
-    "explicit OPT-IN (not opt-out) is required before sharing personal data with third parties",
-  no_automatic_renewal: "the service explicitly states that subscriptions do NOT auto-renew",
-  transparent_retention_period:
-    "a specific data-retention period is stated with deletion at the end",
-  free_data_export: "the service offers free export of user data in a portable format",
+    "the reader must actively agree before personal data is shared with outside groups",
+  no_automatic_renewal: "the reader has to renew a subscription manually",
+  transparent_retention_period: "a specific time limit for keeping personal data is stated",
+  free_data_export: "the reader can download their own data at no cost",
   arbitration_optout_window:
-    "the user can opt out of arbitration within a stated window after signing up",
-  user_retains_content_ownership:
-    "the service explicitly states the user retains ownership of their content",
+    "the reader can escape arbitration by opting out within a stated window",
+  user_retains_content_ownership: "the reader keeps ownership of content the reader submits",
 };
 
 function buildCategoryCatalog() {
@@ -76,7 +115,19 @@ const { flagLines, creditLines } = buildCategoryCatalog();
 
 const BASE_SYSTEM_PROMPT = `You are an automated text-pattern analyser for consumer-facing legal documents.
 
-Read a passage of a Terms of Service, EULA, or similar document and identify clauses that match the closed taxonomy below. You output STRICT JSON only - no prose, no markdown fences.
+You will be given a passage of a Terms of Service, EULA, or similar document. Identify clauses in that passage that match the closed taxonomy below. Output STRICT JSON only - no prose, no markdown fences.
+
+CRITICAL anti-hallucination rule (read this twice):
+- Every "quote" you output MUST be a verbatim contiguous substring of the user's input passage, character for character, including punctuation and casing.
+- Before adding any entry, locate the exact substring in the input. If you cannot find one, OMIT that entry.
+- Do NOT paraphrase. Do NOT write generic legal template language. Do NOT echo phrasing from this system prompt or from anything that "sounds like a typical ToS". Quotes come ONLY from the user's input.
+- Returning fewer entries (or zero) is correct when the input contains no exact match. Returning fabricated entries is a failure.
+- Do NOT use ellipsis (...) or any omission marker inside a quote. Use one continuous substring.
+
+Quote-selection rules:
+- A quote must contain the SUBSTANTIVE obligation, not just a section heading or a "please read carefully" notice. If the passage has a heading like "Settling Disputes" or "Class Action Waiver", look for the actual rule underneath and quote THAT.
+- A quote must contain the OPERATIVE clause text, not a definition entry. "Losses means..." defines a term and is not by itself a limitation-of-liability clause.
+- Aim for quotes of roughly 12 to 60 words. Long enough to be unambiguous, short enough to be a single contiguous obligation.
 
 Output schema:
 {
@@ -97,112 +148,50 @@ ${creditLines}
 
 STRICT RULES:
 - Use ONLY the category ids listed above. If a clause does not fit any id, omit it. Do not invent new ids.
-- "quote" MUST be a verbatim substring of the input (preserve original case, punctuation, smart quotes). If you cannot find an exact substring, omit the entry.
 - For flags, "severity" is "high" for the strongest restrictions (mandatory_arbitration, class_action_waiver, broad_content_license_irrevocable, account_termination_no_notice); "full" for fully formed unfavourable clauses; "partial" for clauses with mitigating language, narrow scope, or short duration.
 - Procedural disclaimers that are required by law in most jurisdictions (force majeure, severability, third-party content disclaimers, governing law itself, jurisdiction notes like "some jurisdictions may not allow") are NOT flags unless they go beyond what is standard.
 - Open-source release of code, transparency statements, and "we do not track" promises are NOT flags.
-- Maximum 8 flags and 8 credits. Pick the most material entries.
-- DO NOT name companies, brands, products, people, regulations, laws, statutes, directives, countries, or compliance frameworks in any field.
-- Quotes are the only place where such names may appear (verbatim, since they are part of the document).
+- Maximum 6 flags and 6 credits. Pick the most material entries actually present in the input. Prefer fewer high-quality entries over many marginal ones.
+- Keep each "quote" between 20 and 50 words. Do not exceed 60 words in any single quote.
+- DO NOT name companies, brands, products, people, regulations, laws, statutes, directives, countries, or compliance frameworks anywhere except inside a quote (where they appear because the document mentions them verbatim).
 - Output ONLY valid JSON.
 
-DISAMBIGUATION GUIDE - common near-miss patterns. If a passage looks like the NOT-MATCH column, omit it; do not coerce it into the closest category.
+NEGATIVE DISAMBIGUATION RULES. These rules tell you when NOT to pick a category. They do not tell you what to write - they tell you what to avoid. Do NOT copy any wording from this section into a "quote".
 
-- mandatory_arbitration:
-  MATCH: "Any dispute shall be resolved by binding individual arbitration."
-  NOT MATCH: "You may, at your option, submit a dispute to arbitration." Optional or opt-in arbitration is not a flag.
-- class_action_waiver:
-  MATCH: "You waive any right to participate in a class action or class-wide arbitration."
-  NOT MATCH: "Disputes will be resolved between the parties." Without an explicit waiver of class proceedings, omit the flag.
-- broad_content_license_irrevocable:
-  MATCH: "you grant us a perpetual, irrevocable, worldwide, royalty-free licence to use, modify, and sublicense it" (a licence to USER-submitted content).
-  NOT MATCH: "We retain all intellectual property rights in our Services." This is the service's own IP, not a grant from the user.
-- broad_warranty_disclaimer:
-  MATCH: "THE SERVICE IS PROVIDED 'AS IS' WITHOUT WARRANTY OF ANY KIND."
-  NOT MATCH: "SOME JURISDICTIONS DO NOT ALLOW THE EXCLUSION OF IMPLIED WARRANTIES." This is a standard procedural disclaimer.
-- broad_indemnity_from_user:
-  MATCH: "You agree to indemnify, defend and hold us harmless from any claim."
-  NOT MATCH: "Our liability is limited to amounts paid in the prior twelve months." That is broad_limitation_of_liability, not indemnity.
-- broad_limitation_of_liability:
-  MATCH: "Our aggregate liability is limited to the fees paid in the prior twelve months."
-  NOT MATCH: "You agree to indemnify us." That is broad_indemnity_from_user.
-- data_resale_undisclosed_parties:
-  MATCH: "We may sell or share your information with third parties for marketing purposes."
-  NOT MATCH: "We share payment data with our payment processor to charge your card." A named purpose with a specific sub-processor is not data resale.
-- broad_data_sharing_third_party:
-  MATCH: "We may share your information with our advertising and analytics partners."
-  NOT MATCH: "We do not share your data with third parties unless you explicitly opt in." Opt-in language is a credit, not a flag.
-- account_termination_no_notice:
-  MATCH: "We may suspend or terminate your account at any time, at our sole discretion."
-  NOT MATCH: "You may close your account at any time from settings." That is a credit (easy_account_deletion), not a flag.
-- content_removal_sole_discretion:
-  MATCH: "We may remove any content at our sole discretion."
-  NOT MATCH: "You may delete your own posts at any time."
-- unilateral_terms_change_no_notice:
-  MATCH: "We may modify these Terms at any time without prior notice."
-  NOT MATCH: "We will notify you of material changes at least 30 days in advance." Advance notice mitigates the flag - omit.
-- auto_renewal_no_clear_optout:
-  MATCH: "Your subscription automatically renews until you cancel" without a clear cancellation path.
-  NOT MATCH: "We do not auto-renew subscriptions." That is a credit (no_automatic_renewal).
-- services_as_is:
-  MATCH: a short "Service is provided on an 'as is' basis" without a full ALL-CAPS warranty disclaimer.
-  NOT MATCH: If a full ALL-CAPS warranty disclaimer is present, prefer broad_warranty_disclaimer instead and omit services_as_is.
+Flags:
+- mandatory_arbitration: if the arbitration is described as optional, opt-in, or "you may", do NOT pick this.
+- class_action_waiver: if the clause is only procedural dispute-resolution language and never says the reader waives group proceedings, do NOT pick this.
+- broad_content_license_irrevocable: if the clause is about the service or its licensors OWNING the platform, catalogue or software (service-side IP), do NOT pick this. The clause must show the reader granting the licence.
+- broad_warranty_disclaimer: if the clause is only the boilerplate "some jurisdictions may not allow" line, do NOT pick this.
+- broad_indemnity_from_user: if the clause caps the SERVICE'S own liability instead of asking the reader to pay the service's costs, do NOT pick this - use broad_limitation_of_liability instead.
+- broad_limitation_of_liability: if the clause obliges the reader to pay the service's legal costs, do NOT pick this - use broad_indemnity_from_user.
+- data_resale_undisclosed_parties: if the third party is named and the purpose is stated, do NOT pick this.
+- broad_data_sharing_third_party: if the sharing requires prior opt-in by the reader, do NOT pick this - it is a credit.
+- account_termination_no_notice: if the sentence subject is the reader ("you may cancel"), do NOT pick this. It has to be the service acting.
+- content_removal_sole_discretion: if there is a stated appeal path or a stated notice window, do NOT pick this.
+- unilateral_terms_change_no_notice: if the clause requires advance notice or the reader's consent before changes, do NOT pick this.
+- auto_renewal_no_clear_optout: if the opt-out path is clearly stated (a settings page, a checkbox, a specific instruction), do NOT pick this.
+- retention_period_undefined: if a concrete numeric retention period is stated, do NOT pick this - it is a credit.
+- governing_law_distant_venue: if the clause is only a neutral choice-of-law statement that leaves consumer venue rights intact, do NOT pick this.
+- services_as_is: if the same passage also contains ALL-CAPS disclaimer of any warranty, warranty of merchantability, fitness, accuracy, non-infringement, or "we make no representation or warranty", do NOT pick services_as_is - use broad_warranty_disclaimer. Never tag the same passage as both.
+- other_unfavourable_clause: if the clause is clearly captured by one of the specific ids above, do NOT pick this.
 
-CREDIT DISAMBIGUATION - the SUBJECT of the clause must be the user, not the service. Read every credit twice and check who owns/retains/decides.
+Credits (the sentence subject must be the reader, not the service):
+- explicit_refund_window: if the clause is only a statutory withdrawal-period reminder with no service-offered refund, do NOT pick this.
+- easy_account_deletion: if the reader must contact support, wait a period, or write a letter, do NOT pick this.
+- explicit_optin_data_sharing: if consent is deemed by using the service rather than actively given, do NOT pick this.
+- no_automatic_renewal: if the clause simply describes how auto-renewal works, do NOT pick this.
+- transparent_retention_period: if the period is vague ("as long as necessary"), do NOT pick this.
+- free_data_export: if export requires payment, do NOT pick this.
+- arbitration_optout_window: if the clause describes the arbitration itself, not how to opt out, do NOT pick this.
+- user_retains_content_ownership: if the clause is about service-side ownership of the platform or software, do NOT pick this. It has to say the reader keeps their own content.
 
-- user_retains_content_ownership (credit):
-  MATCH: "You retain all rights to the content you submit." "User content remains your property."
-  NOT MATCH: "We are the sole owners of all rights to the Service or the content." This is service-side ownership; omit, do not flip into a credit.
-- easy_account_deletion (credit):
-  MATCH: "You may close your account at any time from settings."
-  NOT MATCH: "We may terminate or delete your account at any time." That is account_termination_no_notice, not a credit.
-- explicit_optin_data_sharing (credit):
-  MATCH: "We will share your data with third parties only with your explicit consent." (real opt-in)
-  NOT MATCH: "By using the Service you consent to our data processing." (deemed consent, not a credit)
-- no_automatic_renewal (credit):
-  MATCH: "Subscriptions do not auto-renew."
-  NOT MATCH: "Your subscription will automatically renew." That is the opposite; if anything it is auto_renewal_no_clear_optout, not a credit.
-
-EXAMPLE 1 - friendly Terms (privacy-focused service):
-Input excerpt:
-"We do not track you. You may delete your account at any time from settings. We do not auto-renew subscriptions. Our Services are provided on 'as is' basis. We retain billing data for 12 months and delete it thereafter."
-Output:
-{
-  "serviceType": "general_tech",
-  "flags": [
-    { "category": "services_as_is", "severity": "partial", "quote": "Our Services are provided on 'as is' basis" }
-  ],
-  "credits": [
-    { "category": "easy_account_deletion", "quote": "You may delete your account at any time from settings" },
-    { "category": "no_automatic_renewal", "quote": "We do not auto-renew subscriptions" },
-    { "category": "transparent_retention_period", "quote": "We retain billing data for 12 months and delete it thereafter" }
-  ]
-}
-
-EXAMPLE 2 - aggressive Terms (social platform):
-Input excerpt:
-"By posting content you grant us a perpetual, irrevocable, worldwide, royalty-free licence to use, modify, and sublicense it. Any dispute shall be resolved by binding individual arbitration. You waive any right to participate in a class action. We may modify these Terms at any time without prior notice."
-Output:
-{
-  "serviceType": "social_media",
-  "flags": [
-    { "category": "broad_content_license_irrevocable", "severity": "high", "quote": "you grant us a perpetual, irrevocable, worldwide, royalty-free licence to use, modify, and sublicense it" },
-    { "category": "mandatory_arbitration", "severity": "high", "quote": "Any dispute shall be resolved by binding individual arbitration" },
-    { "category": "class_action_waiver", "severity": "high", "quote": "You waive any right to participate in a class action" },
-    { "category": "unilateral_terms_change_no_notice", "severity": "full", "quote": "We may modify these Terms at any time without prior notice" }
-  ],
-  "credits": []
-}
-
-EXAMPLE 3 - near-miss (do not flag standard procedural language):
-Input excerpt:
-"We retain all intellectual property rights in our Services, but we make the source code available under open-source licenses. SOME JURISDICTIONS DO NOT ALLOW THE EXCLUSION OF IMPLIED WARRANTIES, SO THE ABOVE EXCLUSION MAY NOT APPLY TO YOU. We are not responsible for content created by third parties."
-Output:
-{
-  "serviceType": "general_tech",
-  "flags": [],
-  "credits": []
-}`;
+SELF-CHECK BEFORE YOU EMIT JSON.
+Step 1: for each entry you intend to emit, locate the quote verbatim in the user's input. If you cannot find it as one continuous substring, drop the entry.
+Step 2: for each entry, apply the NEGATIVE DISAMBIGUATION rules for that category. If any negative rule applies, drop the entry.
+Step 3: check that no quote is only a section heading, a definition entry, or a "please read carefully" notice. Drop the entry if it is.
+Step 4: check that no quote or reason mentions a company, brand, product, person, country, regulation or law that is not already visible in the input.
+Step 5: emit the JSON.`;
 
 const DOC_REGION_HINTS = {
   eu: "The document declares jurisdiction inside the EU/EEA.",
@@ -240,6 +229,8 @@ export async function analyze(input, ctx) {
   }
 
   const session = await self.LanguageModel.create({
+    temperature: 0,
+    topK: 1,
     initialPrompts: [
       {
         role: "system",
@@ -250,12 +241,14 @@ export async function analyze(input, ctx) {
 
   let raw;
   try {
-    raw = await session.prompt(input.textForAnalysis);
+    raw = await session.prompt(input.extractedText, {
+      responseConstraint: ANALYZE_SCHEMA,
+    });
   } finally {
     session.destroy?.();
   }
 
-  const parsed = parseAndValidate(raw, input.textForAnalysis ?? "");
+  const parsed = parseAndValidate(raw, input.extractedText ?? "");
   return {
     value: {
       ...input,
@@ -264,9 +257,11 @@ export async function analyze(input, ctx) {
       flags: parsed.flags,
       credits: parsed.credits,
       analyzedAt: new Date().toISOString(),
+      stageAStats: parsed._stageAStats,
       _debug: {
         rawAiResponse: raw,
-        documentText: input.textForAnalysis ?? "",
+        documentText: input.extractedText ?? "",
+        stageAStats: parsed._stageAStats,
       },
     },
   };
@@ -290,22 +285,7 @@ function quoteAppearsInDocument(quote, docNormalized) {
   if (probe.length < 12) {
     return false;
   }
-  if (docNormalized.includes(probe)) {
-    return true;
-  }
-  if (probe.length > 60) {
-    const tail = probe.slice(-60);
-    const head = probe.slice(0, 60);
-    if (docNormalized.includes(head) && docNormalized.includes(tail)) {
-      const headIdx = docNormalized.indexOf(head);
-      const tailIdx = docNormalized.lastIndexOf(tail);
-      if (tailIdx > headIdx && tailIdx - headIdx <= probe.length + 24) {
-        return true;
-      }
-    }
-    return false;
-  }
-  return false;
+  return docNormalized.includes(probe);
 }
 
 export function parseAndValidate(raw, docText) {
@@ -323,6 +303,27 @@ export function parseAndValidate(raw, docText) {
   const serviceType = SERVICE_TYPES.includes(obj.serviceType) ? obj.serviceType : "general_tech";
   const docNormalized = normalizeForQuoteCheck(docText);
 
+  const rawFlagCount = Array.isArray(obj.flags)
+    ? obj.flags.filter(
+        (f) =>
+          f &&
+          typeof f.quote === "string" &&
+          f.quote.length >= 12 &&
+          typeof f.category === "string" &&
+          CATEGORIES[f.category]?.kind === "flag",
+      ).length
+    : 0;
+  const rawCreditCount = Array.isArray(obj.credits)
+    ? obj.credits.filter(
+        (c) =>
+          c &&
+          typeof c.quote === "string" &&
+          c.quote.length >= 12 &&
+          typeof c.category === "string" &&
+          CATEGORIES[c.category]?.kind === "credit",
+      ).length
+    : 0;
+
   const seenFlagCats = new Set();
   const flags = Array.isArray(obj.flags)
     ? obj.flags
@@ -335,8 +336,6 @@ export function parseAndValidate(raw, docText) {
         .filter((f) => CATEGORIES[f.category]?.kind === "flag")
         .filter((f) => !quoteLooksSpliced(f.quote))
         .filter((f) => quoteAppearsInDocument(f.quote, docNormalized))
-        .filter((f) => quoteMatchesCategoryKeywords(f.quote, f.category, "flag"))
-        .filter((f) => !quoteContainsNegation(f.quote))
         .filter((f) => {
           if (seenFlagCats.has(f.category)) {
             return false;
@@ -351,7 +350,7 @@ export function parseAndValidate(raw, docText) {
           title: resolveTitle(f.category),
           quote: f.quote,
         }))
-        .slice(0, 8)
+        .slice(0, 6)
     : [];
 
   const seenCreditCats = new Set();
@@ -365,8 +364,6 @@ export function parseAndValidate(raw, docText) {
         .filter((c) => CATEGORIES[c.category]?.kind === "credit")
         .filter((c) => !quoteLooksSpliced(c.quote))
         .filter((c) => quoteAppearsInDocument(c.quote, docNormalized))
-        .filter((c) => quoteMatchesCategoryKeywords(c.quote, c.category, "credit"))
-        .filter((c) => !creditQuoteIsInverted(c.quote, c.category))
         .filter((c) => {
           if (seenCreditCats.has(c.category)) {
             return false;
@@ -380,8 +377,21 @@ export function parseAndValidate(raw, docText) {
           title: resolveTitle(c.category),
           quote: c.quote,
         }))
-        .slice(0, 8)
+        .slice(0, 6)
     : [];
 
-  return { serviceType, flags, credits };
+  const lowRecall = rawFlagCount >= 3 && flags.length === 0;
+
+  return {
+    serviceType,
+    flags,
+    credits,
+    _stageAStats: {
+      rawFlagCount,
+      rawCreditCount,
+      survivedFlagCount: flags.length,
+      survivedCreditCount: credits.length,
+      lowRecall,
+    },
+  };
 }

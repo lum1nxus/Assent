@@ -40,20 +40,6 @@ const EEA_TIMEZONES = new Set([
 ]);
 
 const NON_EU_EUROPEAN_TIMEZONES = new Set([
-  "Europe/Moscow",
-  "Europe/Kaliningrad",
-  "Europe/Samara",
-  "Europe/Volgograd",
-  "Europe/Saratov",
-  "Europe/Astrakhan",
-  "Europe/Ulyanovsk",
-  "Europe/Kirov",
-  "Europe/Simferopol",
-  "Europe/Minsk",
-  "Europe/Kyiv",
-  "Europe/Kiev",
-  "Europe/Uzhgorod",
-  "Europe/Zaporozhye",
   "Europe/London",
   "Europe/Jersey",
   "Europe/Guernsey",
@@ -67,7 +53,6 @@ const NON_EU_EUROPEAN_TIMEZONES = new Set([
   "Europe/Podgorica",
   "Europe/Pristina",
   "Europe/Chisinau",
-  "Europe/Tiraspol",
   "Europe/Istanbul",
   "Europe/Andorra",
   "Europe/Monaco",
@@ -109,42 +94,15 @@ const COUNTRY_TO_REGION = {
   NO: "eu",
   GB: "non-eu",
   CH: "non-eu",
-  RU: "non-eu",
-  BY: "non-eu",
-  UA: "non-eu",
-  TR: "non-eu",
-  RS: "non-eu",
-  BA: "non-eu",
-  MK: "non-eu",
-  AL: "non-eu",
-  ME: "non-eu",
-  MD: "non-eu",
-  XK: "non-eu",
   US: "non-eu",
   CA: "non-eu",
   AU: "non-eu",
   NZ: "non-eu",
   JP: "non-eu",
   SG: "non-eu",
-  AE: "non-eu",
-  IN: "non-eu",
-  BR: "non-eu",
-  CN: "non-eu",
-  HK: "non-eu",
 };
 
-const OVERRIDE_KEY = "user_region_override";
-
 export async function detectUserRegion() {
-  const override = await readOverride();
-  if (override?.country) {
-    return {
-      country: override.country,
-      region: COUNTRY_TO_REGION[override.country] ?? "unknown",
-      source: "user_override",
-    };
-  }
-
   const fromTz = detectFromTimezone();
   if (fromTz.region !== "unknown") {
     return { ...fromTz, source: "timezone" };
@@ -156,36 +114,6 @@ export async function detectUserRegion() {
   }
 
   return { country: null, region: "unknown", source: "none" };
-}
-
-export async function setUserRegionOverride(country) {
-  try {
-    const storage = chrome.storage?.sync ?? chrome.storage?.local;
-    if (!storage) {
-      return;
-    }
-    if (country === null) {
-      await storage.remove(OVERRIDE_KEY);
-      return;
-    }
-    if (typeof country !== "string" || !/^[A-Z]{2}$/.test(country)) {
-      return;
-    }
-    await storage.set({ [OVERRIDE_KEY]: { country } });
-  } catch {}
-}
-
-async function readOverride() {
-  try {
-    const storage = chrome.storage?.sync ?? chrome.storage?.local;
-    if (!storage) {
-      return null;
-    }
-    const stored = await storage.get(OVERRIDE_KEY);
-    return stored?.[OVERRIDE_KEY] ?? null;
-  } catch {
-    return null;
-  }
 }
 
 function detectFromTimezone() {

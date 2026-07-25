@@ -1,20 +1,37 @@
 const MIN_CONFIDENCE = 0.7;
+const SUPPORTED_LANGUAGE = "en";
 
 export async function detectLang(input, _ctx) {
-  const detectedLang = await detectLanguage(input.extractedText);
+  const source = input.tosText ?? "";
+  const detected = await detectLanguage(source);
+
+  if (detected && detected !== SUPPORTED_LANGUAGE) {
+    return {
+      value: {
+        ...input,
+        tosLanguage: detected,
+        unsupportedLanguage: true,
+      },
+      done: true,
+    };
+  }
+
   return {
-    value: { ...input, tosLanguage: detectedLang },
+    value: { ...input, tosLanguage: SUPPORTED_LANGUAGE },
   };
 }
 
 async function detectLanguage(text) {
+  if (typeof text !== "string" || text.length < 40) {
+    return SUPPORTED_LANGUAGE;
+  }
   try {
     if (!("LanguageDetector" in self)) {
-      return "en";
+      return SUPPORTED_LANGUAGE;
     }
     const availability = await self.LanguageDetector.availability();
     if (availability === "unavailable") {
-      return "en";
+      return SUPPORTED_LANGUAGE;
     }
 
     const detector = await self.LanguageDetector.create();
@@ -23,13 +40,15 @@ async function detectLanguage(text) {
 
     const top = results?.[0];
     if (!top) {
-      return "en";
+      return SUPPORTED_LANGUAGE;
     }
     if (top.confidence < MIN_CONFIDENCE) {
-      return "en";
+      return SUPPORTED_LANGUAGE;
     }
-    return top.detectedLanguage ?? "en";
+    return top.detectedLanguage ?? SUPPORTED_LANGUAGE;
   } catch {
-    return "en";
+    return SUPPORTED_LANGUAGE;
   }
 }
+
+export { MIN_CONFIDENCE, SUPPORTED_LANGUAGE };

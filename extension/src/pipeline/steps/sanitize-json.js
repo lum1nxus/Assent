@@ -72,6 +72,94 @@ export function parseLooseJson(raw) {
   try {
     return JSON.parse(trimmed);
   } catch {
-    return JSON.parse(sanitizeJson(trimmed));
+    try {
+      return JSON.parse(sanitizeJson(trimmed));
+    } catch {
+      return JSON.parse(repairTruncatedJson(sanitizeJson(trimmed)));
+    }
   }
+}
+
+export function repairTruncatedJson(raw) {
+  let inStr = false;
+  let escape = false;
+  const stack = [];
+  let lastCleanBoundary = 0;
+
+  for (let i = 0; i < raw.length; i += 1) {
+    const ch = raw[i];
+    if (escape) {
+      escape = false;
+      continue;
+    }
+    if (inStr) {
+      if (ch === "\\") {
+        escape = true;
+        continue;
+      }
+      if (ch === '"') {
+        inStr = false;
+      }
+      continue;
+    }
+    if (ch === '"') {
+      inStr = true;
+      continue;
+    }
+    if (ch === "{" || ch === "[") {
+      stack.push(ch);
+      lastCleanBoundary = i + 1;
+      continue;
+    }
+    if (ch === "}" || ch === "]") {
+      stack.pop();
+      lastCleanBoundary = i + 1;
+      continue;
+    }
+    if (ch === ",") {
+      lastCleanBoundary = i + 1;
+    }
+  }
+
+  if (!inStr && stack.length === 0) {
+    return raw;
+  }
+
+  let truncated = raw.slice(0, lastCleanBoundary).trimEnd();
+  truncated = truncated.replace(/,\s*$/, "");
+
+  const opened = [];
+  let s = false;
+  let e = false;
+  for (let i = 0; i < truncated.length; i += 1) {
+    const ch = truncated[i];
+    if (e) {
+      e = false;
+      continue;
+    }
+    if (s) {
+      if (ch === "\\") {
+        e = true;
+        continue;
+      }
+      if (ch === '"') {
+        s = false;
+      }
+      continue;
+    }
+    if (ch === '"') {
+      s = true;
+      continue;
+    }
+    if (ch === "{" || ch === "[") {
+      opened.push(ch);
+    } else if (ch === "}" || ch === "]") {
+      opened.pop();
+    }
+  }
+
+  for (let i = opened.length - 1; i >= 0; i -= 1) {
+    truncated += opened[i] === "{" ? "}" : "]";
+  }
+  return truncated;
 }

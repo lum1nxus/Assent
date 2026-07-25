@@ -1,5 +1,5 @@
 const TOS_URL_PATTERNS = [
-  /\/(terms|tos|terms-of-service|terms-of-use|terms-and-conditions|user-agreement|end-user-agreement|legal|eula|privacy|privacy-policy|datenschutz|nutzungsbedingungen|conditions-generales|condizioni-uso|regulamin|gebruiksvoorwaarden)(\/|$|\?)/i,
+  /\/(terms|tos|terms-of-service|terms-of-use|terms-and-conditions|user-agreement|end-user-agreement|legal|eula|privacy|privacy-policy)(\/|$|\?)/i,
 ];
 
 const TOS_HEADING_PATTERNS = [
@@ -11,10 +11,6 @@ const TOS_HEADING_PATTERNS = [
   /legal\s+(terms|notice|agreement)/i,
   /\btos\b/i,
   /\beula\b/i,
-  /allgemeine\s+geschäftsbedingungen/i,
-  /conditions\s+(générales|d'utilisation)/i,
-  /condizioni\s+d'?uso/i,
-  /regulamin/i,
 ];
 
 const TOS_LINK_PATTERNS = [
@@ -35,17 +31,17 @@ const CONSENT_PATTERNS = [
   /create\s*(an?\s*)?account/i,
   /register/i,
   /get\s*started/i,
-  /einverstanden/i,
-  /j'accepte/i,
-  /accetto/i,
-  /zgadzam\s*się/i,
-  /akkoord/i,
 ];
 
 const MIN_TOS_TEXT_LENGTH = 500;
+const SHORT_TOS_WORD_THRESHOLD = 1200;
+const INCOMPLETE_CONTENT_WORD_THRESHOLD = 1500;
+const ABSOLUTE_INCOMPLETE_WORD_THRESHOLD = 800;
+const EXPANSION_RETRY_MS = 1500;
 
 let reported = false;
 let highlightStyleInjected = false;
+let expansionAttempted = false;
 
 function isToSPage() {
   const path = location.pathname + location.search;
@@ -73,6 +69,114 @@ function extractPageText() {
     ariaHidden.removeAttribute("aria-hidden");
   }
   return (clone.textContent ?? "").replace(/\s+/g, " ").trim();
+}
+
+function countWords(text) {
+  if (!text) {
+    return 0;
+  }
+  return text.split(/\s+/).filter(Boolean).length;
+}
+
+function tryExpandHiddenSections() {
+  if (expansionAttempted) {
+    return false;
+  }
+  expansionAttempted = true;
+
+  let touched = 0;
+  for (const d of document.querySelectorAll("details:not([open])")) {
+    try {
+      d.open = true;
+      touched += 1;
+    } catch {
+      // ignore
+    }
+  }
+
+  const containers = document.querySelectorAll("main, article, [role='main']");
+  const scope = containers.length > 0 ? Array.from(containers) : [document.body];
+  for (const container of scope) {
+    const buttons = container.querySelectorAll(
+      'button[aria-expanded="false"], [role="button"][aria-expanded="false"]',
+    );
+    for (const btn of buttons) {
+      if (isProbableNavControl(btn)) {
+        continue;
+      }
+      const popup = btn.getAttribute("aria-haspopup");
+      if (popup && popup !== "false") {
+        continue;
+      }
+      try {
+        btn.click();
+        touched += 1;
+      } catch {
+        // ignore
+      }
+    }
+  }
+  return touched > 0;
+}
+
+function isProbableNavControl(el) {
+  if (!el) {
+    return false;
+  }
+  let node = el;
+  const maxHops = 8;
+  for (let i = 0; i < maxHops && node; i += 1) {
+    if (node.nodeType === Node.ELEMENT_NODE) {
+      const tag = node.tagName;
+      if (tag === "NAV" || tag === "HEADER" || tag === "FOOTER") {
+        return true;
+      }
+      const role = node.getAttribute?.("role");
+      if (role === "navigation" || role === "menu" || role === "menubar" || role === "banner") {
+        return true;
+      }
+    }
+    node = node.parentNode;
+  }
+  const label = (el.getAttribute?.("aria-label") ?? el.textContent ?? "").toLowerCase().trim();
+  if (
+    label.includes("menu") ||
+    label.includes("navigation") ||
+    label.includes("language") ||
+    label.includes("account") ||
+    label.includes("search") ||
+    label.includes("sign in")
+  ) {
+    return true;
+  }
+  return false;
+}
+
+function isContentLikelyIncomplete(words) {
+  if (words < ABSOLUTE_INCOMPLETE_WORD_THRESHOLD) {
+    return true;
+  }
+  if (expansionAttempted && words < INCOMPLETE_CONTENT_WORD_THRESHOLD) {
+    return true;
+  }
+  return false;
+}
+
+function sendTosDetected(text) {
+  if (reported) {
+    return;
+  }
+  reported = true;
+  const words = countWords(text);
+  chrome.runtime.sendMessage({
+    type: "TOS_DETECTED",
+    payload: {
+      tosUrl: location.href,
+      domain: location.hostname,
+      tosText: text,
+      contentMaybeIncomplete: isContentLikelyIncomplete(words),
+    },
+  });
 }
 
 function findTosLink() {
@@ -104,18 +208,30 @@ function detect() {
 
   if (isToSPage()) {
     const text = extractPageText();
-    if (text.length >= MIN_TOS_TEXT_LENGTH) {
-      reported = true;
-      chrome.runtime.sendMessage({
-        type: "TOS_DETECTED",
-        payload: {
-          tosUrl: location.href,
-          domain: location.hostname,
-          tosText: text,
-        },
-      });
+    const words = countWords(text);
+
+    if (text.length < MIN_TOS_TEXT_LENGTH) {
+      if (!expansionAttempted) {
+        tryExpandHiddenSections();
+        setTimeout(detect, EXPANSION_RETRY_MS);
+      }
       return;
     }
+
+    if (words < SHORT_TOS_WORD_THRESHOLD && !expansionAttempted) {
+      tryExpandHiddenSections();
+      setTimeout(() => {
+        if (reported) {
+          return;
+        }
+        const reExtracted = extractPageText();
+        sendTosDetected(reExtracted);
+      }, EXPANSION_RETRY_MS);
+      return;
+    }
+
+    sendTosDetected(text);
+    return;
   }
 
   const tosLink = findTosLink();
@@ -248,6 +364,7 @@ function highlightText(quote) {
     if (!range) {
       continue;
     }
+    revealAncestorSections(range.startContainer);
     applyRangeHighlight(range);
     scrollRangeIntoView(range);
     return true;
@@ -398,6 +515,33 @@ function scrollRangeIntoView(range) {
   } catch {}
 }
 
+function revealAncestorSections(startNode) {
+  let node = startNode;
+  const maxHops = 30;
+  for (let i = 0; i < maxHops && node; i += 1) {
+    if (node.nodeType === Node.ELEMENT_NODE) {
+      const el = node;
+      if (el.tagName === "DETAILS" && !el.open) {
+        try {
+          el.open = true;
+        } catch {}
+      }
+      if (
+        el.getAttribute?.("aria-expanded") === "false" &&
+        el.getAttribute?.("aria-haspopup") !== "true"
+      ) {
+        try {
+          el.click();
+        } catch {}
+      }
+      if (el.hasAttribute?.("hidden")) {
+        el.removeAttribute("hidden");
+      }
+    }
+    node = node.parentNode;
+  }
+}
+
 const OVERLAY_ID = "assent-floating-pill";
 
 function ensureOverlay() {
@@ -536,7 +680,10 @@ function hideOverlay() {
   document.getElementById(OVERLAY_ID)?.remove();
 }
 
-chrome.runtime.onMessage.addListener((msg) => {
+chrome.runtime.onMessage.addListener((msg, sender) => {
+  if (!isTrustedSender(sender)) {
+    return;
+  }
   if (msg?.type === "HIGHLIGHT_QUOTE" && typeof msg.quote === "string") {
     clearHighlights();
     highlightText(msg.quote);
@@ -550,6 +697,16 @@ chrome.runtime.onMessage.addListener((msg) => {
     }
   }
 });
+
+function isTrustedSender(sender) {
+  if (!sender) {
+    return false;
+  }
+  if (sender.id && sender.id !== chrome.runtime.id) {
+    return false;
+  }
+  return true;
+}
 
 function quickReject() {
   if (isToSPage()) {
@@ -565,11 +722,51 @@ function quickReject() {
 detect();
 
 if (!reported && !quickReject()) {
-  const observer = new MutationObserver(() => {
+  const scheduleDetect = debounceIdle(() => {
     if (!reported) {
       detect();
     }
-  });
+  }, 500);
+  const observer = new MutationObserver(scheduleDetect);
   observer.observe(document.body, { childList: true, subtree: true });
   setTimeout(() => observer.disconnect(), 8_000);
+}
+
+let lastLocationHref = location.href;
+setInterval(() => {
+  if (location.href === lastLocationHref) {
+    return;
+  }
+  lastLocationHref = location.href;
+  reported = false;
+  expansionAttempted = false;
+  setTimeout(() => {
+    if (!reported) {
+      detect();
+    }
+  }, 500);
+}, 1000);
+
+function debounceIdle(fn, minDelayMs) {
+  let scheduled = false;
+  let lastRun = 0;
+  const idleFn =
+    typeof requestIdleCallback === "function" ? requestIdleCallback : (cb) => setTimeout(cb, 200);
+  return () => {
+    if (scheduled) {
+      return;
+    }
+    const now = Date.now();
+    if (now - lastRun < minDelayMs) {
+      return;
+    }
+    scheduled = true;
+    idleFn(() => {
+      scheduled = false;
+      lastRun = Date.now();
+      try {
+        fn();
+      } catch {}
+    });
+  };
 }

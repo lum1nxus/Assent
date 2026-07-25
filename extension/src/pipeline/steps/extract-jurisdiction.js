@@ -71,7 +71,7 @@ const OPERATOR_PATTERNS = [
 ];
 
 export async function extractJurisdiction(input, _ctx) {
-  const haystack = `${input.textForAnalysis ?? ""}\n${input.extractedText ?? ""}`;
+  const haystack = input.extractedText ?? "";
 
   const governingLaw = matchFirst(haystack, GOVERNING_LAW_PATTERNS);
   const operatorEntity = matchFirst(haystack, OPERATOR_PATTERNS);

@@ -1,9 +1,17 @@
 {
   "name": "regression-account-termination-by-user",
-  "description": "AI mis-classifies a user-initiated account closure (a credit) as service-initiated termination (a flag).",
+  "description": "AI mis-classifies a user-initiated account closure as service-initiated termination. The verifier compares to reference examples and rejects.",
   "documentText": "You may close your account at any time from settings. We will retain anonymised analytics data for 24 months after closure.",
   "rawAiResponse": "{\"serviceType\":\"general_tech\",\"flags\":[{\"category\":\"account_termination_no_notice\",\"severity\":\"full\",\"quote\":\"You may close your account at any time from settings\"}],\"credits\":[]}",
+  "verifierVerdicts": {
+    "account_termination_no_notice": {
+      "You may close your account at any time from settings": {
+        "match": false,
+        "reason": "subject of the action is the user, not the service; this is user-initiated cancellation"
+      }
+    }
+  },
   "expectedFlags": [],
   "expectedCredits": [],
-  "expectedReason": "negation guard rejects 'You may close your account' classified as service-initiated termination"
+  "expectedReason": "Verifier rejects 'You may close your account' as account_termination_no_notice because the subject is the user, not the service."
 }

@@ -85,10 +85,30 @@ const RISK_KEYWORDS = [
   "disclose",
 ];
 
-const MAX_WORDS = 2500;
-const STRUCTURAL_SAMPLE_BUDGET = 600;
+const MAX_WORDS = 2000;
+const STRUCTURAL_SAMPLE_BUDGET = 500;
 const STRUCTURAL_BUCKETS = 4;
 const FALLBACK_CHAR_BUDGET = MAX_WORDS * 6;
+
+const ABBREVIATIONS = new Set([
+  "u.s.",
+  "e.g.",
+  "i.e.",
+  "mr.",
+  "mrs.",
+  "ms.",
+  "dr.",
+  "inc.",
+  "ltd.",
+  "co.",
+  "corp.",
+  "etc.",
+  "no.",
+  "vs.",
+  "st.",
+  "jr.",
+  "sr.",
+]);
 
 export async function extract(input, _ctx) {
   const raw = (input.tosText ?? "").trim();
@@ -96,10 +116,7 @@ export async function extract(input, _ctx) {
     throw new Error("no document text to analyse");
   }
 
-  const paragraphs = raw
-    .split(/\n{2,}|\.\s{2,}|(?<=\.)\s+(?=[A-Z])/g)
-    .map((p) => p.trim())
-    .filter((p) => p.length >= 40);
+  const paragraphs = splitParagraphs(raw);
 
   if (paragraphs.length === 0) {
     return {
@@ -121,7 +138,10 @@ export async function extract(input, _ctx) {
   const keptIdx = new Set();
   let words = 0;
 
-  const topScoredBudget = Math.max(MAX_WORDS - STRUCTURAL_SAMPLE_BUDGET, Math.floor(MAX_WORDS * 0.5));
+  const topScoredBudget = Math.max(
+    MAX_WORDS - STRUCTURAL_SAMPLE_BUDGET,
+    Math.floor(MAX_WORDS * 0.5),
+  );
   const byScore = [...scored].sort((a, b) => b.score - a.score);
   for (const p of byScore) {
     if (p.score === 0) {
@@ -133,11 +153,19 @@ export async function extract(input, _ctx) {
     keptIdx.add(p.idx);
     words += p.words;
   }
-
-  addStructuralSamples(scored, keptIdx, () => words, (w) => (words += w));
-
+  addStructuralSamples(
+    scored,
+    keptIdx,
+    () => words,
+    (w) => (words += w),
+  );
   if (words < Math.floor(MAX_WORDS * 0.3)) {
-    fillFromAnywhere(scored, keptIdx, () => words, (w) => (words += w));
+    fillFromAnywhere(
+      scored,
+      keptIdx,
+      () => words,
+      (w) => (words += w),
+    );
   }
 
   const ordered = [...keptIdx].sort((a, b) => a - b);
@@ -151,6 +179,51 @@ export async function extract(input, _ctx) {
       extractedWords: words || wordCount(raw),
     },
   };
+}
+
+function splitParagraphs(raw) {
+  const primary = raw.split(/\n{2,}/g);
+  const out = [];
+  for (const chunk of primary) {
+    const trimmedChunk = chunk.trim();
+    if (!trimmedChunk) {
+      continue;
+    }
+    const parts = splitOnSentenceBoundary(trimmedChunk);
+    for (const p of parts) {
+      const t = p.trim();
+      if (t.length >= 25) {
+        out.push(t);
+      }
+    }
+  }
+  return out;
+}
+
+function splitOnSentenceBoundary(text) {
+  const tokens = text.split(/(\s+)/);
+  const out = [];
+  let buf = "";
+  for (let i = 0; i < tokens.length; i += 1) {
+    const tok = tokens[i];
+    buf += tok;
+    if (!/\s/.test(tok)) {
+      const trimmed = tok.replace(/["')\]]+$/, "");
+      const endsSentence = /[.!?]$/.test(trimmed);
+      const isAbbrev = ABBREVIATIONS.has(trimmed.toLowerCase());
+      const tooShort = trimmed.replace(/[.!?]$/, "").length < 4;
+      const next = tokens[i + 2];
+      const nextStartsCap = next && /^[A-Z]/.test(next);
+      if (endsSentence && !isAbbrev && !tooShort && nextStartsCap) {
+        out.push(buf.trim());
+        buf = "";
+      }
+    }
+  }
+  if (buf.trim()) {
+    out.push(buf.trim());
+  }
+  return out;
 }
 
 function addStructuralSamples(scored, keptIdx, getWords, addWords) {

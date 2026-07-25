@@ -4,6 +4,8 @@ import { topThree } from "../../features/top-three.js";
 
 const KEY_PREFIX = "tab_";
 
+const POST_EXTRACT_INCOMPLETE_THRESHOLD = 800;
+
 const DISCLAIMER_TEXT =
   "Output produced by automated pattern detection running on the user's device. " +
   "Each flag references a verbatim excerpt from the document so the reader can verify it independently. " +
@@ -18,6 +20,11 @@ export async function persist(input, ctx) {
   const summary = buildSummary(flags);
   const highlights = topThree(flags);
 
+  const extractedWords = typeof input.extractedWords === "number" ? input.extractedWords : null;
+  const contentMaybeIncomplete =
+    Boolean(input.contentMaybeIncomplete) ||
+    (extractedWords !== null && extractedWords < POST_EXTRACT_INCOMPLETE_THRESHOLD);
+
   const result = {
     domain: input.domain,
     score,
@@ -29,6 +36,8 @@ export async function persist(input, ctx) {
     highlights,
     analyzedAt: input.analyzedAt,
     source: input.source,
+    stageAStats: input.stageAStats ?? null,
+    contentMaybeIncomplete,
     disclaimer: {
       not_legal_advice: true,
       not_affiliated: true,
@@ -38,9 +47,11 @@ export async function persist(input, ctx) {
     },
     _debug: {
       ...input._debug,
-      extractedWords: input.extractedWords ?? null,
+      extractedWords,
       tosLanguage: input.tosLanguage ?? null,
       jurisdictionContext: input.jurisdictionContext ?? null,
+      contentMaybeIncomplete,
+      contentMaybeIncompleteFromContent: Boolean(input.contentMaybeIncomplete),
     },
   };
 

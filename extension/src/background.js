@@ -3,23 +3,27 @@ import { buildContext } from "./pipeline/context.js";
 import {
   extract,
   detectLang,
-  translateIn,
   extractJurisdiction,
   analyze,
-  translateOut,
+  verify,
   persist,
 } from "./pipeline/steps/index.js";
 import { incrementAnalysisCount } from "./features/donation.js";
+import { sanitizeUrl } from "./shared/url-safety.js";
+
+const MAX_TOS_BYTES = 1_500_000;
+const MAX_REDIRECTS = 3;
+const ALLOWED_CONTENT_TYPES = ["text/html", "text/plain", "application/xhtml+xml"];
 
 const TAB_KEY = (tabId) => `tab_${tabId}`;
+const inFlight = new Set();
 
 const PIPELINE = [
-  { name: "extract", fn: extract },
   { name: "detect-lang", fn: detectLang },
-  { name: "translate-in", fn: translateIn },
+  { name: "extract", fn: extract },
   { name: "extract-jurisdiction", fn: extractJurisdiction },
   { name: "analyze", fn: analyze },
-  { name: "translate-out", fn: translateOut },
+  { name: "verify", fn: verify },
   { name: "persist", fn: persist },
 ];
 
@@ -88,6 +92,12 @@ function isValidTosPayload(payload) {
   if (payload.domain !== undefined && typeof payload.domain !== "string") {
     return false;
   }
+  if (
+    payload.contentMaybeIncomplete !== undefined &&
+    typeof payload.contentMaybeIncomplete !== "boolean"
+  ) {
+    return false;
+  }
   return true;
 }
 
@@ -111,16 +121,22 @@ async function handleTosDetected(tabId, payload) {
   if (typeof tabId !== "number") {
     return;
   }
+  if (inFlight.has(tabId)) {
+    return;
+  }
+  inFlight.add(tabId);
 
   const existing = await chrome.storage.session.get(TAB_KEY(tabId));
   const status = existing[TAB_KEY(tabId)]?.status;
   if (status === "done" || status === "loading") {
+    inFlight.delete(tabId);
     return;
   }
 
   const domain = normalizeDomain(payload.domain ?? "");
   const tosUrl = sanitizeUrl(payload.tosUrl);
   if (!tosUrl) {
+    inFlight.delete(tabId);
     return;
   }
 
@@ -137,8 +153,30 @@ async function handleTosDetected(tabId, payload) {
         ? payload.tosText
         : await fetchTosText(tosUrl);
 
-    const ctx = await buildContext({ tabId });
-    const result = await run(PIPELINE, { tosUrl, domain, tosText }, ctx);
+    const onProgress = (stage) => {
+      chrome.storage.session
+        .set({ [TAB_KEY(tabId)]: { status: "loading", domain, stage } })
+        .catch(() => {});
+    };
+    const ctx = await buildContext({ tabId, onProgress });
+    const result = await run(
+      PIPELINE,
+      { tosUrl, domain, tosText, contentMaybeIncomplete: !!payload.contentMaybeIncomplete },
+      ctx,
+    );
+
+    if (result?.unsupportedLanguage) {
+      await chrome.storage.session.set({
+        [TAB_KEY(tabId)]: {
+          status: "unsupported_language",
+          domain,
+          tosLanguage: result.tosLanguage ?? null,
+        },
+      });
+      updateBadge(tabId, "unsupported");
+      sendOverlay(tabId, { kind: "unsupported" });
+      return;
+    }
 
     updateBadge(tabId, "done", result.score);
     sendOverlay(tabId, { kind: "done", grade: result.grade ?? "F", score: result.score });
@@ -156,6 +194,7 @@ async function handleTosDetected(tabId, payload) {
     sendOverlay(tabId, { kind: "error" });
   } finally {
     stopKeepAlive(keepAlive);
+    inFlight.delete(tabId);
   }
 }
 
@@ -188,44 +227,78 @@ function normalizeDomain(raw) {
   }
 }
 
-function sanitizeUrl(rawUrl) {
-  try {
-    const url = new URL(rawUrl);
-    if (url.protocol !== "https:" && url.protocol !== "http:") {
-      return null;
+async function fetchTosText(url) {
+  let current = url;
+  for (let hop = 0; hop <= MAX_REDIRECTS; hop += 1) {
+    const safe = sanitizeUrl(current);
+    if (!safe) {
+      throw new Error("Refusing to fetch: URL failed sanitisation");
+    }
+    const res = await fetch(safe, {
+      headers: { Accept: "text/html, text/plain" },
+      credentials: "omit",
+      referrerPolicy: "no-referrer",
+      redirect: "manual",
+      cache: "no-store",
+    });
+
+    if (res.status >= 300 && res.status < 400) {
+      const next = res.headers.get("Location");
+      if (!next) {
+        throw new Error(`Redirect without Location header (HTTP ${res.status})`);
+      }
+      current = new URL(next, safe).toString();
+      continue;
     }
 
-    const host = url.hostname.toLowerCase();
-    if (
-      host === "localhost" ||
-      host.endsWith(".localhost") ||
-      /^127\./.test(host) ||
-      /^10\./.test(host) ||
-      /^192\.168\./.test(host) ||
-      /^169\.254\./.test(host) ||
-      /^172\.(1[6-9]|2[0-9]|3[01])\./.test(host) ||
-      host === "::1" ||
-      host === "[::1]"
-    ) {
-      return null;
+    if (!res.ok) {
+      throw new Error(`Failed to fetch document: HTTP ${res.status}`);
     }
-    return url.toString();
-  } catch {
-    return null;
+
+    const contentType = (res.headers.get("Content-Type") ?? "").split(";")[0].trim().toLowerCase();
+    if (contentType && !ALLOWED_CONTENT_TYPES.includes(contentType)) {
+      throw new Error(`Refusing to fetch: unsupported content type "${contentType}"`);
+    }
+
+    const declared = Number(res.headers.get("Content-Length"));
+    if (Number.isFinite(declared) && declared > MAX_TOS_BYTES) {
+      throw new Error(`Refusing to fetch: content length ${declared} exceeds cap`);
+    }
+
+    const html = await readWithByteCap(res, MAX_TOS_BYTES);
+    return stripHtml(html);
   }
+  throw new Error("Too many redirects while fetching document");
 }
 
-async function fetchTosText(url) {
-  const res = await fetch(url, {
-    headers: { Accept: "text/html" },
-    credentials: "omit",
-    redirect: "follow",
-  });
-  if (!res.ok) {
-    throw new Error(`Failed to fetch document: HTTP ${res.status}`);
+async function readWithByteCap(res, cap) {
+  if (!res.body || typeof res.body.getReader !== "function") {
+    const text = await res.text();
+    if (text.length > cap * 4) {
+      throw new Error(`Document exceeds cap of ${cap} bytes`);
+    }
+    return text;
   }
-  const html = await res.text();
-  return stripHtml(html);
+  const reader = res.body.getReader();
+  const decoder = new TextDecoder();
+  let total = 0;
+  let out = "";
+  while (true) {
+    const { value, done } = await reader.read();
+    if (done) {
+      break;
+    }
+    total += value.byteLength;
+    if (total > cap) {
+      try {
+        await reader.cancel();
+      } catch {}
+      throw new Error(`Document exceeds cap of ${cap} bytes`);
+    }
+    out += decoder.decode(value, { stream: true });
+  }
+  out += decoder.decode();
+  return out;
 }
 
 function stripHtml(html) {
@@ -245,6 +318,7 @@ function updateBadge(tabId, status, score) {
     idle: { text: "", color: "#71717a" },
     loading: { text: "...", color: "#f59e0b" },
     error: { text: "!", color: "#ef4444" },
+    unsupported: { text: "EN", color: "#71717a" },
     done: {
       text: safe !== null ? String(Math.round(safe)) : "?",
       color:

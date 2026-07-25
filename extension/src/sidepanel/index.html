@@ -77,10 +77,16 @@
 
       .state-idle,
       .state-loading,
-      .state-error {
+      .state-error,
+      .state-unsupported {
         padding: 36px 22px;
         text-align: center;
         color: var(--text-muted);
+      }
+      .state-loading .loading-stage {
+        margin-top: 8px;
+        font-size: 12px;
+        opacity: 0.75;
       }
       .state-loading .spinner {
         width: 24px;
@@ -96,7 +102,8 @@
           transform: rotate(360deg);
         }
       }
-      .state-error .error-label {
+      .state-error .error-label,
+      .state-unsupported .unsupported-label {
         color: var(--red);
         font-weight: 600;
         margin-bottom: 6px;
@@ -317,6 +324,22 @@
       .flag.open .flag-body {
         max-height: 320px;
         padding: 0 12px 12px;
+      }
+      .flag-verifier-note {
+        font-size: 11px;
+        color: var(--text-muted);
+        margin-bottom: 8px;
+        line-height: 1.4;
+      }
+      .confidence-notice {
+        margin: 8px 0 12px;
+        padding: 10px 12px;
+        border-radius: 8px;
+        background: rgba(245, 158, 11, 0.12);
+        border: 1px solid rgba(245, 158, 11, 0.45);
+        color: #fbbf24;
+        font-size: 12px;
+        line-height: 1.5;
       }
       .flag-quote-label {
         font-size: 10px;
@@ -570,7 +593,9 @@
           <div class="debug-title">Debug bundle</div>
           <div class="debug-meta" id="debug-meta">-</div>
         </div>
-        <button class="btn-debug-action btn-debug-close" id="debug-close" type="button">Close</button>
+        <button class="btn-debug-action btn-debug-close" id="debug-close" type="button">
+          Close
+        </button>
       </div>
       <div class="debug-body">
         <textarea class="debug-textarea" id="debug-textarea" readonly spellcheck="false"></textarea>
