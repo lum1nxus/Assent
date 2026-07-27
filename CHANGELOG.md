@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- **Optional "Allow on every page" convenience permission.** `activeTab` is dropped on
+  every navigation, so by default the toolbar icon must be clicked on each new page
+  before the side-panel **Scan** button can reach it. The panel now offers a one-time
+  opt-in to the optional `*://*/*` host permission; once granted, **Scan this page** works
+  on any page without re-clicking the icon. It is off by default and, even when granted,
+  the page is still only read on an explicit Scan press. The "could not access this page"
+  error now surfaces this opt-in directly as the fix.
+
 ### Changed
 
 - **On-demand, privacy-first scanning.** The extension no longer injects a content
@@ -42,6 +52,43 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   requests are routed through the background worker, which (re)injects the extractor
   as needed.
 - **New tests** for capability detection, model download, and input-budget trimming.
+- **Localised, live scan-progress narration.** The side-panel loading state now shows a
+  single evolving stage line ("Reading the document" → "Classifying clauses" →
+  "Verifying findings" → "Finalising") driven by the pipeline, instead of a static
+  spinner alongside a duplicate "Scanning document…" line. Stage labels moved from a
+  hard-coded map into `_locales`. The "this can take a moment the first time"
+  reassurance now shows only until the first scan completes on the device (tracked in
+  `chrome.storage.local`), instead of on every scan.
+
+### Fixed
+
+- **Stale in-page pill.** The floating "grade + Open details" pill left in a page's DOM
+  by a previous extension build could show an outdated badge (e.g. a malformed grade).
+  The content script is now build-stamped: `ensureInjected` re-injects when the live
+  script is from a different version, old pills are removed on injection, and the badge
+  grade is clamped to a valid A–F letter so its text always matches its colour.
+
+### Fixed (UI/UX polish pass)
+
+- **Unified severity colours.** "Top points", flag dots, and severity pills now share
+  one semantic mapping (major = red, minor = orange) via CSS design tokens; previously
+  "partial" was yellow in the top list but orange on the dots/pills.
+- **Score colour vs wording alignment.** The score ring/number colour bands now match
+  the risk-label thresholds, so a "Moderate risk" score is no longer tinted green.
+- **Design-token pass.** Introduced a reusable severity/type/spacing token set in the
+  side-panel stylesheet and applied it across the score header, sections, flags, and
+  top-points list.
+- **Cleaner score header.** Removed the pseudo-`ⓘ` glyph hack and gave the grade / risk
+  label / sublabel / summary consistent vertical rhythm.
+- **Removed the "Why this was flagged" label**; the verifier reason now reads on its own.
+- **Friendlier severity wording.** Pills show "Major"/"Minor" instead of the raw
+  `high`/`full`/`partial` enum.
+- **Reduced repetition.** "Top points to know" is now shown only when there are more than
+  three flags (where it acts as a priority digest); otherwise it was identical to the
+  full "Flagged clauses" list.
+- **Longer flag bodies no longer clip.** Raised the collapsed-panel `max-height` cap so
+  long verifier notes plus quotes are no longer cut off.
+- **Consistent copy casing.** Footer attribution is now fully sentence-cased.
 
 ## [0.4.0]
 

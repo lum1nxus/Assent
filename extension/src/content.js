@@ -483,6 +483,25 @@ function revealAncestorSections(startNode) {
 }
 
 const OVERLAY_ID = "assent-floating-pill";
+const VALID_GRADES = ["A", "B", "C", "D", "F"];
+const BUILD_VERSION = (() => {
+  try {
+    return chrome.runtime.getManifest().version;
+  } catch {
+    return "0";
+  }
+})();
+
+// Remove any pill left in the DOM by a previous extension version or an orphaned
+// content script (e.g. after reloading the extension). Its element survives even
+// when its script context dies, which can show a stale badge from old code.
+function removeStaleOverlays() {
+  document.querySelectorAll(`#${OVERLAY_ID}`).forEach((el) => {
+    if (el.dataset.v !== BUILD_VERSION) {
+      el.remove();
+    }
+  });
+}
 
 function ensureOverlay() {
   const existing = document.getElementById(OVERLAY_ID);
@@ -491,6 +510,7 @@ function ensureOverlay() {
   }
   const host = document.createElement("div");
   host.id = OVERLAY_ID;
+  host.dataset.v = BUILD_VERSION;
   const shadow = host.attachShadow({ mode: "open" });
   shadow.innerHTML = `
     <style>
@@ -590,8 +610,9 @@ function showOverlay(state) {
     root.onclick = null;
   } else if (state.kind === "done") {
     root.className = "pill";
+    const grade = VALID_GRADES.includes(state.grade) ? state.grade : "F";
     root.innerHTML = `
-      <div class="grade grade-${escapeHtml(state.grade)}">${escapeHtml(state.grade)}</div>
+      <div class="grade grade-${grade}">${grade}</div>
       <span>${escapeHtml(tx("overlayDone", "Open details"))}</span>
       <button class="close" id="assent-close" aria-label="Dismiss">×</button>
     `;
@@ -625,7 +646,7 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
     return false;
   }
   if (msg?.type === "PING") {
-    sendResponse?.({ ok: true });
+    sendResponse?.({ ok: true, v: BUILD_VERSION });
     return true;
   }
   if (msg?.type === "EXTRACT_TOS") {
@@ -660,3 +681,5 @@ function isTrustedSender(sender) {
   }
   return true;
 }
+
+removeStaleOverlays();

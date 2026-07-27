@@ -262,7 +262,9 @@ npm run zip        # builds assent-<version>.zip ready for the Chrome Web Store
 
 Assent does not phone home. It does not collect or transmit any analytics, telemetry, identifiers, or document content. Results are stored only in `chrome.storage.session` (the analysed tab) and `chrome.storage.local` (donation state only). Both are local to the user's browser profile.
 
-The extension holds **no host permissions** and installs **no automatic content scripts**. It reads a page only after you explicitly press **Scan this page**, and only via `activeTab` — the transient, per-invocation permission Chrome grants for the current tab. The URL-based icon accent uses `declarativeContent`, which matches URLs inside Chrome without exposing your browsing history to the extension.
+The extension holds **no host permissions by default** and installs **no automatic content scripts**. It reads a page only after you explicitly press **Scan this page**, and by default only via `activeTab` — the transient, per-invocation permission Chrome grants for the current tab. The URL-based icon accent uses `declarativeContent`, which matches URLs inside Chrome without exposing your browsing history to the extension.
+
+Because `activeTab` is dropped on every navigation, the default flow requires clicking the toolbar icon on each new page. For convenience you can opt in to an **optional** all-sites host permission (`*://*/*`) from the side panel ("Allow on every page"). It is **off until you explicitly grant it**, and even when granted the extension still only reads a page when you press **Scan** — nothing runs in the background.
 
 The service worker's `fetch` for a linked ToS URL sends `referrer-policy: no-referrer`, disables the cache, resolves each redirect manually, caps the response at 1.5 MB, and refuses any content type other than `text/html`, `text/plain`, and `application/xhtml+xml`. The URL sanitiser rejects `file://`, `javascript:`, `data:`, RFC 1918 / CGNAT / loopback / link-local addresses in every notation (decimal, hex, octal, dotted, IPv4-mapped IPv6, cloud-metadata hostnames).
 

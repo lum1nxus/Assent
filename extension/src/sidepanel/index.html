@@ -27,6 +27,27 @@
         --yellow: #fbbf24;
         --green: #4ade80;
         --radius: 8px;
+
+        /* Semantic severity scale — one mapping reused for top points, dots and pills. */
+        --sev-major: var(--red);
+        --sev-minor: var(--orange);
+        --sev-major-bg: #450a0a;
+        --sev-minor-bg: #431407;
+
+        /* Type scale. */
+        --fs-2xs: 10px;
+        --fs-xs: 11px;
+        --fs-sm: 12px;
+        --fs-md: 13px;
+        --fs-lg: 14px;
+        --fs-xl: 18px;
+
+        /* Spacing scale. */
+        --space-1: 4px;
+        --space-2: 8px;
+        --space-3: 12px;
+        --space-4: 16px;
+        --space-5: 20px;
       }
 
       html,
@@ -83,10 +104,21 @@
         text-align: center;
         color: var(--text-muted);
       }
+      .allsites-hint {
+        margin: var(--space-4) auto 0;
+        max-width: 300px;
+        font-size: var(--fs-xs);
+        color: var(--text-dim);
+        line-height: 1.5;
+      }
       .state-loading .loading-stage {
-        margin-top: 8px;
-        font-size: 12px;
-        opacity: 0.75;
+        font-size: var(--fs-md);
+        color: var(--text);
+      }
+      .state-loading .loading-hint {
+        margin-top: var(--space-2);
+        font-size: var(--fs-sm);
+        color: var(--text-dim);
       }
       .state-loading .spinner {
         width: 24px;
@@ -152,11 +184,14 @@
       .score-meta {
         flex: 1;
         min-width: 0;
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-2);
       }
       .grade-row {
         display: flex;
         align-items: center;
-        gap: 8px;
+        gap: var(--space-2);
       }
       .grade-badge {
         display: inline-flex;
@@ -190,36 +225,18 @@
         color: var(--red);
       }
       .score-label {
-        font-size: 14px;
+        font-size: var(--fs-lg);
         font-weight: 600;
       }
       .score-sublabel {
-        font-size: 12px;
-        color: var(--text-muted);
-        margin-top: 4px;
+        font-size: var(--fs-sm);
+        color: var(--text-dim);
         font-weight: 500;
         letter-spacing: 0.01em;
       }
-      .score-sublabel::before {
-        content: "i";
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        width: 13px;
-        height: 13px;
-        border-radius: 50%;
-        background: var(--bg-card);
-        color: var(--text-muted);
-        font-size: 10px;
-        font-weight: 700;
-        font-style: italic;
-        margin-right: 6px;
-        vertical-align: -1px;
-      }
       .score-summary {
-        font-size: 12px;
+        font-size: var(--fs-sm);
         color: var(--text-muted);
-        margin-top: 8px;
       }
 
       .section {
@@ -227,7 +244,7 @@
         border-bottom: 1px solid var(--border);
       }
       .section-title {
-        font-size: 11px;
+        font-size: var(--fs-xs);
         text-transform: uppercase;
         letter-spacing: 0.08em;
         color: var(--text-dim);
@@ -237,21 +254,18 @@
 
       .top3 li {
         list-style: none;
-        padding: 8px 10px;
+        padding: var(--space-2) 10px;
         margin-bottom: 6px;
         background: var(--bg-card);
-        border-left: 3px solid var(--orange);
+        border-left: 3px solid var(--sev-minor);
         border-radius: 4px;
-        font-size: 12px;
+        font-size: var(--fs-sm);
       }
       .top3 li.high {
-        border-left-color: var(--red);
-      }
-      .top3 li.full {
-        border-left-color: var(--orange);
+        border-left-color: var(--sev-major);
       }
       .top3 li.partial {
-        border-left-color: var(--yellow);
+        border-left-color: var(--sev-minor);
       }
 
       .flag {
@@ -277,34 +291,32 @@
         border-radius: 50%;
         flex-shrink: 0;
       }
-      .flag-dot.high,
-      .flag-dot.full {
-        background: var(--red);
+      .flag-dot.high {
+        background: var(--sev-major);
       }
       .flag-dot.partial {
-        background: var(--orange);
+        background: var(--sev-minor);
       }
       .flag-title-text {
         flex: 1;
         font-weight: 500;
-        font-size: 12px;
+        font-size: var(--fs-sm);
       }
       .flag-severity-pill {
-        font-size: 10px;
+        font-size: var(--fs-2xs);
         padding: 2px 6px;
         border-radius: 10px;
         text-transform: uppercase;
         letter-spacing: 0.04em;
         font-weight: 600;
       }
-      .flag-severity-pill.high,
-      .flag-severity-pill.full {
-        background: #450a0a;
-        color: var(--red);
+      .flag-severity-pill.high {
+        background: var(--sev-major-bg);
+        color: var(--sev-major);
       }
       .flag-severity-pill.partial {
-        background: #431407;
-        color: var(--orange);
+        background: var(--sev-minor-bg);
+        color: var(--sev-minor);
       }
       .flag-chevron {
         color: var(--text-dim);
@@ -322,11 +334,11 @@
         padding: 0 12px;
       }
       .flag.open .flag-body {
-        max-height: 320px;
+        max-height: 1600px;
         padding: 0 12px 12px;
       }
       .flag-verifier-note {
-        font-size: 11px;
+        font-size: var(--fs-xs);
         color: var(--text-muted);
         margin-bottom: 8px;
         line-height: 1.4;

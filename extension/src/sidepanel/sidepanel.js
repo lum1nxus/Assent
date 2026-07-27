@@ -23,12 +23,11 @@ headerTitle.textContent = t("extName", "Assent");
 renderPersistentFooter();
 wireDebugDialog();
 
+// Colour bands are aligned to the same thresholds as scoreLabel() so the ring
+// colour never contradicts the risk wording (e.g. a green tint labelled "Moderate").
 function scoreColor(score) {
   if (score <= 8) {
     return "var(--green)";
-  }
-  if (score <= 22) {
-    return "#d9f99d";
   }
   if (score <= 44) {
     return "var(--yellow)";
@@ -73,6 +72,10 @@ function severityClass(sev) {
   return sev === "high" || sev === "full" ? "high" : "partial";
 }
 
+function severityLabel(sev) {
+  return sev === "high" || sev === "full" ? t("sevMajor", "Major") : t("sevMinor", "Minor");
+}
+
 function renderHighlights(items = []) {
   if (items.length === 0) {
     return "";
@@ -98,15 +101,11 @@ function renderFlag(flag, idx) {
       <div class="flag-header" data-flag="${id}">
         <div class="flag-dot ${sevClass}"></div>
         <span class="flag-title-text">${esc(flag.title)}</span>
-        <span class="flag-severity-pill ${sevClass}">${esc(flag.severity)}</span>
+        <span class="flag-severity-pill ${sevClass}">${esc(severityLabel(flag.severity))}</span>
         <span class="flag-chevron">▾</span>
       </div>
       <div class="flag-body">
-        ${
-          reason
-            ? `<div class="flag-verifier-note">${esc(t("labelWhyFlagged", "Why this was flagged"))}: ${esc(reason)}</div>`
-            : ""
-        }
+        ${reason ? `<div class="flag-verifier-note">${esc(reason)}</div>` : ""}
         ${
           hasQuote
             ? `<div class="flag-quote">
@@ -179,6 +178,7 @@ function renderConfidenceNotice(result) {
 }
 
 function renderResult(state) {
+  markFirstScanDone();
   const result = state.result;
   domainLabel.textContent = result.domain ?? "-";
 
@@ -197,7 +197,12 @@ function renderResult(state) {
 
     ${renderConfidenceNotice(result)}
 
-    ${renderHighlights(result.highlights)}
+    ${
+      // "Top points" is the 3 highest-severity flags. When there are 3 or fewer
+      // flags it is identical to the full "Flagged clauses" list below, so only
+      // show it as a priority digest when it actually narrows a longer list.
+      (result.flags?.length ?? 0) > 3 ? renderHighlights(result.highlights) : ""
+    }
 
     ${
       result.flags?.length > 0
@@ -444,14 +449,17 @@ function openDebugDialog() {
 
 function renderLoading(state) {
   const domain = state?.domain ?? "-";
-  const stage = state?.stage;
-  const stageLabel = stage && PIPELINE_STAGE_LABELS[stage] ? PIPELINE_STAGE_LABELS[stage] : null;
   domainLabel.textContent = domain;
+  const stageLabel = stageLabelFor(state?.stage);
   app.innerHTML = `
     <div class="state-loading">
       <div class="spinner"></div>
-      <div>${esc(t("stateLoading", "Scanning document…"))}</div>
-      ${stageLabel ? `<div class="loading-stage">${esc(stageLabel)}</div>` : ""}
+      <div class="loading-stage">${esc(stageLabel)}</div>
+      ${
+        firstScanCompleted
+          ? ""
+          : `<div class="loading-hint">${esc(t("stateLoadingHint", "This can take a moment the first time."))}</div>`
+      }
     </div>`;
 }
 
@@ -463,11 +471,62 @@ function renderIdle() {
       <div style="margin-top:16px">
         <button class="btn-primary" id="scan-btn">${esc(t("btnScan", "Scan this page"))}</button>
       </div>
+      <div id="allsites-slot"></div>
     </div>`;
   const scanBtn = document.getElementById("scan-btn");
   scanBtn?.addEventListener("click", () => {
     startScan(scanBtn);
   });
+  maybeRenderAllSitesAffordance();
+}
+
+const ALL_SITES = { origins: ["*://*/*"] };
+
+function hasAllSitesPermission() {
+  try {
+    return chrome.permissions.contains(ALL_SITES);
+  } catch {
+    return Promise.resolve(false);
+  }
+}
+
+// The convenience opt-in that removes the per-page toolbar click. activeTab is
+// only granted when the user invokes the action icon and is dropped on every
+// navigation, so with the default permissions the in-panel Scan button cannot
+// reach a freshly navigated page. Granting "*://*/*" lets chrome.scripting inject
+// on any page the user chooses to scan — still only on an explicit Scan press.
+async function requestAllSites() {
+  let granted = false;
+  try {
+    granted = await chrome.permissions.request(ALL_SITES);
+  } catch {
+    granted = false;
+  }
+  if (granted) {
+    startScan();
+  }
+}
+
+async function maybeRenderAllSitesAffordance() {
+  const slot = document.getElementById("allsites-slot");
+  if (!slot) {
+    return;
+  }
+  let granted = false;
+  try {
+    granted = await hasAllSitesPermission();
+  } catch {
+    granted = false;
+  }
+  if (granted) {
+    return;
+  }
+  slot.innerHTML = `
+    <div class="allsites-hint">${esc(t("allowAllSitesHint", ""))}</div>
+    <div style="margin-top:10px">
+      <button class="btn-secondary" id="allow-allsites">${esc(t("btnAllowAllSites", "Allow on every page"))}</button>
+    </div>`;
+  document.getElementById("allow-allsites")?.addEventListener("click", requestAllSites);
 }
 
 async function startScan(scanBtn) {
@@ -510,13 +569,25 @@ function domainFromUrl(url) {
   }
 }
 
-function renderError(message, domain) {
+function renderError(message, domain, code) {
   domainLabel.textContent = domain ?? "-";
+  const showAllow = code === "no_access";
   app.innerHTML = `
     <div class="state-error">
       <div class="error-label">${esc(t("stateError", "Analysis unavailable"))}</div>
       <div>${esc(message || t("errorNoDeviceAI", ""))}</div>
+      ${
+        showAllow
+          ? `<div style="margin-top:16px">
+               <button class="btn-primary" id="allow-allsites-err">${esc(t("btnAllowAllSites", "Allow on every page"))}</button>
+             </div>
+             <div class="allsites-hint" style="margin-top:10px">${esc(t("allowAllSitesHint", ""))}</div>`
+          : ""
+      }
     </div>`;
+  if (showAllow) {
+    document.getElementById("allow-allsites-err")?.addEventListener("click", requestAllSites);
+  }
 }
 
 function renderUnsupportedLanguage(domain) {
@@ -543,6 +614,25 @@ function escAttr(s) {
 let currentTabId = null;
 let currentTabUrl = null;
 let stuckLoadingTimer = null;
+
+// The "first time" reassurance should only appear until the very first scan has
+// completed on this device — otherwise it shows on every scan and misleads.
+const FIRST_SCAN_KEY = "first_scan_done";
+let firstScanCompleted = false;
+chrome.storage.local
+  .get(FIRST_SCAN_KEY)
+  .then((r) => {
+    firstScanCompleted = r?.[FIRST_SCAN_KEY] === true;
+  })
+  .catch(() => {});
+
+function markFirstScanDone() {
+  if (firstScanCompleted) {
+    return;
+  }
+  firstScanCompleted = true;
+  chrome.storage.local.set({ [FIRST_SCAN_KEY]: true }).catch(() => {});
+}
 const lastDoneStatePerTab = new Map();
 const MAX_CACHED_TABS = 32;
 const STUCK_LOADING_TIMEOUT_MS = 5 * 60 * 1000;
@@ -559,14 +649,21 @@ function cacheDoneState(tabId, state) {
   lastDoneStatePerTab.set(tabId, state);
 }
 
-const PIPELINE_STAGE_LABELS = {
-  "detect-lang": "Detecting language",
-  extract: "Reading document",
-  "extract-jurisdiction": "Reading jurisdiction",
-  analyze: "Classifying clauses",
-  verify: "Verifying findings",
-  persist: "Finalising",
+const PIPELINE_STAGE_KEYS = {
+  "detect-lang": "stageDetectLang",
+  extract: "stageExtract",
+  "extract-jurisdiction": "stageExtractJurisdiction",
+  analyze: "stageAnalyze",
+  verify: "stageVerify",
+  persist: "stagePersist",
 };
+
+// Resolve a live pipeline stage name to a friendly, localised label. Falls back
+// to a neutral "Preparing…" before the first stage arrives.
+function stageLabelFor(stage) {
+  const key = stage ? PIPELINE_STAGE_KEYS[stage] : null;
+  return key ? t(key, stage) : t("stageStarting", "Preparing…");
+}
 
 function materialUrlEquals(a, b) {
   if (!a || !b) {
@@ -628,7 +725,7 @@ function dispatchState(tabId, state) {
       break;
     case "error":
       captureStateForDebug(state);
-      renderError(state.error, state.domain);
+      renderError(state.error, state.domain, state.code);
       break;
     case "unsupported_language":
       captureStateForDebug(state);
@@ -653,7 +750,11 @@ function armStuckLoadingTimer(tabId) {
     if (tabId !== currentTabId) {
       return;
     }
-    renderError(t("errorStuck", "Analysis is taking too long. Please reload the page."), null);
+    renderError(
+      t("errorStuck", "Analysis is taking too long. Please reload the page."),
+      null,
+      null,
+    );
   }, STUCK_LOADING_TIMEOUT_MS);
 }
 
