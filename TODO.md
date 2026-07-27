@@ -72,6 +72,60 @@ Notes / direction:
   deterministic filter proves insufficient, since it adds latency and a model call.
 - Make sure an accidental scan is cheap and reassuring, never alarming.
 
+## UI/UX polish pass
+
+A dedicated pass over the side panel (`extension/src/sidepanel/index.html` CSS +
+`sidepanel.js` rendering). Goal: one consistent visual language, less redundancy.
+No behavioural changes.
+
+### Reported
+
+1. **Copy casing.** `footerAttribution` = "Open source · independent · not affiliated
+   with any third party" — "Open source" is capitalised while the rest is lower-case.
+   Make it consistent ("open source · independent · …") and audit all UI strings for
+   sentence-case consistency.
+2. **Loading redundancy.** `renderLoading` shows the generic "Scanning document…"
+   *and* the live stage ("Classifying clauses"). Drop the generic line and show a
+   single evolving status. (Ties into the "Scan progress narration" item above.)
+3. **Score header looks cramped.** The grade badge / risk label / sublabel / summary
+   in `.score-meta` lack vertical rhythm — align and space them. The `ⓘ` glyph is a
+   CSS `::before { content: "i" }` hack on `.score-sublabel` (index.html ~L203) —
+   drop it or make it a real icon with a tooltip.
+4. **Drop the "Why this was flagged" label.** The literal `labelWhyFlagged` prefix
+   printed above each clause (`renderFlag` → `.flag-verifier-note`) looks clumsy.
+   Remove the label text; either show the verifier reason on its own (phrased so it
+   reads naturally without a prefix) or drop the line entirely. Reassess whether the
+   reason adds value next to the verbatim quote at all.
+5. **Colour mismatch** between "Top points to know" and "Flagged clauses":
+   - `.top3` border-left: high=red, **full=orange**, partial=yellow.
+   - `.flag-dot`: high/**full=red**, partial=orange.
+   So "full" is orange in one place and red in the other; "partial" is yellow vs
+   orange. Unify the severity→colour mapping across `.top3`, `.flag-dot`, and
+   `.flag-severity-pill`.
+
+### Additional findings
+
+- **Fragmented colour system.** Two unrelated scales coexist: the 5-band score
+  ring/label (green → #d9f99d → yellow → orange → red) and the 3-value severity
+  (high/full/partial) with inconsistent colours. Define one semantic token set and
+  reuse it everywhere.
+- **Severity naming.** "full" / "partial" aren't user-friendly and collapse into only
+  two colours; reconsider the severity vocabulary and its visual encoding.
+- **Triple repetition of the same clauses.** `score-summary` ("Document contains: X
+  and Y"), then "Top points to know", then "Flagged clauses" all list the same titles
+  when there are ≤3 flags. Hide/merge "Top points" when it duplicates the flags list;
+  make the summary add information rather than repeat it.
+- **`.flag-body { max-height: 320px }`** clips long verifier-note + quote combos
+  (overflow hidden) — content can be cut off. Use a real expand or a larger cap.
+- **Loading stage labels are hard-coded English** (`PIPELINE_STAGE_LABELS` in
+  `sidepanel.js`) — move to `_locales` for i18n consistency.
+- **Ad-hoc type scale** (10/11/12/13/14/18px scattered) — define a small, reused scale.
+- **Score colour vs wording dissonance** — a score of 11 uses a light-green tint while
+  the label says "Moderate risk"; align the colour semantics with the risk wording.
+
+Deliverable: a small design-token pass (colours, spacing, type) + targeted markup
+tweaks.
+
 ## Other ideas
 
 - (add future items here)
