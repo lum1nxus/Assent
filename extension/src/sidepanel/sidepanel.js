@@ -6,6 +6,7 @@ import {
   PAYPAL_LINK,
   PAYPAL_LINK_CHOOSE_AMOUNT,
 } from "../features/donation.js";
+import { CAP, checkCapability } from "../features/capability.js";
 
 const app = document.getElementById("app");
 const domainLabel = document.getElementById("domain-label");
@@ -226,19 +227,13 @@ function renderResult(state) {
   });
 
   app.querySelectorAll(".btn-show").forEach((btn) => {
-    btn.addEventListener("click", async (e) => {
+    btn.addEventListener("click", (e) => {
       e.stopPropagation();
       const quote = btn.getAttribute("data-quote");
       if (!quote) {
         return;
       }
-      const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
-      if (!tab?.id) {
-        return;
-      }
-      try {
-        await chrome.tabs.sendMessage(tab.id, { type: "HIGHLIGHT_QUOTE", quote });
-      } catch {}
+      chrome.runtime.sendMessage({ type: "HIGHLIGHT_IN_TAB", quote });
     });
   });
 
@@ -464,8 +459,55 @@ function renderIdle() {
   domainLabel.textContent = "-";
   app.innerHTML = `
     <div class="state-idle">
-      ${esc(t("stateIdle", "No document detected on this page."))}
+      ${esc(t("stateIdle", "No analysis yet on this page."))}
+      <div style="margin-top:16px">
+        <button class="btn-primary" id="scan-btn">${esc(t("btnScan", "Scan this page"))}</button>
+      </div>
     </div>`;
+  const scanBtn = document.getElementById("scan-btn");
+  scanBtn?.addEventListener("click", () => {
+    startScan(scanBtn);
+  });
+}
+
+async function startScan(scanBtn) {
+  if (scanBtn) {
+    scanBtn.disabled = true;
+  }
+  let cap = null;
+  try {
+    cap = await checkCapability();
+  } catch {
+    cap = null;
+  }
+  if (!cap || cap.state !== CAP.READY) {
+    renderSetupNeeded();
+    return;
+  }
+  renderLoading({ domain: domainFromUrl(currentTabUrl) });
+  chrome.runtime.sendMessage({ type: "SCAN_ACTIVE_TAB" });
+}
+
+function renderSetupNeeded() {
+  domainLabel.textContent = "-";
+  app.innerHTML = `
+    <div class="state-idle">
+      ${esc(t("sidepanelSetupNeeded", "Assent needs a quick one-time setup before it can analyse pages."))}
+      <div style="margin-top:16px">
+        <button class="btn-primary" id="setup-btn">${esc(t("btnOpenSetup", "Open setup"))}</button>
+      </div>
+    </div>`;
+  document.getElementById("setup-btn")?.addEventListener("click", () => {
+    chrome.tabs.create({ url: chrome.runtime.getURL("onboarding.html") });
+  });
+}
+
+function domainFromUrl(url) {
+  try {
+    return new URL(url).hostname.replace(/^www\./, "");
+  } catch {
+    return "-";
+  }
 }
 
 function renderError(message, domain) {

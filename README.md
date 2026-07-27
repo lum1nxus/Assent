@@ -14,13 +14,17 @@ Most people click "I Agree" without reading thirty pages of legalese. The provis
 
 ## How it works
 
+Assent never scans pages in the background. Analysis is **explicitly triggered by you**:
+
 ```
-content.js          detects an agreement document on the current page, or
-                    one linked from a consent context (sign-up, registration),
-                    and posts TOS_DETECTED to the background.
-   │
+click the Assent toolbar icon    opens the side panel; activeTab is granted
+   │                             for the current tab only
    ▼
-background.js       runs the pipeline:
+side panel · "Scan this page"    verifies Gemini Nano is ready; if not, it
+   │                             routes you to the one-time setup page
+   ▼
+background.js                    injects the extractor into the active tab on
+   │                             demand, reads the text, and runs the pipeline:
    │
    ├─ detect-lang           Chrome LanguageDetector; if the document is not English
    │                        the pipeline halts with unsupportedLanguage
@@ -30,18 +34,32 @@ background.js       runs the pipeline:
    ├─ extract-jurisdiction  regex finds governing law and operator entity,
    │                        classified as eu / non-eu / unknown
    ├─ analyze               Chrome Prompt API (Gemini Nano) classifies clauses into a
-   │                        closed taxonomy and returns verbatim quotes; high recall by design
+   │                        closed taxonomy and returns verbatim quotes; the document is
+   │                        trimmed to fit the model's measured input budget
    ├─ verify                second Prompt-API pass per category, compared against
    │                        curated match / not-match reference examples; rejects misclassifications
    └─ persist               chrome.storage.session, keyed by tab id
    │
    ▼
-the side panel and the in-page floating pill render the result;
-clicking a flag in the side panel highlights the verbatim quote in the
-original page.
+the side panel (and the in-page floating pill) render the result; clicking a
+flag highlights the verbatim quote in the original page.
 ```
 
+A subtle accent appears on the toolbar icon for URLs that look like terms/privacy pages (via `declarativeContent`), as a hint that a page is worth scanning. This needs no access to your browsing history.
+
 The first call to the on-device model downloads a small Chrome model bundle; every subsequent call is offline.
+
+## First-time setup
+
+On install, Assent opens a dedicated onboarding page that detects your device's capability and shows one of:
+
+- **Ready** — Gemini Nano is present; you can scan immediately.
+- **One-time setup** — the model can be downloaded (~2 GB); a single click starts it, with live progress. It runs fully offline afterwards.
+- **Downloading** — a download is already in progress.
+- **Device not supported yet** — hardware/disk/OS requirements are not met, with a checklist and an advanced flag to force-enable on a capable device.
+- **Chrome too old** — desktop Chrome 148+ is required.
+
+The side panel mirrors this: if the model is not ready, **Scan this page** is replaced by **Open setup**.
 
 ## Requirements
 
@@ -58,7 +76,7 @@ If the model is unavailable on the current device, the extension reports an "ana
 The MVP focuses on English-language documents and a single audit-hardened pipeline. Items on the roadmap that are deliberately not shipped in the MVP:
 
 - Multilingual analysis. Non-English detection is kept as a first-class pipeline signal (`unsupportedLanguage`) so support can be added later by re-introducing translate-in / translate-out steps and expanding `_locales/`.
-- Region-aware phrasing. The user-region helper (`extension/src/features/user-region.js`) still detects reader region from timezone and locale, but the analyze prompt currently only uses it as neutral context. A future release may adjust tone based on this signal.
+- Region-aware phrasing. The analyze prompt currently receives only neutral jurisdiction context. A future release may detect the reader's region and adjust tone based on that signal.
 - Regulator-aware badges. The extension deliberately never names a regulation or law; a post-MVP feature could offer an optional user-controlled overlay that surfaces general information about applicable consumer-rights frameworks.
 
 ## Install (development)
@@ -66,8 +84,8 @@ The MVP focuses on English-language documents and a single audit-hardened pipeli
 1. Clone this repository.
 2. Open `chrome://extensions/` and enable Developer Mode.
 3. Choose **Load unpacked** and select the `extension/` folder (not the repository root).
-4. Click the Assent toolbar icon to open the side panel.
-5. Visit any agreement document; the side panel and the floating pill on the page will populate when analysis completes.
+4. On first install a setup page opens and checks whether the on-device model is ready, downloading it if needed.
+5. Click the Assent toolbar icon to open the side panel, open any agreement document, and press **Scan this page**.
 
 For a step-by-step local test guide, including how to provision the on-device model bundle, see [TESTING.md](TESTING.md).
 
@@ -77,7 +95,7 @@ For a step-by-step local test guide, including how to provision the on-device mo
 flowchart TB
     subgraph PAGE["Web page (untrusted DOM)"]
         DOM["document.body"]
-        CS["content.js<br/>- detects agreement-like pages<br/>- in-page floating pill (shadow DOM)<br/>- CSS Custom Highlight API"]
+        CS["content.js (injected on demand)<br/>- extracts page text on request<br/>- in-page floating pill (shadow DOM)<br/>- CSS Custom Highlight API"]
     end
 
     subgraph SW["Service worker (background.js)"]
@@ -117,8 +135,10 @@ flowchart TB
         UI["sidepanel.js<br/>grade + summary + flags + top-three<br/>+ verifier reason + debug export"]
     end
 
+    SP -- SCAN_ACTIVE_TAB --> MSG
+    MSG -- inject + EXTRACT_TOS --> CS
     DOM --> CS
-    CS -- TOS_DETECTED --> MSG
+    CS -- page text --> MSG
     MSG --> ORCH
     ORCH --> DL --> EX --> JU --> AN --> VE --> PE
     VE --> RU --> PE
@@ -136,27 +156,31 @@ flowchart TB
     ORCH --> BADGE
 
     SES -- read + subscribe --> UI
-    UI -- HIGHLIGHT_QUOTE --> CS
+    UI -- HIGHLIGHT_IN_TAB --> MSG
+    MSG -- HIGHLIGHT_QUOTE --> CS
     UI <--> LOC
 ```
 
-| Path                                    | Purpose                                                                                            |
-| --------------------------------------- | -------------------------------------------------------------------------------------------------- |
-| `extension/manifest.json`               | Manifest V3 with i18n placeholders, service worker, content script, side panel                     |
-| `extension/_locales/en/messages.json`   | UI string catalogue (English only for MVP)                                                         |
-| `extension/icons/`                      | Toolbar and store icons (16/32/48/128 px PNG)                                                      |
-| `extension/src/background.js`           | Service worker; pipeline orchestrator, badge, overlay, keep-alive, fetch guard                     |
-| `extension/src/content.js`              | DOM detection, in-page floating pill (shadow DOM), click-to-highlight                              |
-| `extension/src/pipeline/index.js`       | Generic chain-of-responsibility runner                                                             |
-| `extension/src/pipeline/context.js`     | Builds the per-run context (user region, progress callback)                                        |
-| `extension/src/pipeline/steps/`         | The six pipeline steps (detect-lang → extract → extract-jurisdiction → analyze → verify → persist) |
-| `extension/src/pipeline/rubric/`        | Closed taxonomy, deterministic scoring, reference examples, sensitive-token strip                  |
-| `extension/src/features/top-three.js`   | Selects the most material flags for the summary header                                             |
-| `extension/src/features/donation.js`    | Local-only donation prompt timing and PayPal link                                                  |
-| `extension/src/features/user-region.js` | Passive detection of the reader's region from timezone and locale                                  |
-| `extension/src/shared/url-safety.js`    | SSRF-resistant URL sanitiser used by background fetch                                              |
-| `extension/src/sidepanel/`              | Side panel HTML/CSS/JS                                                                             |
-| `tests/`                                | Node `--test` unit tests for the rubric, url safety, verifier, and repair paths                    |
+| Path                                          | Purpose                                                                                            |
+| --------------------------------------------- | -------------------------------------------------------------------------------------------------- |
+| `extension/manifest.json`                     | Manifest V3; service worker, side panel, activeTab + on-demand injection, `minimum_chrome_version` |
+| `extension/_locales/en/messages.json`         | UI string catalogue (English only for MVP)                                                         |
+| `extension/icons/`                            | Toolbar and store icons (16/32/48/128 px PNG)                                                      |
+| `extension/src/background.js`                 | Service worker; pipeline orchestrator, badge, overlay, keep-alive, fetch guard                     |
+| `extension/src/content.js`                    | On-demand text extraction, in-page floating pill (shadow DOM), click-to-highlight                  |
+| `extension/src/pipeline/index.js`             | Generic chain-of-responsibility runner                                                             |
+| `extension/src/pipeline/context.js`           | Builds the per-run context (user region, progress callback)                                        |
+| `extension/src/pipeline/steps/`               | The six pipeline steps (detect-lang → extract → extract-jurisdiction → analyze → verify → persist) |
+| `extension/src/pipeline/rubric/`              | Closed taxonomy, deterministic scoring, reference examples, sensitive-token strip                  |
+| `extension/src/features/top-three.js`         | Selects the most material flags for the summary header                                             |
+| `extension/src/features/donation.js`          | Local-only donation prompt timing and PayPal link                                                  |
+| `extension/src/features/capability.js`        | On-device model capability detection shared by onboarding, side panel, and the scan gate           |
+| `extension/src/features/model-download.js`    | One-time Gemini Nano download with live progress, used by the onboarding page                      |
+| `extension/src/features/nudge.js`             | Best-effort toolbar-icon accent for terms/privacy URLs via `declarativeContent`                    |
+| `extension/onboarding.html` · `onboarding.js` | First-run setup page with the capability state machine                                             |
+| `extension/src/shared/url-safety.js`          | SSRF-resistant URL sanitiser used by background fetch                                              |
+| `extension/src/sidepanel/`                    | Side panel HTML/CSS/JS                                                                             |
+| `tests/`                                      | Node `--test` unit tests for the rubric, url safety, verifier, and repair paths                    |
 
 Every pipeline step is a pure async function `(input, ctx) => { value, done? }`. Steps may short-circuit, throw (the orchestrator wraps the error with the step name), or pass through. Adding a new step does not require modifying existing ones.
 
@@ -237,6 +261,8 @@ npm run zip        # builds assent-<version>.zip ready for the Chrome Web Store
 ## Privacy
 
 Assent does not phone home. It does not collect or transmit any analytics, telemetry, identifiers, or document content. Results are stored only in `chrome.storage.session` (the analysed tab) and `chrome.storage.local` (donation state only). Both are local to the user's browser profile.
+
+The extension holds **no host permissions** and installs **no automatic content scripts**. It reads a page only after you explicitly press **Scan this page**, and only via `activeTab` — the transient, per-invocation permission Chrome grants for the current tab. The URL-based icon accent uses `declarativeContent`, which matches URLs inside Chrome without exposing your browsing history to the extension.
 
 The service worker's `fetch` for a linked ToS URL sends `referrer-policy: no-referrer`, disables the cache, resolves each redirect manually, caps the response at 1.5 MB, and refuses any content type other than `text/html`, `text/plain`, and `application/xhtml+xml`. The URL sanitiser rejects `file://`, `javascript:`, `data:`, RFC 1918 / CGNAT / loopback / link-local addresses in every notation (decimal, hex, octal, dotted, IPv4-mapped IPv6, cloud-metadata hostnames).
 
