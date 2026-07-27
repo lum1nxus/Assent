@@ -1,0 +1,264 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>__MSG_onbTitle__</title>
+    <style>
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      :root {
+        --bg: #0f0f11;
+        --bg-card: #18181b;
+        --bg-card-hover: #1f1f23;
+        --border: #2a2a2e;
+        --text: #e4e4e7;
+        --text-muted: #a1a1aa;
+        --text-dim: #71717a;
+        --accent: #a78bfa;
+        --red: #f87171;
+        --green: #4ade80;
+        --yellow: #fbbf24;
+        --radius: 10px;
+      }
+      html,
+      body {
+        min-height: 100vh;
+        background: var(--bg);
+        color: var(--text);
+        font-family: system-ui, sans-serif;
+        font-size: 15px;
+        line-height: 1.6;
+      }
+      body {
+        display: flex;
+        justify-content: center;
+        padding: 48px 20px;
+      }
+      .wrap {
+        width: 100%;
+        max-width: 560px;
+      }
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 6px;
+      }
+      .brand h1 {
+        font-size: 22px;
+        font-weight: 800;
+        letter-spacing: 0.01em;
+      }
+      .privacy-note {
+        font-size: 12px;
+        color: var(--green);
+        margin-bottom: 24px;
+        font-weight: 500;
+      }
+      .intro {
+        color: var(--text-muted);
+        font-size: 14px;
+        margin-bottom: 28px;
+      }
+      .card {
+        background: var(--bg-card);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        padding: 24px;
+      }
+      .card-title {
+        font-size: 17px;
+        font-weight: 700;
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .card-title .badge {
+        width: 26px;
+        height: 26px;
+        border-radius: 50%;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 15px;
+        flex-shrink: 0;
+      }
+      .badge.ok {
+        background: #14532d;
+        color: var(--green);
+      }
+      .badge.warn {
+        background: #7c2d12;
+        color: var(--yellow);
+      }
+      .badge.err {
+        background: #7f1d1d;
+        color: var(--red);
+      }
+      .card-body {
+        color: var(--text-muted);
+        font-size: 14px;
+      }
+      ul.reqs {
+        list-style: none;
+        margin: 14px 0 0;
+      }
+      ul.reqs li {
+        padding: 8px 0 8px 24px;
+        position: relative;
+        font-size: 13px;
+        color: var(--text-muted);
+        border-top: 1px solid var(--border);
+      }
+      ul.reqs li::before {
+        content: "•";
+        position: absolute;
+        left: 6px;
+        color: var(--accent);
+      }
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        margin-top: 20px;
+        padding: 11px 18px;
+        border-radius: 8px;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        border: 1px solid transparent;
+        font-family: inherit;
+      }
+      .btn-primary {
+        background: var(--accent);
+        color: #1a1625;
+      }
+      .btn-primary:hover {
+        filter: brightness(1.1);
+      }
+      .btn-primary:disabled {
+        opacity: 0.6;
+        cursor: default;
+        filter: none;
+      }
+      .btn-secondary {
+        background: var(--bg-card-hover);
+        color: var(--text);
+        border-color: var(--border);
+      }
+      .btn-secondary:hover {
+        border-color: var(--text-dim);
+      }
+      .progress {
+        margin-top: 18px;
+        height: 8px;
+        background: var(--bg);
+        border: 1px solid var(--border);
+        border-radius: 999px;
+        overflow: hidden;
+      }
+      .progress-fill {
+        height: 100%;
+        width: 0%;
+        background: var(--accent);
+        transition: width 0.3s ease;
+      }
+      .progress-fill.indeterminate {
+        width: 40%;
+        animation: slide 1.2s ease-in-out infinite;
+      }
+      @keyframes slide {
+        0% {
+          margin-left: -40%;
+        }
+        100% {
+          margin-left: 100%;
+        }
+      }
+      .progress-label {
+        margin-top: 8px;
+        font-size: 12px;
+        color: var(--text-dim);
+      }
+      .flag-box {
+        margin-top: 18px;
+        padding-top: 18px;
+        border-top: 1px solid var(--border);
+      }
+      .flag-box .flag-title {
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--text);
+        margin-bottom: 6px;
+      }
+      .code-row {
+        display: flex;
+        gap: 8px;
+        margin-top: 10px;
+        align-items: stretch;
+      }
+      .code {
+        flex: 1;
+        background: var(--bg);
+        border: 1px solid var(--border);
+        border-radius: 6px;
+        padding: 8px 10px;
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        font-size: 12px;
+        color: var(--text);
+        overflow-x: auto;
+        white-space: nowrap;
+        display: flex;
+        align-items: center;
+      }
+      .btn-copy {
+        background: var(--bg-card-hover);
+        color: var(--text);
+        border: 1px solid var(--border);
+        border-radius: 6px;
+        padding: 0 14px;
+        font-size: 12px;
+        cursor: pointer;
+        font-family: inherit;
+        white-space: nowrap;
+      }
+      .btn-copy:hover {
+        border-color: var(--accent);
+        color: var(--accent);
+      }
+      .spinner {
+        width: 20px;
+        height: 20px;
+        border: 2px solid var(--border);
+        border-top-color: var(--accent);
+        border-radius: 50%;
+        animation: spin 0.7s linear infinite;
+      }
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <div class="brand">
+        <img src="icons/icon-48.png" width="36" height="36" alt="" />
+        <h1 id="brand-title">Assent</h1>
+      </div>
+      <div class="privacy-note" id="privacy-note"></div>
+      <p class="intro" id="intro"></p>
+      <div id="state-root" class="card"></div>
+    </div>
+    <script type="module" src="./onboarding.js"></script>
+  </body>
+</html>

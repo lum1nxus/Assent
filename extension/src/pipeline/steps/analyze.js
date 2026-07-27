@@ -7,6 +7,7 @@ import {
 } from "../rubric/categories.js";
 import { resolveTitle } from "../rubric/labels.js";
 import { quoteLooksSpliced } from "./category-guards.js";
+import { LM_OPTIONS } from "../../features/capability.js";
 
 const SERVICE_TYPES = ["fintech", "social_media", "content", "marketplace", "general_tech"];
 
@@ -223,12 +224,13 @@ export async function analyze(input, ctx) {
     throw new Error("On-device language model is not available");
   }
 
-  const availability = await self.LanguageModel.availability();
+  const availability = await self.LanguageModel.availability(LM_OPTIONS);
   if (availability === "unavailable") {
     throw new Error("On-device language model is unavailable");
   }
 
   const session = await self.LanguageModel.create({
+    ...LM_OPTIONS,
     temperature: 0,
     topK: 1,
     initialPrompts: [
@@ -240,15 +242,17 @@ export async function analyze(input, ctx) {
   });
 
   let raw;
+  let promptText = input.extractedText ?? "";
   try {
-    raw = await session.prompt(input.extractedText, {
+    promptText = await fitToInputBudget(session, promptText);
+    raw = await session.prompt(promptText, {
       responseConstraint: ANALYZE_SCHEMA,
     });
   } finally {
     session.destroy?.();
   }
 
-  const parsed = parseAndValidate(raw, input.extractedText ?? "");
+  const parsed = parseAndValidate(raw, promptText);
   return {
     value: {
       ...input,
@@ -260,11 +264,46 @@ export async function analyze(input, ctx) {
       stageAStats: parsed._stageAStats,
       _debug: {
         rawAiResponse: raw,
-        documentText: input.extractedText ?? "",
+        documentText: promptText,
         stageAStats: parsed._stageAStats,
       },
     },
   };
+}
+
+// Trim the document so the system prompt + document fit the model's input
+// quota. The system prompt is large, so a full extraction can overflow Gemini
+// Nano's context; measureInputUsage lets us shrink it deterministically.
+export async function fitToInputBudget(session, text) {
+  if (!text || typeof session?.measureInputUsage !== "function") {
+    return text;
+  }
+  const quota = Number(session.inputQuota);
+  if (!Number.isFinite(quota) || quota <= 0) {
+    return text;
+  }
+  const used = Number(session.inputUsage) || 0;
+  const margin = 128;
+  const budget = quota - used - margin;
+  if (budget <= 0) {
+    return text;
+  }
+  try {
+    let candidate = text;
+    let need = await session.measureInputUsage(candidate);
+    for (let i = 0; i < 5 && need > budget && candidate.length > 0; i += 1) {
+      const ratio = budget / need;
+      const nextLen = Math.max(0, Math.floor(candidate.length * ratio * 0.9));
+      if (nextLen >= candidate.length) {
+        break;
+      }
+      candidate = candidate.slice(0, nextLen);
+      need = await session.measureInputUsage(candidate);
+    }
+    return candidate;
+  } catch {
+    return text;
+  }
 }
 
 function normalizeForQuoteCheck(text) {
