@@ -10,7 +10,10 @@ import {
 } from "./pipeline/steps/index.js";
 import { incrementAnalysisCount } from "./features/donation.js";
 import { sanitizeUrl } from "./shared/url-safety.js";
+import { CAP, checkCapability } from "./features/capability.js";
+import { setupNudge } from "./features/nudge.js";
 
+const CONTENT_SCRIPT = "src/content.js";
 const MAX_TOS_BYTES = 1_500_000;
 const MAX_REDIRECTS = 3;
 const ALLOWED_CONTENT_TYPES = ["text/html", "text/plain", "application/xhtml+xml"];
@@ -32,15 +35,15 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     return false;
   }
 
-  if (message?.type === "TOS_DETECTED") {
-    const tabId = sender.tab?.id;
-    if (typeof tabId !== "number" || !isValidTosPayload(message.payload)) {
-      sendResponse({ ok: false, error: "invalid_payload" });
-      return true;
-    }
-    handleTosDetected(tabId, message.payload).catch((err) => {
+  if (message?.type === "SCAN_ACTIVE_TAB") {
+    handleScanRequest().catch((err) => {
       console.error("[Assent]", err);
     });
+    sendResponse({ ok: true });
+    return true;
+  }
+  if (message?.type === "HIGHLIGHT_IN_TAB" && typeof message.quote === "string") {
+    highlightInActiveTab(message.quote).catch(() => {});
     sendResponse({ ok: true });
     return true;
   }
@@ -113,9 +116,128 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo) => {
   }
 });
 
-chrome.runtime.onInstalled.addListener(() => {
-  chrome.sidePanel?.setPanelBehavior?.({ openPanelOnActionClick: true }).catch(() => {});
+// Open the side panel from action.onClicked (NOT setPanelBehavior). This is the
+// only way the click counts as an extension invocation, which grants activeTab
+// for the current tab. That grant persists until the tab navigates, so the
+// in-panel "Scan this page" button can then use chrome.scripting on that tab.
+// setPanelBehavior({ openPanelOnActionClick: true }) would open the panel
+// WITHOUT granting activeTab, and scanning would silently fail.
+// setPanelBehavior is persisted in the profile. A previous build set
+// openPanelOnActionClick:true, which makes the icon open the panel WITHOUT
+// firing action.onClicked (so activeTab is never granted). Explicitly force it
+// back to false so onClicked fires and we can grant activeTab ourselves.
+chrome.sidePanel?.setPanelBehavior?.({ openPanelOnActionClick: false }).catch(() => {});
+
+chrome.action.onClicked.addListener((tab) => {
+  if (typeof tab?.id === "number") {
+    chrome.sidePanel.open({ tabId: tab.id }).catch(() => {});
+  }
 });
+
+chrome.runtime.onInstalled.addListener((details) => {
+  setupNudge();
+  if (details?.reason === "install") {
+    chrome.tabs.create({ url: chrome.runtime.getURL("onboarding.html") }).catch(() => {});
+  }
+});
+
+chrome.runtime.onStartup?.addListener(() => {
+  setupNudge();
+});
+
+const NO_ACCESS_MESSAGE =
+  "Assent could not access this page. Click the Assent icon on the toolbar, then press Scan this page.";
+
+async function handleScanRequest() {
+  const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+  const tabId = tab?.id;
+  if (typeof tabId !== "number") {
+    return;
+  }
+
+  // Only reject pages we can never script when the URL is actually readable.
+  // When activeTab has not been granted yet, tab.url is undefined; in that case
+  // we still try to inject and surface a clear error if the grant is missing,
+  // instead of leaving the side panel spinning forever.
+  if (typeof tab.url === "string" && !/^https?:/i.test(tab.url)) {
+    await failScan(
+      tabId,
+      "errorUnsupportedPage",
+      "This page can't be scanned. Open a normal web page and try again.",
+    );
+    return;
+  }
+
+  const cap = await checkCapability();
+  if (cap.state !== CAP.READY) {
+    await chrome.storage.session.remove(TAB_KEY(tabId)).catch(() => {});
+    updateBadge(tabId, "idle");
+    await chrome.tabs.create({ url: chrome.runtime.getURL("onboarding.html") }).catch(() => {});
+    return;
+  }
+
+  try {
+    await ensureInjected(tabId);
+  } catch {
+    await failScan(tabId, "errorNoAccess", NO_ACCESS_MESSAGE);
+    return;
+  }
+
+  let payload;
+  try {
+    payload = await chrome.tabs.sendMessage(tabId, { type: "EXTRACT_TOS" });
+  } catch {
+    await failScan(tabId, "errorNoAccess", NO_ACCESS_MESSAGE);
+    return;
+  }
+  if (!payload || payload.error || !isValidTosPayload(payload)) {
+    await failScan(tabId, "errorNoDocument", "No agreement text was found on this page.");
+    return;
+  }
+
+  await handleTosDetected(tabId, payload);
+}
+
+async function failScan(tabId, messageKey, fallback) {
+  const message = i18nMessage(messageKey, fallback);
+  await chrome.storage.session
+    .set({ [TAB_KEY(tabId)]: { status: "error", error: message } })
+    .catch(() => {});
+  updateBadge(tabId, "error");
+}
+
+function i18nMessage(key, fallback) {
+  try {
+    return chrome.i18n.getMessage(key) || fallback;
+  } catch {
+    return fallback;
+  }
+}
+
+async function ensureInjected(tabId) {
+  try {
+    const pong = await chrome.tabs.sendMessage(tabId, { type: "PING" });
+    if (pong?.ok) {
+      return;
+    }
+  } catch {
+    // Not injected yet.
+  }
+  await chrome.scripting.executeScript({ target: { tabId }, files: [CONTENT_SCRIPT] });
+}
+
+async function highlightInActiveTab(quote) {
+  const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+  if (!tab?.id) {
+    return;
+  }
+  try {
+    await ensureInjected(tab.id);
+    await chrome.tabs.sendMessage(tab.id, { type: "HIGHLIGHT_QUOTE", quote });
+  } catch {
+    // Tab may have navigated; ignore.
+  }
+}
 
 async function handleTosDetected(tabId, payload) {
   if (typeof tabId !== "number") {
@@ -128,7 +250,7 @@ async function handleTosDetected(tabId, payload) {
 
   const existing = await chrome.storage.session.get(TAB_KEY(tabId));
   const status = existing[TAB_KEY(tabId)]?.status;
-  if (status === "done" || status === "loading") {
+  if (status === "loading") {
     inFlight.delete(tabId);
     return;
   }

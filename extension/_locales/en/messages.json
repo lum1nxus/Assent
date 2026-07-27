@@ -21,7 +21,16 @@
     "message": "Pattern detection only - not legal advice."
   },
   "stateIdle": {
-    "message": "No document detected on this page."
+    "message": "No analysis yet on this page."
+  },
+  "btnScan": {
+    "message": "Scan this page"
+  },
+  "btnOpenSetup": {
+    "message": "Open setup"
+  },
+  "sidepanelSetupNeeded": {
+    "message": "Assent needs a quick one-time setup before it can analyse pages."
   },
   "stateLoading": {
     "message": "Scanning document…"
@@ -40,6 +49,15 @@
   },
   "errorStuck": {
     "message": "Analysis is taking too long. Please reload the page and try again."
+  },
+  "errorNoAccess": {
+    "message": "Assent could not access this page. Click the Assent icon on the toolbar, then press Scan this page."
+  },
+  "errorNoDocument": {
+    "message": "No agreement text was found on this page."
+  },
+  "errorUnsupportedPage": {
+    "message": "This page can't be scanned. Open a normal web page and try again."
   },
   "sectionTopThree": {
     "message": "Top points to know"
@@ -223,5 +241,83 @@
         "example": "Broad limitation of liability"
       }
     }
+  },
+  "onbTitle": {
+    "message": "Set up Assent"
+  },
+  "onbIntro": {
+    "message": "Assent analyses agreement documents entirely on your device using Chrome's built-in AI. Nothing you read is ever sent to a server."
+  },
+  "onbPrivacyNote": {
+    "message": "100% on-device · no data leaves your browser"
+  },
+  "onbChecking": {
+    "message": "Checking your device…"
+  },
+  "onbReadyTitle": {
+    "message": "You're all set"
+  },
+  "onbReadyBody": {
+    "message": "The on-device model is ready. Open any terms, privacy, or agreement page and press \"Scan this page\" in the side panel."
+  },
+  "onbDownloadableTitle": {
+    "message": "One-time setup"
+  },
+  "onbDownloadableBody": {
+    "message": "Chrome needs to download its built-in AI model once (about 2 GB). It runs fully offline afterwards. This can take a few minutes depending on your connection."
+  },
+  "onbDownloadBtn": {
+    "message": "Download & finish"
+  },
+  "onbDownloadingTitle": {
+    "message": "Downloading the on-device model…"
+  },
+  "onbDownloadingBody": {
+    "message": "You can leave this page open. This happens only once."
+  },
+  "onbUnavailableTitle": {
+    "message": "Device not supported yet"
+  },
+  "onbUnavailableBody": {
+    "message": "Your device does not currently meet the requirements for Chrome's built-in AI. Please check the following:"
+  },
+  "onbReqDisk": {
+    "message": "At least 22 GB of free space on the volume that holds your Chrome profile."
+  },
+  "onbReqHardware": {
+    "message": "A GPU with more than 4 GB of VRAM (or a recent CPU with sufficient RAM)."
+  },
+  "onbReqOs": {
+    "message": "Windows 10/11, macOS 13+, Linux, or ChromeOS on a supported device."
+  },
+  "onbFlagTitle": {
+    "message": "Advanced: force-enable on a capable device"
+  },
+  "onbFlagBody": {
+    "message": "If your hardware qualifies but the model still will not appear, open this flag, set it to Enabled, and restart Chrome:"
+  },
+  "onbUnsupportedTitle": {
+    "message": "Chrome is too old"
+  },
+  "onbUnsupportedBody": {
+    "message": "Assent needs desktop Chrome 148 or newer for the built-in Prompt API. Update Chrome and reopen this page."
+  },
+  "onbCheckVersion": {
+    "message": "Check your Chrome version"
+  },
+  "onbErrorTitle": {
+    "message": "Something went wrong"
+  },
+  "onbDownloadFailed": {
+    "message": "The model download did not finish. Check your connection and free disk space, then try again."
+  },
+  "onbCopy": {
+    "message": "Copy"
+  },
+  "onbCopied": {
+    "message": "Copied"
+  },
+  "onbRecheck": {
+    "message": "Check again"
   }
 }
