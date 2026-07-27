@@ -9,6 +9,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- **Graceful "nothing to analyse" for non-agreement pages.** Scanning is user-initiated,
+  so a user can press **Scan this page** on an article, dashboard, or search result. A new
+  deterministic `detect-agreement` pipeline step (no model cost) runs before analysis and,
+  when a page shows no legal/agreement vocabulary, short-circuits with a first-class
+  `notAgreement` outcome and a calm side-panel message ("This doesn't look like a terms,
+  agreement, or privacy page…") plus a **Scan again** button — instead of feeding arbitrary
+  text to the model and risking hallucinated flags or a misleading grade. The gate is
+  lenient (a real Terms/EULA/privacy document is saturated with this vocabulary), so it only
+  rejects pages with essentially none of it. Distinct from the empty-document error and from
+  a low-recall model result.
 - **Optional "Allow on every page" convenience permission.** `activeTab` is dropped on
   every navigation, so by default the toolbar icon must be clicked on each new page
   before the side-panel **Scan** button can reach it. The panel now offers a one-time

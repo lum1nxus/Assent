@@ -3,6 +3,7 @@ import { buildContext } from "./pipeline/context.js";
 import {
   extract,
   detectLang,
+  detectAgreement,
   extractJurisdiction,
   analyze,
   verify,
@@ -24,6 +25,7 @@ const inFlight = new Set();
 const PIPELINE = [
   { name: "detect-lang", fn: detectLang },
   { name: "extract", fn: extract },
+  { name: "detect-agreement", fn: detectAgreement },
   { name: "extract-jurisdiction", fn: extractJurisdiction },
   { name: "analyze", fn: analyze },
   { name: "verify", fn: verify },
@@ -309,6 +311,15 @@ async function handleTosDetected(tabId, payload) {
       return;
     }
 
+    if (result?.notAgreement) {
+      await chrome.storage.session.set({
+        [TAB_KEY(tabId)]: { status: "not_agreement", domain },
+      });
+      updateBadge(tabId, "not_agreement");
+      sendOverlay(tabId, { kind: "hide" });
+      return;
+    }
+
     updateBadge(tabId, "done", result.score);
     sendOverlay(tabId, { kind: "done", grade: result.grade ?? "F", score: result.score });
     incrementAnalysisCount().catch(() => {});
@@ -450,6 +461,7 @@ function updateBadge(tabId, status, score) {
     loading: { text: "...", color: "#f59e0b" },
     error: { text: "!", color: "#ef4444" },
     unsupported: { text: "EN", color: "#71717a" },
+    not_agreement: { text: "", color: "#71717a" },
     done: {
       text: safe !== null ? String(Math.round(safe)) : "?",
       color:

@@ -599,6 +599,27 @@ function renderUnsupportedLanguage(domain) {
     </div>`;
 }
 
+function renderNotAgreement(domain) {
+  domainLabel.textContent = domain ?? "-";
+  app.innerHTML = `
+    <div class="state-idle">
+      <div class="unsupported-label">${esc(t("stateNotAgreementTitle", "Nothing to analyse here"))}</div>
+      <div>${esc(
+        t(
+          "stateNotAgreementBody",
+          "This doesn't look like a terms, agreement, or privacy page. Open a Terms of Service, EULA, or privacy policy and scan again.",
+        ),
+      )}</div>
+      <div style="margin-top:16px">
+        <button class="btn-secondary" id="rescan-btn">${esc(t("btnScanAgain", "Scan again"))}</button>
+      </div>
+    </div>`;
+  const rescanBtn = document.getElementById("rescan-btn");
+  rescanBtn?.addEventListener("click", () => {
+    startScan(rescanBtn);
+  });
+}
+
 function esc(s) {
   return String(s ?? "")
     .replace(/&/g, "&amp;")
@@ -730,6 +751,10 @@ function dispatchState(tabId, state) {
     case "unsupported_language":
       captureStateForDebug(state);
       renderUnsupportedLanguage(state.domain);
+      break;
+    case "not_agreement":
+      captureStateForDebug(state);
+      renderNotAgreement(state.domain);
       break;
     default:
       captureStateForDebug(state);

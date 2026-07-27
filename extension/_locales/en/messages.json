@@ -77,6 +77,15 @@
   "stateUnsupportedLanguageBody": {
     "message": "This document is not in English. Assent currently analyses English-language documents only. Support for other languages is planned."
   },
+  "stateNotAgreementTitle": {
+    "message": "Nothing to analyse here"
+  },
+  "stateNotAgreementBody": {
+    "message": "This doesn't look like a terms, agreement, or privacy page. Open a Terms of Service, EULA, or privacy policy and scan again."
+  },
+  "btnScanAgain": {
+    "message": "Scan again"
+  },
   "errorNoDeviceAI": {
     "message": "On-device language model is not ready on this device."
   },

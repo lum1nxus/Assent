@@ -27,30 +27,6 @@ Options to evaluate next time:
 3. **Bright badge (dot / "!")** — most visible, but requires adding the `"tabs"` permission.
 4. **Drop the nudge** — scanning is manual anyway; the side-panel Scan button may be enough.
 
-## Non-agreement page → graceful "nothing to analyze"
-
-If the user presses **Scan this page** on a page that is _not_ a terms / EULA /
-privacy / agreement document (e.g. a random article, a dashboard, a search result),
-we must **not** feed arbitrary page text to the model and risk hallucinated flags or a
-misleading grade. Instead: recognise "this isn't an agreement page" and show a calm,
-explicit message like _"This doesn't look like a terms or agreement page — open a
-Terms of Service, EULA, or privacy policy and scan again."_
-
-Notes / direction:
-
-- Prefer a **deterministic pre-filter** (no model cost, no false accusations):
-  reuse/extend `content.js` `isToSPage()` + `findTosLink()` plus a legal-keyword
-  density check in `extract`. If the page has no agreement signals and no ToS link,
-  short-circuit before `analyze` and return a dedicated "not an agreement" result.
-- Keep this **distinct** from the existing states: it is not `errorNoDocument`
-  (empty/blocked extraction) and not `lowRecall` (model ran but nothing survived
-  quote-verification). Add a first-class `notAgreement` pipeline outcome + side-panel
-  state with friendly copy.
-- Optional stronger gate: a single cheap yes/no model classification ("is this a
-  consumer agreement document?") before the full analyze — but only if the
-  deterministic filter proves insufficient, since it adds latency and a model call.
-- Make sure an accidental scan is cheap and reassuring, never alarming.
-
 ## Documentation — system requirements to run the extension
 
 The README/onboarding should tell users, up front and in plain language, **what it takes
