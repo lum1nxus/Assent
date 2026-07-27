@@ -50,12 +50,12 @@ isn't staring at a blank spinner — especially when a scan is slow.
 
 ## Non-agreement page → graceful "nothing to analyze"
 
-If the user presses **Scan this page** on a page that is *not* a terms / EULA /
+If the user presses **Scan this page** on a page that is _not_ a terms / EULA /
 privacy / agreement document (e.g. a random article, a dashboard, a search result),
 we must **not** feed arbitrary page text to the model and risk hallucinated flags or a
 misleading grade. Instead: recognise "this isn't an agreement page" and show a calm,
-explicit message like *"This doesn't look like a terms or agreement page — open a
-Terms of Service, EULA, or privacy policy and scan again."*
+explicit message like _"This doesn't look like a terms or agreement page — open a
+Terms of Service, EULA, or privacy policy and scan again."_
 
 Notes / direction:
 
@@ -85,7 +85,7 @@ No behavioural changes.
    Make it consistent ("open source · independent · …") and audit all UI strings for
    sentence-case consistency.
 2. **Loading redundancy.** `renderLoading` shows the generic "Scanning document…"
-   *and* the live stage ("Classifying clauses"). Drop the generic line and show a
+   _and_ the live stage ("Classifying clauses"). Drop the generic line and show a
    single evolving status. (Ties into the "Scan progress narration" item above.)
 3. **Score header looks cramped.** The grade badge / risk label / sublabel / summary
    in `.score-meta` lack vertical rhythm — align and space them. The `ⓘ` glyph is a
@@ -99,9 +99,9 @@ No behavioural changes.
 5. **Colour mismatch** between "Top points to know" and "Flagged clauses":
    - `.top3` border-left: high=red, **full=orange**, partial=yellow.
    - `.flag-dot`: high/**full=red**, partial=orange.
-   So "full" is orange in one place and red in the other; "partial" is yellow vs
-   orange. Unify the severity→colour mapping across `.top3`, `.flag-dot`, and
-   `.flag-severity-pill`.
+     So "full" is orange in one place and red in the other; "partial" is yellow vs
+     orange. Unify the severity→colour mapping across `.top3`, `.flag-dot`, and
+     `.flag-severity-pill`.
 
 ### Additional findings
 
