@@ -7,6 +7,7 @@ import {
   PAYPAL_LINK_CHOOSE_AMOUNT,
 } from "../features/donation.js";
 import { CAP, checkCapability } from "../features/capability.js";
+import { bandForScore } from "../shared/risk-bands.js";
 
 const app = document.getElementById("app");
 const domainLabel = document.getElementById("domain-label");
@@ -23,32 +24,16 @@ headerTitle.textContent = t("extName", "Assent");
 renderPersistentFooter();
 wireDebugDialog();
 
-// Colour bands are aligned to the same thresholds as scoreLabel() so the ring
-// colour never contradicts the risk wording (e.g. a green tint labelled "Moderate").
+// Colour and wording both come from the shared RISK_BANDS table (see
+// shared/risk-bands.js), the same table that decides the grade letter — so the
+// ring, the label, and the grade badge always agree.
 function scoreColor(score) {
-  if (score <= 8) {
-    return "var(--green)";
-  }
-  if (score <= 44) {
-    return "var(--yellow)";
-  }
-  if (score <= 65) {
-    return "var(--orange)";
-  }
-  return "var(--red)";
+  return `var(${bandForScore(score).colorVar})`;
 }
 
 function scoreLabel(score) {
-  if (score <= 8) {
-    return t("scoreLabelLow", "Low risk");
-  }
-  if (score <= 44) {
-    return t("scoreLabelMedium", "Moderate risk");
-  }
-  if (score <= 65) {
-    return t("scoreLabelHigh", "High risk");
-  }
-  return t("scoreLabelExtreme", "Extreme risk");
+  const band = bandForScore(score);
+  return t(band.labelKey, band.labelFallback);
 }
 
 function renderRing(score) {

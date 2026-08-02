@@ -72,6 +72,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- **Severity vs. risk-scale colour collision.** Minor flags were a solid warm orange —
+  the same hue the score scale uses for "High risk" — so a minor clause could be misread
+  as high-risk, and it clashed with a green "Low risk" header. Minor severity is now a
+  muted amber outline (calm, clearly "noted but minor") while major stays a solid red, so
+  the two axes (overall document risk vs. per-clause severity) no longer fight over the
+  same colours.
+- **Grade colour vs. risk label mismatch.** A green grade "B" (score 9–22) was shown next
+  to a yellow "Moderate risk" label because the grade letters and the ring/label colours
+  were two separate hard-coded threshold tables with different cut-offs. Both now derive
+  from a single `shared/risk-bands.js` table, so the grade badge, ring colour, and risk
+  wording can no longer drift apart. Score 9–22 now reads as green "Low risk" to match the
+  "B" grade. A regression test locks `gradeOf` and the UI bands to the same table.
 - **Stale in-page pill.** The floating "grade + Open details" pill left in a page's DOM
   by a previous extension build could show an outdated badge (e.g. a malformed grade).
   The content script is now build-stamped: `ensureInjected` re-injects when the live

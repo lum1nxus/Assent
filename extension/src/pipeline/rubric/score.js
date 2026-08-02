@@ -1,4 +1,5 @@
 import { CATEGORIES, SEVERITY_MULTIPLIER } from "./categories.js";
+import { bandForScore } from "../../shared/risk-bands.js";
 
 const CREDIT_CAP_FLOOR = 8;
 const CREDIT_CAP_RATIO = 0.4;
@@ -35,23 +36,7 @@ export function computeScore(flags = [], credits = []) {
 }
 
 export function gradeOf(score) {
-  const n = Number(score);
-  if (!Number.isFinite(n)) {
-    return "F";
-  }
-  if (n <= 8) {
-    return "A";
-  }
-  if (n <= 22) {
-    return "B";
-  }
-  if (n <= 44) {
-    return "C";
-  }
-  if (n <= 65) {
-    return "D";
-  }
-  return "F";
+  return bandForScore(score).grade;
 }
 
 function clamp(n, min, max) {

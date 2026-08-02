@@ -28,11 +28,14 @@
         --green: #4ade80;
         --radius: 8px;
 
-        /* Semantic severity scale — one mapping reused for top points, dots and pills. */
+        /* Semantic severity scale — one mapping reused for top points, dots and pills.
+           Major stays a solid red so it pops; minor is a muted amber rendered as an
+           outline (not a solid warm fill) so it does not read as the risk-scale
+           "high risk" orange and sits calmly under a green "Low risk" header. */
         --sev-major: var(--red);
-        --sev-minor: var(--orange);
+        --sev-minor: #d6a95c;
         --sev-major-bg: #450a0a;
-        --sev-minor-bg: #431407;
+        --sev-minor-border: rgba(214, 169, 92, 0.35);
 
         /* Type scale. */
         --fs-2xs: 10px;
@@ -309,14 +312,16 @@
         text-transform: uppercase;
         letter-spacing: 0.04em;
         font-weight: 600;
+        border: 1px solid transparent;
       }
       .flag-severity-pill.high {
         background: var(--sev-major-bg);
         color: var(--sev-major);
       }
       .flag-severity-pill.partial {
-        background: var(--sev-minor-bg);
+        background: transparent;
         color: var(--sev-minor);
+        border-color: var(--sev-minor-border);
       }
       .flag-chevron {
         color: var(--text-dim);
