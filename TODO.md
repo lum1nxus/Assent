@@ -27,6 +27,43 @@ Options to evaluate next time:
 3. **Bright badge (dot / "!")** — most visible, but requires adding the `"tabs"` permission.
 4. **Drop the nudge** — scanning is manual anyway; the side-panel Scan button may be enough.
 
+## Onboarding — explain what the one-time download actually does
+
+On the first-run **download** screen (`onboarding.js` → `renderDownloadable()`, the
+`onbDownloadableTitle` / `onbDownloadableBody` / `onbDownloadBtn` block), add a short,
+plain-language explainer **above the button** so the user knows exactly what pressing
+it does and never feels like something opaque is happening. Keep it to a few tight
+bullets, e.g.:
+
+- **Downloading Google's public on-device AI model to your device** — this is a
+  one-time, multi-GB download that happens now, not at install time.
+- **Everything runs locally.** Your browsing and the documents you scan never leave
+  your device; there is no Assent server.
+- **This can take a few minutes** depending on your connection; you only do it once.
+- (Optional) **Free disk space needed:** ~N GB — mention the current figure.
+
+Be precise about the Google relationship (don't over- or under-claim):
+
+- We do **not** grant Google any API permission, and there is **no Google account, API
+  key, or OAuth** involved. For Chrome Extensions the Prompt API ships in Chrome stable
+  (since Chrome 138) with no origin-trial token — we just call a browser JS API
+  (`LanguageModel`), the same category as any Web API.
+- The **only** contact with Google is the one-time **model download** (Gemini Nano) via
+  Chrome's component updater — that's a network request to Google's servers for the model
+  itself, not for user data.
+- **Inference is fully local**: prompts and scanned documents never leave the device and
+  are never sent to Google or to us.
+- So frame it as _"one-time download of Google's public model, then everything runs
+  locally"_ — avoid both "we send data to Google" (false) and "nothing ever touches
+  Google" (the download itself does).
+
+Notes:
+
+- Put the copy in `_locales` (new keys), not hard-coded, so it stays localisable.
+- Reuse the same wording family as the privacy note in the README/side panel so the
+  "local, private, one-time" message is consistent everywhere.
+- Keep it scannable: bullets/icons over a paragraph; the button stays the clear CTA.
+
 ## Documentation — system requirements to run the extension
 
 The README/onboarding should tell users, up front and in plain language, **what it takes
