@@ -50,6 +50,30 @@ that could not be reproduced were dropped. Ordered by risk, cheapest first withi
    rubric corpus and the pipeline unit tests never gate a merge. Add `npm test`. The locale-parity
    job is redundant while `en` is the only locale.
 
+### P0-1: what is already done, and the approved design for the rest
+
+The capability-regression route is fixed (the background writes `setup_needed`, the panel renders
+its existing "Open setup" card). The rest of P0-1 was designed and reviewed but not yet written:
+
+- **Overwrite an orphaned `loading` entry** in `handleTosDetected` instead of returning. This is
+  safe without a timestamp or a staleness threshold, and the reasoning matters: `inFlight.add()`
+  happens _before_ the storage write, so a genuine concurrent duplicate is already caught by the
+  `inFlight` guard above. Reaching the storage check with status `loading` therefore means this
+  worker has no scan running — and only the worker can run one. The entry is always orphaned (the
+  worker was killed), so respecting it is what wedges the tab forever.
+- **`failScan` when `sanitizeUrl` returns null** (the `!tosUrl` branch) instead of returning
+  silently; `unsupported_page` is the right code.
+- **Arm the stuck-loading timer from `startScan`**, not only from `dispatchState`. The latter needs
+  a storage write to have happened, which is exactly what is missing on every silent path.
+- **Add a short "did the scan actually start?" check** (~10 s) next to the existing 5-minute
+  timeout. The background writes `loading` within milliseconds of starting, so a tab still `idle`
+  10 s after the request never started at all — and 5 minutes is a punishing wait for that case.
+  Needs one new locale string, and a retry button in `renderError` for the new code is the useful
+  affordance.
+- Not strictly P0-1 but the same family: `SCAN_ACTIVE_TAB` / `HIGHLIGHT_IN_TAB` should carry the
+  panel's `currentTabId` the way `GET_STATE` already does, and `loadStateForActiveTab` needs a
+  `try`/`catch` — a rejected `GET_STATE` currently leaves the panel blank with no retry.
+
 ## P1 — high
 
 - **The verifier fails open and then shows its own failure as the reasoning.** `verify.js:138-141`
@@ -335,6 +359,19 @@ we harden for release. Deliverable: a short report + cleanup PR(s).
     processes page content the user didn't explicitly submit.
   - Outcome: either justify each regex with a one-line rationale in code/docs, or delete
     it — and make the privacy story ("nothing runs until you press Scan") verifiable.
+
+## Local environment gotchas (worth knowing on a fresh machine)
+
+- **`core.autocrlf=true`** in at least one clone, which makes `git status` permanently report
+  several `extension/` and `tests/` files as modified with a **zero-content diff**. That is
+  line-ending noise, not someone's unfinished work — confirm with
+  `git diff --ignore-all-space --stat` before assuming there are pending changes to preserve.
+- **Prettier formats markdown too**, and it re-aligns markdown tables to equal column widths.
+  Hand-written tables therefore fail `format:check` unless they happen to match byte for byte;
+  `PRIVACY.md` uses lists instead for that reason. Run the formatter, don't hand-align.
+- If `npm` is missing but `node` is present, the checks still run directly:
+  `node --test` over `tests/*.test.js`, `node node_modules/eslint/bin/eslint.js extension/src tests`,
+  and `node node_modules/prettier/bin/prettier.cjs --check .`
 
 ## Other ideas
 
