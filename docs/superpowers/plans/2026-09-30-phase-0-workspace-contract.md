@@ -130,7 +130,7 @@ Then run: `git rm docs/HANDOFF.md`
 
 - [ ] **Step 4: Format and verify**
 
-Run: `npx prettier --write AGENTS.md .cursor/rules/superpowers-discipline.mdc TODO.md && npm run format:check`
+Run: `npx prettier --write AGENTS.md TODO.md && npm run format:check`
 Expected: `All matched files use Prettier code style!`
 
 Run: `rg -n '[^\x00-\x7F]' AGENTS.md .cursor/rules/superpowers-discipline.mdc`
@@ -153,6 +153,7 @@ git commit -m "docs: add agent guide and superpowers workflow rule"
 **Files:**
 
 - Modify: `.cursor/rules/testing.mdc` (the `- **Layer 3 - real Chrome end-to-end**` bullet, plus a new `## Gate` section right after it)
+- Modify: `.prettierignore`
 
 **Interfaces:**
 
@@ -182,18 +183,28 @@ New:
 - Changes to the side panel, content script, onboarding, or manifest: also a Layer 3 check.
 ```
 
-- [ ] **Step 2: Format and verify**
+- [ ] **Step 2: Keep subagent scratch files out of the format gate**
 
-Run: `npx prettier --write .cursor/rules/testing.mdc && npm run format:check`
+The Superpowers subagent workflow writes Markdown scratch files under `.superpowers/` (git-ignored by its own `.gitignore`), and `npm run format:check` currently fails on them. Append one line to `.prettierignore`:
+
+```text
+.superpowers
+```
+
+- [ ] **Step 3: Verify**
+
+Prettier has no parser for `.mdc`, and `format:check` does not cover `.mdc` files, so rule files are not passed to Prettier.
+
+Run: `npm run format:check`
 Expected: `All matched files use Prettier code style!`
 
 Run: `rg -n '[^\x00-\x7F]' .cursor/rules/testing.mdc`
 Expected: no output, exit code 1.
 
-- [ ] **Step 3: Commit**
+- [ ] **Step 4: Commit**
 
 ```bash
-git add .cursor/rules/testing.mdc
+git add .cursor/rules/testing.mdc .prettierignore
 git commit -m "docs: describe layer 3 browser testing and commit gate"
 ```
 
@@ -376,7 +387,7 @@ Expected: `fail 0`, no lint problems, `All matched files use Prettier code style
 - [ ] **Step 2: Confirm scope**
 
 Run: `git diff --stat origin/chore/mvp-hardening..HEAD`
-Expected: only `AGENTS.md`, `.nvmrc`, `.cursor/rules/superpowers-discipline.mdc`, `.cursor/rules/testing.mdc`, `.github/workflows/ci.yml`, `eslint.config.mjs`, `package.json`, `TODO.md`, `docs/HANDOFF.md` (deleted), and files under `docs/superpowers/`.
+Expected: only `AGENTS.md`, `.nvmrc`, `.prettierignore`, `.cursor/rules/superpowers-discipline.mdc`, `.cursor/rules/testing.mdc`, `.github/workflows/ci.yml`, `eslint.config.mjs`, `package.json`, `TODO.md`, `docs/HANDOFF.md` (deleted), and files under `docs/superpowers/`.
 
 - [ ] **Step 3: Hand off**
 
