@@ -32,8 +32,41 @@
   "sidepanelSetupNeeded": {
     "message": "Assent needs a quick one-time setup before it can analyse pages."
   },
+  "btnAllowAllSites": {
+    "message": "Allow on every page"
+  },
+  "allowAllSitesHint": {
+    "message": "Tired of clicking the toolbar icon on each new page? Allow Assent to read any page you choose to scan. It still only reads a page when you press Scan — nothing runs in the background."
+  },
+  "allowAllSitesEnabled": {
+    "message": "Enabled — you can scan any page from here without clicking the toolbar icon."
+  },
   "stateLoading": {
     "message": "Scanning document…"
+  },
+  "stateLoadingHint": {
+    "message": "This can take a moment the first time."
+  },
+  "stageStarting": {
+    "message": "Preparing…"
+  },
+  "stageDetectLang": {
+    "message": "Detecting language"
+  },
+  "stageExtract": {
+    "message": "Reading the document"
+  },
+  "stageExtractJurisdiction": {
+    "message": "Reading the jurisdiction"
+  },
+  "stageAnalyze": {
+    "message": "Classifying clauses"
+  },
+  "stageVerify": {
+    "message": "Verifying findings"
+  },
+  "stagePersist": {
+    "message": "Finalising"
   },
   "stateError": {
     "message": "Analysis unavailable"
@@ -43,6 +76,15 @@
   },
   "stateUnsupportedLanguageBody": {
     "message": "This document is not in English. Assent currently analyses English-language documents only. Support for other languages is planned."
+  },
+  "stateNotAgreementTitle": {
+    "message": "Nothing to analyse here"
+  },
+  "stateNotAgreementBody": {
+    "message": "This doesn't look like a terms, agreement, or privacy page. Open a Terms of Service, EULA, or privacy policy and scan again."
+  },
+  "btnScanAgain": {
+    "message": "Scan again"
   },
   "errorNoDeviceAI": {
     "message": "On-device language model is not ready on this device."
@@ -80,8 +122,11 @@
   "labelEvidence": {
     "message": "Evidence:"
   },
-  "labelWhyFlagged": {
-    "message": "Why this was flagged"
+  "sevMajor": {
+    "message": "Major"
+  },
+  "sevMinor": {
+    "message": "Minor"
   },
   "noticeLowRecall": {
     "message": "We could not find verifiable clauses in the visible page text. The actual document may be hidden behind a tab, accordion, or paywall. Try expanding each section before opening this analysis."
@@ -117,7 +162,7 @@
     "message": "No thanks"
   },
   "footerAttribution": {
-    "message": "Open source · independent · not affiliated with any third party"
+    "message": "open source · independent · not affiliated with any third party"
   },
   "footerSupport": {
     "message": "Support development"

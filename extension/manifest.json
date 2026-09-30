@@ -6,6 +6,7 @@
   "minimum_chrome_version": "148",
   "description": "__MSG_extDescription__",
   "permissions": ["activeTab", "scripting", "storage", "sidePanel", "declarativeContent"],
+  "optional_host_permissions": ["*://*/*"],
   "content_security_policy": {
     "extension_pages": "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; object-src 'none'; base-uri 'none'; frame-ancestors 'none'"
   },

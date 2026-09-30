@@ -3,6 +3,7 @@ import { buildContext } from "./pipeline/context.js";
 import {
   extract,
   detectLang,
+  detectAgreement,
   extractJurisdiction,
   analyze,
   verify,
@@ -24,6 +25,7 @@ const inFlight = new Set();
 const PIPELINE = [
   { name: "detect-lang", fn: detectLang },
   { name: "extract", fn: extract },
+  { name: "detect-agreement", fn: detectAgreement },
   { name: "extract-jurisdiction", fn: extractJurisdiction },
   { name: "analyze", fn: analyze },
   { name: "verify", fn: verify },
@@ -164,13 +166,20 @@ async function handleScanRequest() {
       tabId,
       "errorUnsupportedPage",
       "This page can't be scanned. Open a normal web page and try again.",
+      "unsupported_page",
     );
     return;
   }
 
   const cap = await checkCapability();
   if (cap.state !== CAP.READY) {
-    await chrome.storage.session.remove(TAB_KEY(tabId)).catch(() => {});
+    // The panel checks capability before asking, so reaching here means it regressed
+    // in between. Write a state the panel can act on: removing the key fires no
+    // newValue handler there, which would leave it on its own spinner while the
+    // onboarding tab opens behind it.
+    await chrome.storage.session
+      .set({ [TAB_KEY(tabId)]: { status: "setup_needed" } })
+      .catch(() => {});
     updateBadge(tabId, "idle");
     await chrome.tabs.create({ url: chrome.runtime.getURL("onboarding.html") }).catch(() => {});
     return;
@@ -179,7 +188,7 @@ async function handleScanRequest() {
   try {
     await ensureInjected(tabId);
   } catch {
-    await failScan(tabId, "errorNoAccess", NO_ACCESS_MESSAGE);
+    await failScan(tabId, "errorNoAccess", NO_ACCESS_MESSAGE, "no_access");
     return;
   }
 
@@ -187,21 +196,26 @@ async function handleScanRequest() {
   try {
     payload = await chrome.tabs.sendMessage(tabId, { type: "EXTRACT_TOS" });
   } catch {
-    await failScan(tabId, "errorNoAccess", NO_ACCESS_MESSAGE);
+    await failScan(tabId, "errorNoAccess", NO_ACCESS_MESSAGE, "no_access");
     return;
   }
   if (!payload || payload.error || !isValidTosPayload(payload)) {
-    await failScan(tabId, "errorNoDocument", "No agreement text was found on this page.");
+    await failScan(
+      tabId,
+      "errorNoDocument",
+      "No agreement text was found on this page.",
+      "no_document",
+    );
     return;
   }
 
   await handleTosDetected(tabId, payload);
 }
 
-async function failScan(tabId, messageKey, fallback) {
+async function failScan(tabId, messageKey, fallback, code) {
   const message = i18nMessage(messageKey, fallback);
   await chrome.storage.session
-    .set({ [TAB_KEY(tabId)]: { status: "error", error: message } })
+    .set({ [TAB_KEY(tabId)]: { status: "error", error: message, code: code ?? null } })
     .catch(() => {});
   updateBadge(tabId, "error");
 }
@@ -215,9 +229,12 @@ function i18nMessage(key, fallback) {
 }
 
 async function ensureInjected(tabId) {
+  const version = chrome.runtime.getManifest().version;
   try {
     const pong = await chrome.tabs.sendMessage(tabId, { type: "PING" });
-    if (pong?.ok) {
+    // Re-inject when the live script is from a different build, so a stale
+    // content script (e.g. after an extension update) can't render old UI.
+    if (pong?.ok && pong.v === version) {
       return;
     }
   } catch {
@@ -297,6 +314,15 @@ async function handleTosDetected(tabId, payload) {
       });
       updateBadge(tabId, "unsupported");
       sendOverlay(tabId, { kind: "unsupported" });
+      return;
+    }
+
+    if (result?.notAgreement) {
+      await chrome.storage.session.set({
+        [TAB_KEY(tabId)]: { status: "not_agreement", domain },
+      });
+      updateBadge(tabId, "not_agreement");
+      sendOverlay(tabId, { kind: "hide" });
       return;
     }
 
@@ -441,6 +467,7 @@ function updateBadge(tabId, status, score) {
     loading: { text: "...", color: "#f59e0b" },
     error: { text: "!", color: "#ef4444" },
     unsupported: { text: "EN", color: "#71717a" },
+    not_agreement: { text: "", color: "#71717a" },
     done: {
       text: safe !== null ? String(Math.round(safe)) : "?",
       color:
