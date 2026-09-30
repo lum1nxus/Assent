@@ -192,7 +192,7 @@ the deterministic scorer were all judged above the bar for a first release.
 ## Store submission — outstanding items for the privacy policy
 
 [PRIVACY.md](PRIVACY.md) is written and is the document we point the Chrome Web Store at
-(`https://github.com/lum1nxus/Assent/blob/main/PRIVACY.md`). Two things still have to happen
+(`https://github.com/lum1nxus/atof/blob/main/PRIVACY.md`). Two things still have to happen
 before it is truthful and complete:
 
 - **Gate the diagnostic payload behind an explicit debug toggle — required before publishing.**
@@ -235,7 +235,7 @@ accent dot on the toolbar icon for terms/privacy-like URLs. It works, but has re
 limits we hit during testing:
 
 - **Requires the extension to be pinned.** `SetIcon` only swaps the toolbar icon, so
-  if Assent lives in the puzzle-menu overflow, nothing is visible.
+  if AtoF lives in the puzzle-menu overflow, nothing is visible.
 - **Cannot blink / animate.** Chrome does not animate toolbar icons; `declarativeContent`
   only supports a static image swap.
 - **No badge without extra permissions.** `chrome.action.setBadgeText` (more eye-catching)
@@ -264,7 +264,7 @@ bullets, e.g.:
 - **Downloading Google's public on-device AI model to your device** — this is a
   one-time, multi-GB download that happens now, not at install time.
 - **Everything runs locally.** Your browsing and the documents you scan never leave
-  your device; there is no Assent server.
+  your device; there is no AtoF server.
 - **This can take a few minutes** depending on your connection; you only do it once.
 - (Optional) **Free disk space needed:** ~N GB — mention the current figure.
 
@@ -293,7 +293,7 @@ Notes:
 ## Documentation — system requirements to run the extension
 
 The README/onboarding should tell users, up front and in plain language, **what it takes
-to actually run Assent**, so nobody installs it and hits a silent "unavailable". Gemini
+to actually run AtoF**, so nobody installs it and hits a silent "unavailable". Gemini
 Nano / the on-device Prompt API has real hardware and storage costs.
 
 - **Disk space.** The on-device model is a multi-GB download (document the current

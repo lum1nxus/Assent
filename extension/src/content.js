@@ -197,29 +197,29 @@ function absoluteUrl(href) {
   }
 }
 
-const HIGHLIGHT_NAME = "assent-hl";
+const HIGHLIGHT_NAME = "atof-hl";
 
 function ensureHighlightStyle() {
   if (highlightStyleInjected) {
     return;
   }
   const style = document.createElement("style");
-  style.setAttribute("data-assent", "highlight-style");
+  style.setAttribute("data-atof", "highlight-style");
   style.textContent = `
     ::highlight(${HIGHLIGHT_NAME}) {
       background-color: #fff3cd;
       color: inherit;
       text-shadow: none;
     }
-    mark.assent-hl {
+    mark.atof-hl {
       background: #fff3cd !important;
       color: inherit !important;
       outline: 2px solid #f0a500;
       border-radius: 2px;
       padding: 0 2px;
-      animation: assent-pulse 1.5s ease 2;
+      animation: atof-pulse 1.5s ease 2;
     }
-    @keyframes assent-pulse {
+    @keyframes atof-pulse {
       0%, 100% { background: #fff3cd; }
       50%      { background: #ffe082; }
     }
@@ -239,7 +239,7 @@ function clearHighlights() {
       }
     }
   } catch {}
-  document.querySelectorAll("mark.assent-hl").forEach((m) => {
+  document.querySelectorAll("mark.atof-hl").forEach((m) => {
     const parent = m.parentNode;
     if (!parent) {
       return;
@@ -264,13 +264,13 @@ function highlightText(quote) {
   ensureHighlightStyle();
   const needle = normalizeChars(quote).replace(/\s+/g, " ").trim().toLowerCase();
   if (needle.length < 8) {
-    console.warn("[Assent] highlight: needle too short", { quote });
+    console.warn("[AtoF] highlight: needle too short", { quote });
     return false;
   }
 
   const { text, anchors } = buildNormalisedTextMap(document.body);
   if (text.length === 0) {
-    console.warn("[Assent] highlight: empty page text buffer");
+    console.warn("[AtoF] highlight: empty page text buffer");
     return false;
   }
 
@@ -309,7 +309,7 @@ function highlightText(quote) {
     scrollRangeIntoView(range);
     return true;
   }
-  console.warn("[Assent] highlight: no probe matched", {
+  console.warn("[AtoF] highlight: no probe matched", {
     needlePreview: `${needle.slice(0, 80)}...`,
     needleLength: needle.length,
     bufferLength: text.length,
@@ -439,7 +439,7 @@ function applyRangeHighlight(range) {
 
   try {
     const mark = document.createElement("mark");
-    mark.className = "assent-hl";
+    mark.className = "atof-hl";
     range.surroundContents(mark);
   } catch {}
 }
@@ -482,7 +482,7 @@ function revealAncestorSections(startNode) {
   }
 }
 
-const OVERLAY_ID = "assent-floating-pill";
+const OVERLAY_ID = "atof-floating-pill";
 const VALID_GRADES = ["A", "B", "C", "D", "F"];
 const BUILD_VERSION = (() => {
   try {
@@ -555,9 +555,9 @@ function ensureOverlay() {
         border: 2px solid #2a2a2e;
         border-top-color: #a78bfa;
         border-radius: 50%;
-        animation: assent-spin 0.8s linear infinite;
+        animation: atof-spin 0.8s linear infinite;
       }
-      @keyframes assent-spin { to { transform: rotate(360deg); } }
+      @keyframes atof-spin { to { transform: rotate(360deg); } }
       .close {
         margin-left: 4px;
         width: 18px; height: 18px;
@@ -614,10 +614,10 @@ function showOverlay(state) {
     root.innerHTML = `
       <div class="grade grade-${grade}">${grade}</div>
       <span>${escapeHtml(tx("overlayDone", "Open details"))}</span>
-      <button class="close" id="assent-close" aria-label="Dismiss">×</button>
+      <button class="close" id="atof-close" aria-label="Dismiss">×</button>
     `;
     root.onclick = (e) => {
-      if (e.target.id === "assent-close") {
+      if (e.target.id === "atof-close") {
         host.remove();
         return;
       }
@@ -627,10 +627,10 @@ function showOverlay(state) {
     root.className = "pill";
     root.innerHTML = `
       <span>${escapeHtml(tx("overlayError", "Analysis unavailable"))}</span>
-      <button class="close" id="assent-close" aria-label="Dismiss">×</button>
+      <button class="close" id="atof-close" aria-label="Dismiss">×</button>
     `;
     root.onclick = (e) => {
-      if (e.target.id === "assent-close") {
+      if (e.target.id === "atof-close") {
         host.remove();
       }
     };

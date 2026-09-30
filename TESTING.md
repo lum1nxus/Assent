@@ -1,6 +1,6 @@
-# Testing Assent locally
+# Testing AtoF locally
 
-Assent has three test layers. Layers 1 and 2 run in pure Node without any
+AtoF has three test layers. Layers 1 and 2 run in pure Node without any
 browser; layer 3 needs a real Chrome with the on-device model.
 
 - **Layer 1 - unit tests** (fast, deterministic, no AI). Pure functions
@@ -46,7 +46,7 @@ npm run format:check
 
 The side panel has a built-in capture tool so you never have to paste
 DevTools snippets again. The bottom of every side panel shows the
-extension version (for example `Assent v0.4.0`) next to a `Debug` button.
+extension version (for example `AtoF v0.4.0`) next to a `Debug` button.
 
 1. Reproduce the bug in Chrome. Wait for analysis to finish.
 2. Open the side panel. Click `Debug` at the bottom.
@@ -66,7 +66,7 @@ extension version (for example `Assent v0.4.0`) next to a `Debug` button.
 You can now replay that exact case in pure Node without a browser:
 
 ```sh
-npm run replay -- /path/to/assent-debug-<...>.json
+npm run replay -- /path/to/debug-<domain>-<timestamp>.json
 ```
 
 The replay runs `parseAndValidate` and then `verify` with a
@@ -161,15 +161,15 @@ Confirm Language Detector is also ready:
 await LanguageDetector.availability();
 ```
 
-## 3. Load Assent as an unpacked extension
+## 3. Load AtoF as an unpacked extension
 
 1. Open `chrome://extensions/`.
 2. Toggle **Developer mode** in the upper right.
 3. Click **Load unpacked** and select the `extension/` directory of this
    repository (not the repository root).
-4. Pin Assent to the toolbar so the badge text is visible while pages load.
+4. Pin AtoF to the toolbar so the badge text is visible while pages load.
 
-After any edit under `extension/`, click the reload icon on the Assent row
+After any edit under `extension/`, click the reload icon on the AtoF row
 in `chrome://extensions/` and then reload the page you are testing on.
 
 ## 4. Try it on a real document
@@ -224,7 +224,7 @@ This is currently the only relevant flag.
 
 ### Logs
 
-- **Service worker logs**: `chrome://extensions/` → Assent → click
+- **Service worker logs**: `chrome://extensions/` → AtoF → click
   _service worker_ → opens DevTools attached to the background script.
 - **Content-script logs**: open DevTools on the inspected page (F12) and
   look at the page console.
@@ -263,6 +263,6 @@ chrome.storage.local.clear(); // also resets donation prompt state
 npm run zip
 ```
 
-Produces `assent-<version>.zip` at the repository root, ready to upload to
+Produces `atof-<version>.zip` at the repository root, ready to upload to
 the Chrome Web Store developer console. The script strips macOS `.DS_Store`
 files automatically.

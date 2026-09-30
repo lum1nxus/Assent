@@ -9,5 +9,5 @@ build/
 .env.local
 .cursor/*
 !.cursor/rules/
-assent-*.zip
+atof-*.zip
 .superpowers/

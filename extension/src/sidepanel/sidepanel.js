@@ -14,13 +14,13 @@ const domainLabel = document.getElementById("domain-label");
 const headerTitle = document.getElementById("header-title");
 const persistentFooter = document.getElementById("persistent-footer");
 
-const METHODOLOGY_URL = "https://github.com/lum1nxus/Assent#methodology";
+const METHODOLOGY_URL = "https://github.com/lum1nxus/atof#methodology";
 const EXTENSION_VERSION = chrome.runtime.getManifest().version;
 
 const t = (key, fallback = "") => chrome.i18n.getMessage(key) || fallback;
 
-document.title = t("extName", "Assent");
-headerTitle.textContent = t("extName", "Assent");
+document.title = t("extName", "AtoF");
+headerTitle.textContent = t("extName", "AtoF");
 renderPersistentFooter();
 wireDebugDialog();
 
@@ -288,7 +288,7 @@ function renderPersistentFooter() {
     <div>${esc(t("footerAttribution", ""))}</div>
     <div class="footer-support"><a id="footer-support-link" href="#">${esc(t("footerSupport", "Support development"))}</a></div>
     <div class="footer-version-row">
-      <span class="footer-version">Assent v${esc(EXTENSION_VERSION)}</span>
+      <span class="footer-version">AtoF v${esc(EXTENSION_VERSION)}</span>
       <button class="btn-debug" id="footer-debug-btn" type="button">Debug</button>
     </div>
   `;
@@ -396,13 +396,13 @@ function wireDebugDialog() {
     try {
       bundle = JSON.parse(textarea.value);
     } catch {
-      bundle = { name: "assent-debug" };
+      bundle = { name: "atof-debug" };
     }
     const blob = new Blob([textarea.value], { type: "application/json" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = `${bundle.name ?? "assent-debug"}.json`;
+    a.download = `${bundle.name ?? "atof-debug"}.json`;
     document.body.appendChild(a);
     a.click();
     a.remove();
@@ -536,7 +536,7 @@ function renderSetupNeeded() {
   domainLabel.textContent = "-";
   app.innerHTML = `
     <div class="state-idle">
-      ${esc(t("sidepanelSetupNeeded", "Assent needs a quick one-time setup before it can analyse pages."))}
+      ${esc(t("sidepanelSetupNeeded", "AtoF needs a quick one-time setup before it can analyse pages."))}
       <div style="margin-top:16px">
         <button class="btn-primary" id="setup-btn">${esc(t("btnOpenSetup", "Open setup"))}</button>
       </div>

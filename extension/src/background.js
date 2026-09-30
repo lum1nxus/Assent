@@ -39,7 +39,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 
   if (message?.type === "SCAN_ACTIVE_TAB") {
     handleScanRequest().catch((err) => {
-      console.error("[Assent]", err);
+      console.error("[AtoF]", err);
     });
     sendResponse({ ok: true });
     return true;
@@ -148,7 +148,7 @@ chrome.runtime.onStartup?.addListener(() => {
 });
 
 const NO_ACCESS_MESSAGE =
-  "Assent could not access this page. Click the Assent icon on the toolbar, then press Scan this page.";
+  "AtoF could not access this page. Click the AtoF icon on the toolbar, then press Scan this page.";
 
 async function handleScanRequest() {
   const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
@@ -330,7 +330,7 @@ async function handleTosDetected(tabId, payload) {
     sendOverlay(tabId, { kind: "done", grade: result.grade ?? "F", score: result.score });
     incrementAnalysisCount().catch(() => {});
   } catch (err) {
-    console.error("[Assent]", err);
+    console.error("[AtoF]", err);
     await chrome.storage.session.set({
       [TAB_KEY(tabId)]: {
         status: "error",
