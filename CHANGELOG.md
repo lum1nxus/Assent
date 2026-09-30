@@ -43,9 +43,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Project renamed from Assent to AtoF.** The extension name, side panel, onboarding,
   in-page pill, privacy policy, and repository URL now use AtoF. Old repository links
   redirect to the new one.
-
-### Changed
-
 - **Corrected the README's claims about the linked-document fetch.** It advertised that the
   request "resolves each redirect manually" and refused unexpected content types. Neither held:
   `redirect: "manual"` yields an opaque response with `status: 0` and no readable headers, so the
