@@ -101,8 +101,11 @@ from the first commit, while the old URLs keep working through the redirect.
 
 ## Verification
 
+- A guard test `tests/project-name.test.js` asserts the display name `AtoF`, the slug
+  `atof` in `package.json` and `package-lock.json`, and that no file under `extension/`
+  contains the retired name.
 - `rg -i assent` matches only: the CHANGELOG entry, the README "Formerly named Assent"
-  line, the dev-reboot spec, and this rename spec and its plan.
+  line, the dev-reboot spec, this rename spec and its plan, and the guard test.
 - `npm test && npm run lint && npm run format:check`.
 - `npm run eval`, because `extension/src/pipeline/steps/persist.js` changes.
 - `gh repo view lum1nxus/atof` succeeds and `git remote -v` points to
@@ -119,4 +122,6 @@ from the first commit, while the old URLs keep working through the redirect.
 ## Delivery
 
 - Branch: `chore/rename-atof` from `main`.
-- Commit and PR title: `chore: rename project to AtoF`.
+- Commits: `chore: rename extension and package to AtoF`, then
+  `docs: rename project to AtoF in docs and rules`.
+- PR title: `chore: rename project to AtoF`.
