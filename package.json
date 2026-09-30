@@ -10,6 +10,9 @@
     "url": "git+https://github.com/lum1nxus/Assent.git"
   },
   "license": "MIT",
+  "engines": {
+    "node": ">=24"
+  },
   "scripts": {
     "lint": "eslint extension/src tests",
     "format": "prettier --write \"**/*.{js,json,html,md}\" --ignore-path .prettierignore",

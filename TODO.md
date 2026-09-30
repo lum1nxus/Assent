@@ -46,9 +46,8 @@ that could not be reproduced were dropped. Ordered by risk, cheapest first withi
    mode; today `persist.js` stores it after every scan.
 6. **`minimum_chrome_version: "148"` locks out supported users.** The extension Prompt API is stable
    from Chrome 138; 148 is the web-exposed number. One line in `manifest.json`.
-7. **CI does not run the tests.** `.github/workflows/ci.yml` runs lint and format only, so the
-   rubric corpus and the pipeline unit tests never gate a merge. Add `npm test`. The locale-parity
-   job is redundant while `en` is the only locale.
+7. **Done - CI runs the tests.** `npm test` runs in CI on Node 24 (version from `.nvmrc`). The
+   locale-parity job is kept: it costs nothing and matters as soon as a second locale lands.
 
 ### P0-1: what is already done, and the approved design for the rest
 
