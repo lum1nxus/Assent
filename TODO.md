@@ -53,7 +53,9 @@ that could not be reproduced were dropped. Ordered by risk, cheapest first withi
 ### P0-1: what is already done, and the approved design for the rest
 
 The capability-regression route is fixed (the background writes `setup_needed`, the panel renders
-its existing "Open setup" card). The rest of P0-1 was designed and reviewed but not yet written:
+its existing "Open setup" card). It has not been tested in a real browser yet: reproducing it
+requires the model capability to regress between the panel's check and the background's. The rest
+of P0-1 was designed and reviewed but not yet written:
 
 - **Overwrite an orphaned `loading` entry** in `handleTosDetected` instead of returning. This is
   safe without a timestamp or a staleness threshold, and the reasoning matters: `inFlight.add()`
