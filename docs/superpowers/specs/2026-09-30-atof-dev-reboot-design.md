@@ -6,8 +6,18 @@ Status: Approved in brainstorming, pending written-spec review
 ## Goal
 
 Restart development of the Assent Chrome extension under a disciplined, AI-assisted
-workflow built on the Superpowers plugin, rename the project to **AtoF**, and add
-automated real-browser testing on top of the existing unit and replay suites.
+workflow built on the Superpowers plugin, fully reconfigure the development environment,
+rename the project to **AtoF**, and then work through the existing pre-release audit.
+
+## Starting point
+
+- `main` is behind. The latest work is on `chore/mvp-hardening` (8 commits, linear on top
+  of `main`, 187 tests passing): non-agreement page detection, risk-band colour
+  consistency, scan narration, `PRIVACY.md`, part of P0-1, and the August 2026 pre-release
+  audit in `TODO.md` with a P0 / P1 / P2 list.
+- `chore/mvp-hardening` is merged into `main` through a pull request before or alongside
+  Phase 0. Phase 0 work is branched from `chore/mvp-hardening` so it does not wait on that
+  merge.
 
 ## Decisions
 
@@ -16,8 +26,10 @@ automated real-browser testing on top of the existing unit and replay suites.
 | Project name | `AtoF` (display: "AtoF"; slug: `atof`)                                  |
 | Local path   | `~/repos/atof`, cloned from the existing GitHub repo with full history  |
 | Stack        | Keep vanilla JS ESM, zero build step, `node:test`, ESLint 9, Prettier 3 |
+| Node         | Node 24 LTS in CI and as the documented local version (Node 20 is EOL)  |
 | Workflow     | Mandatory Superpowers cycle for every feature and fix                   |
-| Rollout      | Staged: workspace and contract first, rename second, backlog third      |
+| Rollout      | Environment first, rename second, then the audit list                   |
+| Backlog      | `TODO.md` audit list is the backlog; its order is reviewed, not redone  |
 | Repo rename  | GitHub repo rename happens in Phase 1, not Phase 0                      |
 
 ## 1. Workspace and rule isolation
@@ -33,9 +45,10 @@ automated real-browser testing on top of the existing unit and replay suites.
 
 ### `AGENTS.md` (repo root)
 
-Short, authoritative entry point for any agent. Contains:
+The single entry point for any agent. Contains:
 
-1. Project one-liner and a pointer to `README.md` for the full pipeline.
+1. Project one-liner and pointers: `README.md` for the pipeline, `TODO.md` for the
+   prioritised backlog, `TESTING.md` for manual browser testing.
 2. Workflow override (section 1 above).
 3. Mandatory Superpowers cycle: `brainstorming`, then a spec in
    `docs/superpowers/specs/`, then `writing-plans` with a plan in
@@ -44,6 +57,11 @@ Short, authoritative entry point for any agent. Contains:
    Bugs start with `systematic-debugging` instead of `brainstorming`.
 4. Verification gate commands (section 3.3).
 5. Pointers to the scoped rules in `.cursor/rules/`.
+
+`docs/HANDOFF.md` was a one-off snapshot for moving between machines. Its content already
+lives in `TODO.md` except one note (the `setup_needed` path is not yet tested in a real
+browser), which moves into the P0-1 section of `TODO.md`. `docs/HANDOFF.md` is then
+deleted so there is one entry point.
 
 ### `.cursor/rules/`
 
@@ -76,8 +94,10 @@ clauses that matter, each backed by a verbatim quote the user can check in the p
   servers, no keys, no telemetry, no cost. Agreement text never leaves the machine.
 - **Small context window.** The model's input budget is limited, so the extractor does
   keyword-weighted, zone-sampled extraction before the model sees anything.
+- **Cheap gate before the model.** The deterministic `detect-agreement` step rejects
+  non-agreement pages before any inference.
 - **AI classifies, code scores.** The model only picks ids from the closed taxonomy
-  and returns verbatim quotes. Score and A-F grade are deterministic code.
+  and returns verbatim quotes. Score, A-F grade, and risk band are deterministic code.
 - **Two-stage precision.** High-recall classifier, then a per-category verifier against
   curated match / not-match examples.
 - **Side panel UX.** Results stay beside the page; clicking a flag highlights the
@@ -85,16 +105,16 @@ clauses that matter, each backed by a verbatim quote the user can check in the p
 - **Zero build.** The unpacked extension loads straight from `extension/`, which keeps
   the edit-reload loop and agent reasoning simple.
 
-Known architectural risks to revisit during backlog triage (not in this spec's scope):
-very long documents exceeding the sampled budget, non-agreement pages, and
-model-download UX.
+The audit's verdict matches: the analysis layer is solid, the weak spot is orchestration
+in `background.js` and `sidepanel.js` (service-worker death, tab navigation). That is
+what the P0 list fixes; no architectural rewrite is planned.
 
 ### 3.3 Three-layer testing
 
 The layer names match the existing `testing.mdc`.
 
-1. **Layer 1 - unit (`npm test`).** Pure functions: rubric math, URL safety, quote
-   normalisation, JSON sanitising, guards.
+1. **Layer 1 - unit (`npm test`).** Pure functions: rubric math, risk bands, agreement
+   detection, URL safety, quote normalisation, JSON sanitising, guards.
 2. **Layer 2 - AI-output replay (`npm test`, `npm run eval`).** Captured model outputs
    in `tests/fixtures/ai-outputs/` replayed through the pipeline in pure Node, without
    Chrome. Every pipeline change runs `npm run eval`.
@@ -114,22 +134,30 @@ Gate before any commit: `npm test && npm run lint && npm run format:check`.
 Pipeline changes additionally require `npm run eval`. UI changes additionally require
 a Layer 3 check, interactive until the automated harness exists.
 
-CI currently runs lint and format but not tests. Phase 0 adds `npm test` to CI so the
-gate is enforced on every push and pull request.
+### 3.4 Tooling fixes in Phase 0
+
+- **CI runs tests** (audit P0-7). Add `npm test` to CI.
+- **Node 24.** CI moves from Node 20 to Node 24. Add `.nvmrc` with `24` and
+  `"engines": { "node": ">=24" }` in `package.json`.
+- **Lint covers everything** (audit P1 item "ESLint does not cover the root entrypoints").
+  Browser config applies to `extension/**/*.js`, Node config to `tests/**/*.js` and
+  `scripts/**/*.mjs`, and `npm run lint` lints `extension tests scripts`. A probe run with
+  this scope reports zero errors, so no source changes are needed.
 
 ## 4. Roadmap
 
 Each phase gets its own spec, plan, and implementation cycle.
 
-- **Phase 0 - Workspace and contract (this spec's implementation).** Clone (done), add
-  `AGENTS.md`, add `superpowers-discipline.mdc`, update `testing.mdc`, add `npm test`
-  to CI, run the gate on a clean checkout.
+- **Phase 0 - Environment and contract (this spec's implementation).** `AGENTS.md`,
+  `superpowers-discipline.mdc`, `testing.mdc`, retire `docs/HANDOFF.md`, the tooling fixes
+  in 3.4, and mark P0-7 and the ESLint item done in `TODO.md`.
 - **Phase 1 - Rename and browser harness.** Two separate specs: rename Assent to AtoF
-  (manifest, `package.json`, locales, UI copy, README, rules, GitHub repo name), then
-  the automated Layer 3 harness.
-- **Phase 2 - Backlog triage.** Turn `TODO.md` and loose ideas into a prioritised list;
-  each picked item becomes a GitHub issue.
-- **Phase 3 - Feature work.** One item at a time through the full Superpowers cycle.
+  (manifest, `package.json`, locales, UI copy, README, `PRIVACY.md` and its store URL,
+  rules, GitHub repo name), then the automated Layer 3 harness.
+- **Phase 2 - Audit P0 list.** Start with a short review of the P0 / P1 / P2 order in
+  `TODO.md` with the user, then take the P0 items one at a time. P0-1 already has an
+  approved design in `TODO.md` and goes straight to `writing-plans`.
+- **Phase 3 - P1, P2, and new features.** One item at a time through the full cycle.
 
 ## Out of scope
 
@@ -139,9 +167,10 @@ Each phase gets its own spec, plan, and implementation cycle.
 
 ## Success criteria for Phase 0
 
-- `AGENTS.md` and `superpowers-discipline.mdc` exist and are committed.
+- `AGENTS.md` and `superpowers-discipline.mdc` exist; `docs/HANDOFF.md` is gone.
 - `testing.mdc` describes automated and interactive Layer 3 and the gate commands.
-- CI runs `npm test`.
-- `npm ci && npm test && npm run lint && npm run format:check` pass on `main`.
+- CI runs `npm test` on Node 24; `.nvmrc` and `engines` pin Node 24.
+- `npm run lint` covers `extension`, `tests`, and `scripts` and passes.
+- `npm ci && npm test && npm run lint && npm run format:check` pass.
 - A new agent session opened in `~/repos/atof` follows the Superpowers cycle without
   being reminded.
