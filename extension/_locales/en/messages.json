@@ -1,6 +1,6 @@
 {
   "extName": {
-    "message": "Assent"
+    "message": "AtoF"
   },
   "extDescription": {
     "message": "Reads agreement documents so you don't have to. Highlights potentially unfavourable clauses before you accept."
@@ -30,13 +30,13 @@
     "message": "Open setup"
   },
   "sidepanelSetupNeeded": {
-    "message": "Assent needs a quick one-time setup before it can analyse pages."
+    "message": "AtoF needs a quick one-time setup before it can analyse pages."
   },
   "btnAllowAllSites": {
     "message": "Allow on every page"
   },
   "allowAllSitesHint": {
-    "message": "Tired of clicking the toolbar icon on each new page? Allow Assent to read any page you choose to scan. It still only reads a page when you press Scan — nothing runs in the background."
+    "message": "Tired of clicking the toolbar icon on each new page? Allow AtoF to read any page you choose to scan. It still only reads a page when you press Scan - nothing runs in the background."
   },
   "allowAllSitesEnabled": {
     "message": "Enabled — you can scan any page from here without clicking the toolbar icon."
@@ -75,7 +75,7 @@
     "message": "English-only for now"
   },
   "stateUnsupportedLanguageBody": {
-    "message": "This document is not in English. Assent currently analyses English-language documents only. Support for other languages is planned."
+    "message": "This document is not in English. AtoF currently analyses English-language documents only. Support for other languages is planned."
   },
   "stateNotAgreementTitle": {
     "message": "Nothing to analyse here"
@@ -93,7 +93,7 @@
     "message": "Analysis is taking too long. Please reload the page and try again."
   },
   "errorNoAccess": {
-    "message": "Assent could not access this page. Click the Assent icon on the toolbar, then press Scan this page."
+    "message": "AtoF could not access this page. Click the AtoF icon on the toolbar, then press Scan this page."
   },
   "errorNoDocument": {
     "message": "No agreement text was found on this page."
@@ -288,10 +288,10 @@
     }
   },
   "onbTitle": {
-    "message": "Set up Assent"
+    "message": "Set up AtoF"
   },
   "onbIntro": {
-    "message": "Assent analyses agreement documents entirely on your device using Chrome's built-in AI. Nothing you read is ever sent to a server."
+    "message": "AtoF analyses agreement documents entirely on your device using Chrome's built-in AI. Nothing you read is ever sent to a server."
   },
   "onbPrivacyNote": {
     "message": "100% on-device · no data leaves your browser"
@@ -345,7 +345,7 @@
     "message": "Chrome is too old"
   },
   "onbUnsupportedBody": {
-    "message": "Assent needs desktop Chrome 148 or newer for the built-in Prompt API. Update Chrome and reopen this page."
+    "message": "AtoF needs desktop Chrome 148 or newer for the built-in Prompt API. Update Chrome and reopen this page."
   },
   "onbCheckVersion": {
     "message": "Check your Chrome version"

@@ -41,7 +41,7 @@ export async function persist(input, ctx) {
     disclaimer: {
       not_legal_advice: true,
       not_affiliated: true,
-      methodology_url: "https://github.com/lum1nxus/Assent#methodology",
+      methodology_url: "https://github.com/lum1nxus/atof#methodology",
       analyzed_at: input.analyzedAt,
       text: DISCLAIMER_TEXT,
     },

@@ -15,10 +15,10 @@ const t = (key, fallback = "") => {
   }
 };
 
-document.getElementById("brand-title").textContent = t("extName", "Assent");
+document.getElementById("brand-title").textContent = t("extName", "AtoF");
 document.getElementById("privacy-note").textContent = t("onbPrivacyNote", "");
 document.getElementById("intro").textContent = t("onbIntro", "");
-document.title = t("onbTitle", "Set up Assent");
+document.title = t("onbTitle", "Set up AtoF");
 
 function esc(s) {
   return String(s ?? "")

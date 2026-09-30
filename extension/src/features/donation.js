@@ -9,7 +9,7 @@ const SNOOZE_DAYS_NO_THANKS = 30;
 const SNOOZE_DAYS_AFTER_DONATION = 150;
 
 const DAY_MS = 24 * 60 * 60 * 1000;
-const KEY = "assent_donation_state";
+const KEY = "atof_donation_state";
 
 const DEFAULT_STATE = {
   firstUse: null,
