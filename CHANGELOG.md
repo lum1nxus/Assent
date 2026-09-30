@@ -9,6 +9,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- **Published privacy policy ([PRIVACY.md](PRIVACY.md)).** The Chrome Web Store requires a
+  disclosure and a posted policy even when data is processed and stored entirely locally —
+  "scraping content from a website the user visits" counts as handling user data regardless of
+  where the processing happens — and the dashboard field is mandatory. The README's Privacy
+  section was a developer-facing note, not a policy. The new document states what is handled and
+  when, that nothing is ever transmitted, where results live and how long they survive, the
+  purpose of every permission, Chrome's (not Assent's) role in downloading the Gemini Nano model,
+  and the affirmative Limited Use statement the programme policies require. It deliberately keeps
+  to the level of _what happens to your data_ rather than restating implementation details that
+  can drift out of date.
+
 - **Graceful "nothing to analyse" for non-agreement pages.** Scanning is user-initiated,
   so a user can press **Scan this page** on an article, dashboard, or search result. A new
   deterministic `detect-agreement` pipeline step (no model cost) runs before analysis and,
@@ -29,6 +40,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- **Corrected the README's claims about the linked-document fetch.** It advertised that the
+  request "resolves each redirect manually" and refused unexpected content types. Neither held:
+  `redirect: "manual"` yields an opaque response with `status: 0` and no readable headers, so the
+  `Location` branch is unreachable and redirects fail as "HTTP 0", and the content-type guard is
+  skipped outright when a server sends no `Content-Type`. The README now documents the real
+  behaviour and both defects are tracked in [TODO.md](TODO.md); the security claims that remain
+  are the ones the code actually enforces.
 - **On-demand, privacy-first scanning.** The extension no longer injects a content
   script into every page or scans the DOM in the background. Analysis is now
   explicitly triggered from the side panel's **Scan this page** button. The page is
