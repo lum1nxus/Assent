@@ -125,9 +125,9 @@ id="app">` stays empty. Add both, plus a retry affordance.
   minimum and require a minimum word count.
 - **Jurisdiction misclassification.** `extract-jurisdiction.js` matches by substring, so a UK
   document mentioning Northern Ireland is classified as EU. Match on word boundaries.
-- **ESLint does not cover the root entrypoints.** The config's scoping misses `extension/*.js`, so
-  `onboarding.js` is unlinted; that hides two genuinely empty `catch {}` blocks
-  (`onboarding.js:43`, `:65`) behind eleven false-positive globals errors.
+- **Done - ESLint covers every JS file.** `npm run lint` now lints `extension`, `tests`, and
+  `scripts`. The empty `catch {}` blocks in `onboarding.js` pass because the config allows empty
+  catches; whether they should log is a separate style decision.
 - **The result cache outlives its document.** `sidepanel.js:674-685` keys by tab id and compares
   only origin + pathname, and replays on `idle`. Reloading a page clears the badge but the panel
   still shows the old grade, and `?doc=terms` → `?doc=privacy` shows the wrong document's analysis.

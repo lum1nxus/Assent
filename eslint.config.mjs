@@ -5,7 +5,7 @@ export default [
   js.configs.recommended,
 
   {
-    files: ["extension/src/**/*.js"],
+    files: ["extension/**/*.js"],
     languageOptions: {
       ecmaVersion: 2023,
       sourceType: "module",
@@ -19,10 +19,7 @@ export default [
       },
     },
     rules: {
-      "no-unused-vars": [
-        "error",
-        { argsIgnorePattern: "^_", varsIgnorePattern: "^_" },
-      ],
+      "no-unused-vars": ["error", { argsIgnorePattern: "^_", varsIgnorePattern: "^_" }],
       "no-undef": "error",
       eqeqeq: ["error", "always"],
       "no-var": "error",
@@ -41,7 +38,7 @@ export default [
   },
 
   {
-    files: ["tests/**/*.js"],
+    files: ["tests/**/*.js", "scripts/**/*.mjs"],
     languageOptions: {
       ecmaVersion: 2023,
       sourceType: "module",

@@ -14,7 +14,7 @@
     "node": ">=24"
   },
   "scripts": {
-    "lint": "eslint extension/src tests",
+    "lint": "eslint extension tests scripts",
     "format": "prettier --write \"**/*.{js,json,html,md}\" --ignore-path .prettierignore",
     "format:check": "prettier --check \"**/*.{js,json,html,md}\" --ignore-path .prettierignore",
     "test": "node --test tests/*.test.js",
