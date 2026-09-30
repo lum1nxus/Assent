@@ -173,7 +173,13 @@ async function handleScanRequest() {
 
   const cap = await checkCapability();
   if (cap.state !== CAP.READY) {
-    await chrome.storage.session.remove(TAB_KEY(tabId)).catch(() => {});
+    // The panel checks capability before asking, so reaching here means it regressed
+    // in between. Write a state the panel can act on: removing the key fires no
+    // newValue handler there, which would leave it on its own spinner while the
+    // onboarding tab opens behind it.
+    await chrome.storage.session
+      .set({ [TAB_KEY(tabId)]: { status: "setup_needed" } })
+      .catch(() => {});
     updateBadge(tabId, "idle");
     await chrome.tabs.create({ url: chrome.runtime.getURL("onboarding.html") }).catch(() => {});
     return;

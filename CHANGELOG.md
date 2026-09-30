@@ -90,6 +90,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- **Side panel no longer spins forever when the model becomes unavailable mid-request.**
+  The panel checks model capability before asking for a scan and the background checks it
+  again; if it regressed in between, the background used to _remove_ the tab's stored
+  state and open onboarding. Removal fires no `newValue` handler in the panel, so it kept
+  showing the spinner it had drawn locally, behind the new tab. The background now writes
+  a `setup_needed` state and the panel renders its existing "Open setup" card. This is the
+  first of several routes into a permanent spinner; the rest are tracked in `TODO.md` as
+  P0-1.
+
 - **Severity vs. risk-scale colour collision.** Minor flags were a solid warm orange —
   the same hue the score scale uses for "High risk" — so a minor clause could be misread
   as high-risk, and it clashed with a green "Low risk" header. Minor severity is now a

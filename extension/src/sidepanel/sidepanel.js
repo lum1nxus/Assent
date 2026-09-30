@@ -733,6 +733,13 @@ function dispatchState(tabId, state) {
       captureStateForDebug(state);
       renderError(state.error, state.domain, state.code);
       break;
+    // Capability regressed between the panel's own check and the background's.
+    // The background opens onboarding and writes this so the panel has something
+    // to render instead of sitting on the spinner it drew locally.
+    case "setup_needed":
+      captureStateForDebug(state);
+      renderSetupNeeded();
+      break;
     case "unsupported_language":
       captureStateForDebug(state);
       renderUnsupportedLanguage(state.domain);
