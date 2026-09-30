@@ -1,5 +1,5 @@
 ---
-description: Test conventions for Assent.
+description: Test conventions for AtoF.
 globs: tests/**,extension/**
 alwaysApply: false
 ---

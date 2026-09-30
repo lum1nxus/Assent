@@ -1,8 +1,10 @@
-# Assent
+# AtoF
+
+Formerly named Assent.
 
 > Reads agreement documents so you don't have to. Highlights potentially unfavourable clauses before you accept.
 
-Assent is a Chrome extension that scans Terms of Service, EULAs, privacy policies, and similar agreement documents. It produces a letter grade (A-F), a deterministic numeric risk score, a short neutral summary, and a list of flagged clauses with verbatim quotes so every finding can be checked against the original document.
+AtoF is a Chrome extension that scans Terms of Service, EULAs, privacy policies, and similar agreement documents. It produces a letter grade (A-F), a deterministic numeric risk score, a short neutral summary, and a list of flagged clauses with verbatim quotes so every finding can be checked against the original document.
 
 The extension runs **entirely on the user's device** using Chrome's built-in Gemini Nano. There are no servers, no API keys, no telemetry, no logins, no costs.
 
@@ -10,14 +12,14 @@ The MVP scope is **English-language documents only**. Documents in other languag
 
 ## Why
 
-Most people click "I Agree" without reading thirty pages of legalese. The provisions that matter - mandatory arbitration, broad content licences, automatic training on user content, indefinite data retention, unilateral termination, broad indemnity - are usually buried where they will not be found. Assent surfaces them with a verbatim quote so the reader can verify each finding directly against the original document.
+Most people click "I Agree" without reading thirty pages of legalese. The provisions that matter - mandatory arbitration, broad content licences, automatic training on user content, indefinite data retention, unilateral termination, broad indemnity - are usually buried where they will not be found. AtoF surfaces them with a verbatim quote so the reader can verify each finding directly against the original document.
 
 ## How it works
 
-Assent never scans pages in the background. Analysis is **explicitly triggered by you**:
+AtoF never scans pages in the background. Analysis is **explicitly triggered by you**:
 
 ```
-click the Assent toolbar icon    opens the side panel; activeTab is granted
+click the AtoF toolbar icon      opens the side panel; activeTab is granted
    │                             for the current tab only
    ▼
 side panel · "Scan this page"    verifies Gemini Nano is ready; if not, it
@@ -51,7 +53,7 @@ The first call to the on-device model downloads a small Chrome model bundle; eve
 
 ## First-time setup
 
-On install, Assent opens a dedicated onboarding page that detects your device's capability and shows one of:
+On install, AtoF opens a dedicated onboarding page that detects your device's capability and shows one of:
 
 - **Ready** — Gemini Nano is present; you can scan immediately.
 - **One-time setup** — the model can be downloaded (~2 GB); a single click starts it, with live progress. It runs fully offline afterwards.
@@ -85,7 +87,7 @@ The MVP focuses on English-language documents and a single audit-hardened pipeli
 2. Open `chrome://extensions/` and enable Developer Mode.
 3. Choose **Load unpacked** and select the `extension/` folder (not the repository root).
 4. On first install a setup page opens and checks whether the on-device model is ready, downloading it if needed.
-5. Click the Assent toolbar icon to open the side panel, open any agreement document, and press **Scan this page**.
+5. Click the AtoF toolbar icon to open the side panel, open any agreement document, and press **Scan this page**.
 
 For a step-by-step local test guide, including how to provision the on-device model bundle, see [TESTING.md](TESTING.md).
 
@@ -186,7 +188,7 @@ Every pipeline step is a pure async function `(input, ctx) => { value, done? }`.
 
 ## Methodology
 
-Assent performs **automated text-pattern detection only**. The on-device model classifies clauses into a closed taxonomy. The score is computed deterministically in code from those classifications using the rubric below.
+AtoF performs **automated text-pattern detection only**. The on-device model classifies clauses into a closed taxonomy. The score is computed deterministically in code from those classifications using the rubric below.
 
 ### Pipeline
 
@@ -253,7 +255,7 @@ npm test           # node --test on tests/*.test.js (pure unit tests, no AI)
 npm run lint       # eslint on extension/src and tests
 npm run format     # prettier write
 npm run format:check
-npm run zip        # builds assent-<version>.zip ready for the Chrome Web Store
+npm run zip        # builds atof-<version>.zip ready for the Chrome Web Store
 ```
 
 `npm test` covers the deterministic scoring rubric, label resolution, and the summary template. It does not call any AI; for end-to-end testing with the real on-device model see [TESTING.md](TESTING.md).
@@ -263,7 +265,7 @@ npm run zip        # builds assent-<version>.zip ready for the Chrome Web Store
 The full, user-facing policy is [PRIVACY.md](PRIVACY.md) — that is the document published with the
 Chrome Web Store listing. This section is the developer-facing summary of how it is enforced in code.
 
-Assent does not phone home. It does not collect or transmit any analytics, telemetry, identifiers, or document content. Results are stored only in `chrome.storage.session` (the analysed tab) and `chrome.storage.local` (donation state only). Both are local to the user's browser profile.
+AtoF does not phone home. It does not collect or transmit any analytics, telemetry, identifiers, or document content. Results are stored only in `chrome.storage.session` (the analysed tab) and `chrome.storage.local` (donation state only). Both are local to the user's browser profile.
 
 The extension holds **no host permissions by default** and installs **no automatic content scripts**. It reads a page only after you explicitly press **Scan this page**, and by default only via `activeTab` — the transient, per-invocation permission Chrome grants for the current tab. The URL-based icon accent uses `declarativeContent`, which matches URLs inside Chrome without exposing your browsing history to the extension.
 

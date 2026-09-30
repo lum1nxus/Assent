@@ -10,7 +10,7 @@ When a real document on a real Chrome with Gemini Nano produces an output you wa
 
 ## Snippet
 
-Open the **service worker** DevTools (chrome://extensions -> Assent -> Service worker -> Inspect) and paste this:
+Open the **service worker** DevTools (chrome://extensions -> AtoF -> Service worker -> Inspect) and paste this:
 
 ```js
 (async () => {

@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- **Project renamed from Assent to AtoF.** The extension name, side panel, onboarding,
+  in-page pill, privacy policy, and repository URL now use AtoF. Old repository links
+  redirect to the new one.
+
 ### Added
 
 - **Published privacy policy ([PRIVACY.md](PRIVACY.md)).** The Chrome Web Store requires a
@@ -15,7 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   where the processing happens — and the dashboard field is mandatory. The README's Privacy
   section was a developer-facing note, not a policy. The new document states what is handled and
   when, that nothing is ever transmitted, where results live and how long they survive, the
-  purpose of every permission, Chrome's (not Assent's) role in downloading the Gemini Nano model,
+  purpose of every permission, Chrome's (not AtoF's) role in downloading the Gemini Nano model,
   and the affirmative Limited Use statement the programme policies require. It deliberately keeps
   to the level of _what happens to your data_ rather than restating implementation details that
   can drift out of date.

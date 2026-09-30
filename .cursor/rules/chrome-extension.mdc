@@ -1,5 +1,5 @@
 ---
-description: Chrome MV3 security and architecture rules for Assent.
+description: Chrome MV3 security and architecture rules for AtoF.
 globs: extension/**
 alwaysApply: false
 ---

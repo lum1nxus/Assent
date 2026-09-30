@@ -1,5 +1,5 @@
 ---
-description: Closed-taxonomy pipeline and deterministic scoring rules for Assent.
+description: Closed-taxonomy pipeline and deterministic scoring rules for AtoF.
 globs: extension/src/pipeline/**
 alwaysApply: false
 ---
