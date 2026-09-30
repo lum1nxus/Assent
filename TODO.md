@@ -171,6 +171,9 @@ id="app">` stays empty. Add both, plus a retry affordance.
 - **Severity naming hides a weighting difference.** `severityClass` collapses `full` into "Major"
   while the scorer weights `full` at 1.0 and `high` at 1.5, so two identical-looking Major flags can
   differ by 50 % in penalty.
+- **`format:check` does not cover `.mjs` files**, so `eslint.config.mjs` and `scripts/*.mjs` are
+  never format-checked, and both `scripts/*.mjs` files currently fail `prettier --check`. Add `mjs`
+  to the `format` and `format:check` globs in `package.json` and reformat those files.
 
 ## What the audit explicitly cleared
 
@@ -371,7 +374,7 @@ we harden for release. Deliverable: a short report + cleanup PR(s).
   Hand-written tables therefore fail `format:check` unless they happen to match byte for byte;
   `PRIVACY.md` uses lists instead for that reason. Run the formatter, don't hand-align.
 - If `npm` is missing but `node` is present, the checks still run directly:
-  `node --test` over `tests/*.test.js`, `node node_modules/eslint/bin/eslint.js extension/src tests`,
+  `node --test` over `tests/*.test.js`, `node node_modules/eslint/bin/eslint.js extension tests scripts`,
   and `node node_modules/prettier/bin/prettier.cjs --check .`
 
 ## Other ideas

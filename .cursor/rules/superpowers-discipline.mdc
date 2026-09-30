@@ -6,8 +6,9 @@ alwaysApply: true
 # Superpowers discipline
 
 - Read `AGENTS.md` at the start of every session. It overrides user-level workflow rules.
-- No edits under `extension/`, `tests/`, or `scripts/` until a spec in `docs/superpowers/specs/` and a plan in `docs/superpowers/plans/` exist for the change and the user has approved both. An approved design recorded in `TODO.md` counts as the spec.
-- Bug fixes start with `superpowers:systematic-debugging`. The regression fixture or test lands in the same commit as the fix.
+- Gated paths: `extension/`, `tests/`, `scripts/`, `package.json`, `package-lock.json`, `eslint.config.mjs`, `.github/`. No edits to them until a spec in `docs/superpowers/specs/` and a plan in `docs/superpowers/plans/` exist for the change and the user has approved both. An approved design recorded in `TODO.md` counts as the spec.
+- Docs-only changes (Markdown files, `AGENTS.md`, `.cursor/rules/`) skip the spec and plan steps, but still go on a feature branch and still run the verification gate.
+- Bug fixes start with `superpowers:systematic-debugging`. Its root-cause write-up, saved to `docs/superpowers/specs/`, replaces brainstorming and counts as the spec. Uncommitted diagnostic logging is allowed before approval. The failing regression test is written after the plan is approved and lands in the same commit as the fix.
 - Implementation happens on a feature branch, never directly on `main`.
 - Never claim a task is done, fixed, or passing without running the verification gate from `AGENTS.md` in the same turn and showing its result.
 - If the user asks to skip a step, confirm once, then follow the user.

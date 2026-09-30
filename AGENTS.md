@@ -9,7 +9,7 @@ Chrome MV3 extension that grades agreement documents A-F on-device.
 
 ## This repo overrides user-level conventions
 
-This is a personal project. Any user-level rule about ticket ids, Jira, choosing between `dev` / `preprod` base branches, or infrastructure does not apply here.
+This is a personal project. Any user-level rule about ticket ids, issue-tracker keys, choosing between `dev` / `preprod` base branches, or infrastructure does not apply here.
 
 - Base branch: `main`. Do not ask which base branch to use.
 - Branch names: `<type>/<short-change>`, for example `feat/scan-progress`.
@@ -19,9 +19,12 @@ This is a personal project. Any user-level rule about ticket ids, Jira, choosing
 
 ## Workflow
 
-Every change goes through the Superpowers cycle. Do not skip steps because a change looks small.
+Every change to a gated path goes through the Superpowers cycle below. Do not skip steps because a change looks small.
 
-1. `superpowers:brainstorming` - agree on the design with the user. Bugs start with `superpowers:systematic-debugging` instead. If `TODO.md` already records an approved design for the item, go straight to step 3.
+- Gated paths (need an approved spec and plan before editing): `extension/`, `tests/`, `scripts/`, `package.json`, `package-lock.json`, `eslint.config.mjs`, `.github/`.
+- Docs-only changes (Markdown files, `AGENTS.md`, `.cursor/rules/`) skip steps 1-3, but still go on a feature branch and still run the verification gate.
+
+1. `superpowers:brainstorming` - agree on the design with the user. If `TODO.md` already records an approved design for the item, go straight to step 3. Bugs start with `superpowers:systematic-debugging` instead: its root-cause write-up, saved to `docs/superpowers/specs/`, replaces brainstorming and counts as the spec. Uncommitted diagnostic logging is allowed before approval. The failing regression test is written after the plan is approved and lands in the same commit as the fix.
 2. Spec saved to `docs/superpowers/specs/YYYY-MM-DD-<topic>-design.md` and committed.
 3. `superpowers:writing-plans` - plan saved to `docs/superpowers/plans/YYYY-MM-DD-<topic>.md` and committed.
 4. `superpowers:subagent-driven-development` (preferred) or `superpowers:executing-plans`, on a feature branch, with `superpowers:test-driven-development` for code.
@@ -38,6 +41,8 @@ Also required when the change touches:
 
 - `extension/src/pipeline/**`: `npm run eval`
 - side panel, content script, onboarding, or manifest: a Layer 3 check in real Chrome (see `.cursor/rules/testing.mdc`)
+
+The Layer 3 check needs the user: they load `extension/` unpacked in Chrome (an agent cannot drive the Load unpacked file picker) and hand over the tab. The agent then uses the `chrome-devtools` MCP for console, DOM, storage, and screenshots. If the user is not available, report the Layer 3 check as pending and do not claim the change is done.
 
 ## Where the rules live
 

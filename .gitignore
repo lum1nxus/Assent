@@ -10,3 +10,4 @@ build/
 .cursor/*
 !.cursor/rules/
 assent-*.zip
+.superpowers/

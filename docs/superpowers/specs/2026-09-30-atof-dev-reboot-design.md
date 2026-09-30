@@ -1,7 +1,7 @@
 # AtoF Development Reboot - Design
 
 Date: 2026-09-30
-Status: Approved in brainstorming, pending written-spec review
+Status: Approved; Phase 0 implemented
 
 ## Goal
 
@@ -78,8 +78,8 @@ New rule:
 - `superpowers-discipline.mdc` (`alwaysApply: true`) - no implementation without an
   approved spec and plan; no completion claim without running the gate commands.
 
-`AGENTS.md` is the single place that describes the workflow; rules hold only scoped
-technical constraints, so they do not duplicate each other.
+`AGENTS.md` is canonical; rules may restate parts of it in short form so they apply
+automatically.
 
 ## 3. Architecture fit and testing
 

@@ -1,6 +1,6 @@
 # Phase 0: Environment and Contract Implementation Plan
 
-> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
+> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [x]`) syntax for tracking.
 
 **Goal:** Make every future agent session in this repo follow the Superpowers cycle and the repo's own conventions without being reminded, and make the tooling gate complete (tests in CI, Node 24, lint over every JS file).
 
@@ -36,7 +36,7 @@
 - Consumes: nothing.
 - Produces: gate command string `npm test && npm run lint && npm run format:check`, referenced verbatim by Task 2.
 
-- [ ] **Step 1: Create `AGENTS.md`**
+- [x] **Step 1: Create `AGENTS.md`**
 
 ```markdown
 # Agent guide
@@ -90,7 +90,7 @@ Also required when the change touches:
 - `.cursor/rules/superpowers-discipline.mdc` - workflow gating.
 ```
 
-- [ ] **Step 2: Create `.cursor/rules/superpowers-discipline.mdc`**
+- [x] **Step 2: Create `.cursor/rules/superpowers-discipline.mdc`**
 
 ```markdown
 ---
@@ -108,7 +108,7 @@ alwaysApply: true
 - If the user asks to skip a step, confirm once, then follow the user.
 ```
 
-- [ ] **Step 3: Move the one unique HANDOFF note into `TODO.md` and delete `docs/HANDOFF.md`**
+- [x] **Step 3: Move the one unique HANDOFF note into `TODO.md` and delete `docs/HANDOFF.md`**
 
 In `TODO.md`, section `### P0-1: what is already done, and the approved design for the rest`, find:
 
@@ -128,7 +128,7 @@ of P0-1 was designed and reviewed but not yet written:
 
 Then run: `git rm docs/HANDOFF.md`
 
-- [ ] **Step 4: Format and verify**
+- [x] **Step 4: Format and verify**
 
 Run: `npx prettier --write AGENTS.md TODO.md && npm run format:check`
 Expected: `All matched files use Prettier code style!`
@@ -139,7 +139,7 @@ Expected: no output, exit code 1.
 Run: `rg -n 'HANDOFF' --glob '!docs/superpowers/**' .`
 Expected: no output, exit code 1.
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add AGENTS.md .cursor/rules/superpowers-discipline.mdc TODO.md
@@ -160,7 +160,7 @@ git commit -m "docs: add agent guide and superpowers workflow rule"
 - Consumes: gate command from Task 1.
 - Produces: nothing used by later tasks.
 
-- [ ] **Step 1: Replace the Layer 3 bullet**
+- [x] **Step 1: Replace the Layer 3 bullet**
 
 Old:
 
@@ -183,15 +183,15 @@ New:
 - Changes to the side panel, content script, onboarding, or manifest: also a Layer 3 check.
 ```
 
-- [ ] **Step 2: Keep subagent scratch files out of the format gate**
+- [x] **Step 2: Keep subagent scratch files out of the format gate**
 
-The Superpowers subagent workflow writes Markdown scratch files under `.superpowers/` (git-ignored by its own `.gitignore`), and `npm run format:check` currently fails on them. Append one line to `.prettierignore`:
+The Superpowers subagent workflow writes Markdown scratch files under `.superpowers/` (git-ignored by the root `.gitignore`), and `npm run format:check` currently fails on them. Append one line to `.prettierignore`:
 
 ```text
 .superpowers
 ```
 
-- [ ] **Step 3: Verify**
+- [x] **Step 3: Verify**
 
 Prettier has no parser for `.mdc`, and `format:check` does not cover `.mdc` files, so rule files are not passed to Prettier.
 
@@ -201,7 +201,7 @@ Expected: `All matched files use Prettier code style!`
 Run: `rg -n '[^\x00-\x7F]' .cursor/rules/testing.mdc`
 Expected: no output, exit code 1.
 
-- [ ] **Step 4: Commit**
+- [x] **Step 4: Commit**
 
 ```bash
 git add .cursor/rules/testing.mdc .prettierignore
@@ -224,7 +224,7 @@ git commit -m "docs: describe layer 3 browser testing and commit gate"
 - Consumes: `npm test` script from `package.json`.
 - Produces: nothing.
 
-- [ ] **Step 1: Create `.nvmrc`**
+- [x] **Step 1: Create `.nvmrc`**
 
 Content (single line, trailing newline):
 
@@ -232,7 +232,7 @@ Content (single line, trailing newline):
 24
 ```
 
-- [ ] **Step 2: Add `engines` to `package.json`**
+- [x] **Step 2: Add `engines` to `package.json`**
 
 Insert after the `"license": "MIT",` line:
 
@@ -242,7 +242,7 @@ Insert after the `"license": "MIT",` line:
   },
 ```
 
-- [ ] **Step 3: Update `.github/workflows/ci.yml` job `lint-and-format`**
+- [x] **Step 3: Update `.github/workflows/ci.yml` job `lint-and-format`**
 
 Change `name: Lint + format + audit` to `name: Test + lint + format + audit`.
 
@@ -263,7 +263,7 @@ Add a test step between "Install dependencies" and "Lint":
   run: npm test
 ```
 
-- [ ] **Step 4: Mark P0-7 done in `TODO.md`**
+- [x] **Step 4: Mark P0-7 done in `TODO.md`**
 
 Find the item that starts with `7. **CI does not run the tests.**` (three lines, ending with `job is redundant while \`en\` is the only locale.`) and replace the whole item with:
 
@@ -272,7 +272,7 @@ Find the item that starts with `7. **CI does not run the tests.**` (three lines,
    locale-parity job is kept: it costs nothing and matters as soon as a second locale lands.
 ```
 
-- [ ] **Step 5: Verify**
+- [x] **Step 5: Verify**
 
 Run: `python3 -c "import yaml; yaml.safe_load(open('.github/workflows/ci.yml')); print('ok')"`
 Expected: `ok`
@@ -286,7 +286,7 @@ Expected: `pass 187` and `fail 0`
 Run: `npx prettier --write TODO.md package.json && npm run format:check`
 Expected: `All matched files use Prettier code style!`
 
-- [ ] **Step 6: Commit**
+- [x] **Step 6: Commit**
 
 ```bash
 git add .nvmrc package.json .github/workflows/ci.yml TODO.md
@@ -308,7 +308,7 @@ git commit -m "ci: run tests on node 24"
 - Consumes: nothing.
 - Produces: `npm run lint` covering `extension`, `tests`, `scripts`.
 
-- [ ] **Step 1: Widen the browser block in `eslint.config.mjs`**
+- [x] **Step 1: Widen the browser block in `eslint.config.mjs`**
 
 Old:
 
@@ -322,7 +322,7 @@ New:
     files: ["extension/**/*.js"],
 ```
 
-- [ ] **Step 2: Add scripts to the Node block**
+- [x] **Step 2: Add scripts to the Node block**
 
 Old:
 
@@ -336,7 +336,7 @@ New:
     files: ["tests/**/*.js", "scripts/**/*.mjs"],
 ```
 
-- [ ] **Step 3: Update the `lint` script in `package.json`**
+- [x] **Step 3: Update the `lint` script in `package.json`**
 
 Old:
 
@@ -350,12 +350,12 @@ New:
     "lint": "eslint extension tests scripts",
 ```
 
-- [ ] **Step 4: Run lint**
+- [x] **Step 4: Run lint**
 
 Run: `npm run lint`
 Expected: exits 0 with no problems reported. A probe with exactly this scope on 2026-09-30 reported zero errors. If errors appear, stop and report them; do not edit files under `extension/` or `scripts/` in this task.
 
-- [ ] **Step 5: Mark the ESLint item done in `TODO.md`**
+- [x] **Step 5: Mark the ESLint item done in `TODO.md`**
 
 Find the P1 bullet that starts with `- **ESLint does not cover the root entrypoints.**` (three lines, ending with `eleven false-positive globals errors.`) and replace it with:
 
@@ -365,7 +365,7 @@ Find the P1 bullet that starts with `- **ESLint does not cover the root entrypoi
   catches; whether they should log is a separate style decision.
 ```
 
-- [ ] **Step 6: Verify and commit**
+- [x] **Step 6: Verify and commit**
 
 Run: `npx prettier --write TODO.md eslint.config.mjs package.json && npm run format:check`
 Expected: `All matched files use Prettier code style!`
@@ -379,16 +379,16 @@ git commit -m "build: lint extension entrypoints and scripts"
 
 ### Task 5: Final verification and hand-off
 
-- [ ] **Step 1: Clean install and full gate**
+- [x] **Step 1: Clean install and full gate**
 
 Run: `npm ci && npm test && npm run lint && npm run format:check`
 Expected: `fail 0`, no lint problems, `All matched files use Prettier code style!`
 
-- [ ] **Step 2: Confirm scope**
+- [x] **Step 2: Confirm scope**
 
 Run: `git diff --stat origin/chore/mvp-hardening..HEAD`
 Expected: only `AGENTS.md`, `.nvmrc`, `.prettierignore`, `.cursor/rules/superpowers-discipline.mdc`, `.cursor/rules/testing.mdc`, `.github/workflows/ci.yml`, `eslint.config.mjs`, `package.json`, `TODO.md`, `docs/HANDOFF.md` (deleted), and files under `docs/superpowers/`.
 
-- [ ] **Step 3: Hand off**
+- [x] **Step 3: Hand off**
 
 Use `superpowers:finishing-a-development-branch`. `chore/dev-reboot` is stacked on `chore/mvp-hardening`: its PR targets `main` after the `chore/mvp-hardening` PR is merged. Do not push or open PRs without the user's confirmation.
