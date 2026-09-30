@@ -7,12 +7,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### Changed
-
-- **Project renamed from Assent to AtoF.** The extension name, side panel, onboarding,
-  in-page pill, privacy policy, and repository URL now use AtoF. Old repository links
-  redirect to the new one.
-
 ### Added
 
 - **Published privacy policy ([PRIVACY.md](PRIVACY.md)).** The Chrome Web Store requires a
@@ -43,6 +37,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   on any page without re-clicking the icon. It is off by default and, even when granted,
   the page is still only read on an explicit Scan press. The "could not access this page"
   error now surfaces this opt-in directly as the fix.
+
+### Changed
+
+- **Project renamed from Assent to AtoF.** The extension name, side panel, onboarding,
+  in-page pill, privacy policy, and repository URL now use AtoF. Old repository links
+  redirect to the new one.
 
 ### Changed
 

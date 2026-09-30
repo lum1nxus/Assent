@@ -66,7 +66,7 @@ extension version (for example `AtoF v0.4.0`) next to a `Debug` button.
 You can now replay that exact case in pure Node without a browser:
 
 ```sh
-npm run replay -- /path/to/atof-debug-<...>.json
+npm run replay -- /path/to/debug-<domain>-<timestamp>.json
 ```
 
 The replay runs `parseAndValidate` and then `verify` with a
