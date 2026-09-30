@@ -1,6 +1,6 @@
 ---
 description: Test conventions for Assent.
-globs: tests/**
+globs: tests/**,extension/**
 alwaysApply: false
 ---
 
@@ -21,7 +21,16 @@ alwaysApply: false
 
 - **Layer 1 - unit**: pure functions (rubric, sanitiser, url-safety, splice-guard, strip-sensitive-tokens, verify). Lives in `tests/*.test.js`.
 - **Layer 2 - AI-output replay**: each JSON in `tests/fixtures/ai-outputs/` is a captured or hand-authored `(documentText, rawAiResponse, verifierVerdicts)` triple plus the `expectedFlags` and `expectedCredits` the pipeline should produce after Stage A parseAndValidate and Stage B verify. `tests/analyze-pipeline.test.js` and `npm run eval` exercise the whole path in pure Node without Chrome, using a fixture-driven verifier that reads `verifierVerdicts` from the fixture.
-- **Layer 3 - real Chrome end-to-end**: manual, slow, only when you need to verify the live on-device model. See `TESTING.md`. Debug bundles from real sessions can be replayed offline with `npm run replay <bundle.json>`.
+- **Layer 3 - real Chrome end-to-end**: verifies the extension in a real browser.
+  - Interactive: the user loads `extension/` unpacked in Chrome (an agent cannot drive the Load unpacked file picker) and hands over the tab. The agent then uses the `chrome-devtools` MCP to drive the page, read the service-worker and page consoles, inspect `chrome.storage.session`, and take screenshots, following the manual checklist in `TESTING.md`. If the user is not available, the agent reports the Layer 3 check as pending and must not claim the change is done.
+  - Automated: planned for Phase 1 (Chrome for Testing + Chrome DevTools Protocol). Until it exists, the interactive check is required for the changes listed under Gate.
+  - Debug bundles from real sessions can be replayed offline with `npm run replay <bundle.json>`; a reproduced bug becomes a Layer 2 fixture.
+
+## Gate
+
+- Every commit: `npm test && npm run lint && npm run format:check`.
+- Changes under `extension/src/pipeline/**`: also `npm run eval`.
+- Changes to the side panel, content script, onboarding, or manifest: also a Layer 3 check.
 
 ## Coverage targets
 

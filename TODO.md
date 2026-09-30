@@ -46,14 +46,15 @@ that could not be reproduced were dropped. Ordered by risk, cheapest first withi
    mode; today `persist.js` stores it after every scan.
 6. **`minimum_chrome_version: "148"` locks out supported users.** The extension Prompt API is stable
    from Chrome 138; 148 is the web-exposed number. One line in `manifest.json`.
-7. **CI does not run the tests.** `.github/workflows/ci.yml` runs lint and format only, so the
-   rubric corpus and the pipeline unit tests never gate a merge. Add `npm test`. The locale-parity
-   job is redundant while `en` is the only locale.
+7. **Done - CI runs the tests.** `npm test` runs in CI on Node 24 (version from `.nvmrc`). The
+   locale-parity job is kept: it costs nothing and matters as soon as a second locale lands.
 
 ### P0-1: what is already done, and the approved design for the rest
 
 The capability-regression route is fixed (the background writes `setup_needed`, the panel renders
-its existing "Open setup" card). The rest of P0-1 was designed and reviewed but not yet written:
+its existing "Open setup" card). It has not been tested in a real browser yet: reproducing it
+requires the model capability to regress between the panel's check and the background's. The rest
+of P0-1 was designed and reviewed but not yet written:
 
 - **Overwrite an orphaned `loading` entry** in `handleTosDetected` instead of returning. This is
   safe without a timestamp or a staleness threshold, and the reasoning matters: `inFlight.add()`
@@ -124,9 +125,9 @@ id="app">` stays empty. Add both, plus a retry affordance.
   minimum and require a minimum word count.
 - **Jurisdiction misclassification.** `extract-jurisdiction.js` matches by substring, so a UK
   document mentioning Northern Ireland is classified as EU. Match on word boundaries.
-- **ESLint does not cover the root entrypoints.** The config's scoping misses `extension/*.js`, so
-  `onboarding.js` is unlinted; that hides two genuinely empty `catch {}` blocks
-  (`onboarding.js:43`, `:65`) behind eleven false-positive globals errors.
+- **Done - ESLint covers every JS file.** `npm run lint` now lints `extension`, `tests`, and
+  `scripts`. The empty `catch {}` blocks in `onboarding.js` pass because the config allows empty
+  catches; whether they should log is a separate style decision.
 - **The result cache outlives its document.** `sidepanel.js:674-685` keys by tab id and compares
   only origin + pathname, and replays on `idle`. Reloading a page clears the badge but the panel
   still shows the old grade, and `?doc=terms` → `?doc=privacy` shows the wrong document's analysis.
@@ -170,6 +171,9 @@ id="app">` stays empty. Add both, plus a retry affordance.
 - **Severity naming hides a weighting difference.** `severityClass` collapses `full` into "Major"
   while the scorer weights `full` at 1.0 and `high` at 1.5, so two identical-looking Major flags can
   differ by 50 % in penalty.
+- **`format:check` does not cover `.mjs` files**, so `eslint.config.mjs` and `scripts/*.mjs` are
+  never format-checked, and both `scripts/*.mjs` files currently fail `prettier --check`. Add `mjs`
+  to the `format` and `format:check` globs in `package.json` and reformat those files.
 
 ## What the audit explicitly cleared
 
@@ -370,7 +374,7 @@ we harden for release. Deliverable: a short report + cleanup PR(s).
   Hand-written tables therefore fail `format:check` unless they happen to match byte for byte;
   `PRIVACY.md` uses lists instead for that reason. Run the formatter, don't hand-align.
 - If `npm` is missing but `node` is present, the checks still run directly:
-  `node --test` over `tests/*.test.js`, `node node_modules/eslint/bin/eslint.js extension/src tests`,
+  `node --test` over `tests/*.test.js`, `node node_modules/eslint/bin/eslint.js extension tests scripts`,
   and `node node_modules/prettier/bin/prettier.cjs --check .`
 
 ## Other ideas
