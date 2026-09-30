@@ -131,6 +131,20 @@ id="app">` stays empty. Add both, plus a retry affordance.
 - **The result cache outlives its document.** `sidepanel.js:674-685` keys by tab id and compares
   only origin + pathname, and replays on `idle`. Reloading a page clears the badge but the panel
   still shows the old grade, and `?doc=terms` → `?doc=privacy` shows the wrong document's analysis.
+- **A mislabelled flag survives verification.** Seen in a real scan on 30 Sept 2026: a clause
+  reserving the right to refuse service to anyone, for any reason, at any time was flagged Minor as
+  `unilateral_terms_change_no_notice`. The clause says nothing about changing the terms, so it does
+  not fit the category definition in `reference-examples.js:54-56`, yet it passed Stage B. Capture
+  a debug bundle for that page, replay it with `npm run replay`, and land it as a
+  `regression-*` fixture. Then find out whether the verifier failed open (see the verifier item
+  above) or judged it a match, and add refuse-service wording as a `notMatch` example.
+- **A credit whose own rationale contradicts it.** Same scan: `explicit_optin_data_sharing` was
+  shown under Notable provisions with the rationale "data sharing is contingent upon the user
+  opting out through account settings, indicating a requirement for explicit opt-in". Opting out is
+  the opposite of opt-in, and the definition at `reference-examples.js:277-279` excludes it. A
+  wrong credit lowers the penalty, so the grade looks better than the document deserves. Check
+  whether credits go through the verifier at all; if not, route them through it, and add an
+  opt-out `notMatch` example. Reuse the regression fixture from the item above.
 
 ## P2 — worth doing, not release-blocking
 
@@ -174,6 +188,14 @@ id="app">` stays empty. Add both, plus a retry affordance.
 - **`format:check` does not cover `.mjs` files**, so `eslint.config.mjs` and `scripts/*.mjs` are
   never format-checked, and both `scripts/*.mjs` files currently fail `prettier --check`. Add `mjs`
   to the `format` and `format:check` globs in `package.json` and reformat those files.
+- **`topK` on the on-device model session is deprecated.** Every scan logs five "Deprecated feature
+  used" issues in the side panel console: "The 'topK' parameter/attribute for LanguageModel is
+  deprecated. It is only functional within extensions and may be removed in the future." Sessions
+  are created with `temperature: 0, topK: 1` at `analyze.js:234-235` and `verify.js:139-140`. It
+  still works in extensions, but once it is removed the deterministic sampling setting changes
+  silently. Decide on the replacement (for example `temperature: 0` alone), with `npm run eval`
+  and a real-browser scan before and after. Coordinate with the P1 verifier item, which already
+  changes how the `verify.js` session is created.
 
 ## What the audit explicitly cleared
 
